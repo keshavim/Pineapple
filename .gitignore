@@ -39,3 +39,35 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+bin/
+obj/
+build/
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ninja build files
+*.ninja
+.ninja_deps
+.ninja_log
+
+# Visual Studio and VSCode files
+*.VC.db
+*.VC.opendb
+*.sdf
+*.ipch
+.vscode/
+
+# Other common editor files
+*.swp
+*.user
+*.userprefs
+*.ide
+*.DS_Store
+
+.cache/
