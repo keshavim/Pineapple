@@ -6,7 +6,53 @@
       "-MP",
       "-DPLATFORM_LINUX",
       "-DDEBUG",
-      "-I../Pineapple/src",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o",
+      "../Pineapple/src/stdafx.cpp"
+    ],
+    "directory": "/home/overlord/CLionProjects/Pineapple/build",
+    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/stdafx.cpp",
+    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o",
+      "../Pineapple/src/stdafx.h"
+    ],
+    "directory": "/home/overlord/CLionProjects/Pineapple/build",
+    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/stdafx.h",
+    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
       "-m64",
       "-g",
       "-std=c++23",
@@ -29,30 +75,7 @@
       "-MP",
       "-DPLATFORM_LINUX",
       "-DDEBUG",
-      "-I../Pineapple/src",
-      "-m64",
-      "-g",
-      "-std=c++23",
-      "-Wall",
-      "-Wextra",
-      "-pedantic",
-      "-c",
-      "-o",
-      "bin-int/Debug-linux-x86_64/Debug/Pineapple/test.o",
-      "../Pineapple/src/test.h"
-    ],
-    "directory": "/home/overlord/CLionProjects/Pineapple/build",
-    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/test.h",
-    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/test.o"
-  },
-  {
-    "arguments": [
-      "g++",
-      "-MD",
-      "-MP",
-      "-DPLATFORM_LINUX",
-      "-DDEBUG",
-      "-I../Pineapple",
+      "-I../Pineapple/include",
       "-m64",
       "-g",
       "-std=c++23",
@@ -67,5 +90,5 @@
     "directory": "/home/overlord/CLionProjects/Pineapple/build",
     "file": "/home/overlord/CLionProjects/Pineapple/Sandbox/src/main.cpp",
     "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Sandbox/main.o"
-  }
+  },
 ]

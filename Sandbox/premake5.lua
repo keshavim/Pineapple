@@ -10,7 +10,7 @@ project "Sandbox"
 
 
     includedirs {
-        "../Pineapple",
+        "../Pineapple/include",
     }
 
     links { "Pineapple" }
