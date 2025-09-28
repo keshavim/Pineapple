@@ -19,7 +19,7 @@ namespace pap {
     }
 
     void Application::Init() {
-        PAP_PRINT("Application initialized");
+        PAP_INFO("Application initialized");
     }
 
     void Application::Update() {

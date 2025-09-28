@@ -5,7 +5,7 @@ public:
     TestLayer(const std::string& name = "TestLayer") : Layer(name) {}
 
     void OnAttach() override {
-        PAP_PRINT("TestLayer ({}) attached!\n", GetName());
+        PAP_INFO("TestLayer ({}) attached!\n", GetName());
     }
 
     void OnDetach() override {

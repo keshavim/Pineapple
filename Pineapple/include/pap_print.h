@@ -1,17 +1,60 @@
 #pragma once
 
 #include <iostream>
+#include <format>
+#include <cstring>
 
 #ifdef __cpp_lib_print
 #include <print>
-#define PAP_PRINT(...) std::print(__VA_ARGS__)
+#define PAP_PRINT(...) std::println(__VA_ARGS__)
 #else
-#include <format>
-namespace pap{
+namespace pap {
     template<typename... Args>
-    void print(const std::string& fmt, Args&&... args) {
-        std::cout << std::format(fmt, std::forward<Args>(args)...);
+    void println(std::format_string<Args...> fmt, Args&&... args) {
+        std::cout << std::format(fmt, std::forward<Args>(args)...) << '\n';
     }
 }
-#define PAP_PRINT(...) pap::print(__VA_ARGS__)
+#define PAP_PRINT(...) pap::println(__VA_ARGS__)
+#endif
+
+#ifdef DEBUG
+// ANSI color codes
+#define COLOR_RESET   "\033[0m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_YELLOW  "\033[33m"
+#define COLOR_GREEN   "\033[32m"
+#define COLOR_BLUE    "\033[34m"
+#define COLOR_PINK    "\033[95m"
+
+// Helper macro to extract filename from full path
+#define FILENAME(msg) (strrchr(msg, '/') ? strrchr(msg, '/') + 1 : msg)
+
+#ifdef PINEAPPLE_LIB
+    #define PAP_LOG_LEVEL_NAME "CORE"
+#else
+    #define PAP_LOG_LEVEL_NAME "CLIENT"
+#endif
+
+#define PAP_LOG(level_color, level_name, ...) \
+    do { \
+        std::string _log_msg = std::format(__VA_ARGS__); \
+        PAP_PRINT(level_color "[{}:{}] [{}] {}" COLOR_RESET "\n", FILENAME(__FILE__), __LINE__, level_name, _log_msg); \
+    } while (0)
+
+#define PAP_TRACE(...)  PAP_LOG(COLOR_BLUE,    PAP_LOG_LEVEL_NAME "/TRACE", __VA_ARGS__)
+#define PAP_INFO(...)   PAP_LOG(COLOR_GREEN,   PAP_LOG_LEVEL_NAME "/INFO",  __VA_ARGS__)
+#define PAP_WARN(...)   PAP_LOG(COLOR_YELLOW,  PAP_LOG_LEVEL_NAME "/WARN",  __VA_ARGS__)
+#define PAP_ERROR(...)  PAP_LOG(COLOR_RED,     PAP_LOG_LEVEL_NAME "/ERROR", __VA_ARGS__)
+#define PAP_CRITICAL(...)  PAP_LOG(COLOR_PINK,     PAP_LOG_LEVEL_NAME "/CRITICAL", __VA_ARGS__)
+
+#elif
+
+#define PAP_LOG(level_color, level_name, ...)
+#define PAP_TRACE(...)
+#define PAP_INFO(...)
+#define PAP_WARN(...)
+#define PAP_ERROR(...)
+#define PAP_CRITICAL(...)
+
+
 #endif

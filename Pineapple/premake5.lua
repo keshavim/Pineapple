@@ -4,6 +4,7 @@ project "Pineapple"
     cppdialect "C++23"
     targetdir ("%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
     objdir ("%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
+    defines { "PINEAPPLE_LIB" }
 
 
     files { "src/**.cpp", "src/**.h", "include/**.h"}
