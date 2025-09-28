@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace Pineapple {
+namespace pap {
 
     class Layer {
     public:
@@ -11,6 +11,7 @@ namespace Pineapple {
         virtual void OnAttach();
         virtual void OnDetach();
         virtual void OnUpdate();
+        virtual void OnRender();
 
         const std::string& GetName() const { return m_DebugName; }
 

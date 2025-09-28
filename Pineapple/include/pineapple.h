@@ -2,5 +2,8 @@
 
 // For use by Pineapple applications
 
-#include "pnap_application.h"
-#include "pnap_layer.h"
+#include "pap_application.h"
+#include "pap_layer.h"
+#include "pap_print.h"
+
+#include "pap_entrypoint.h"

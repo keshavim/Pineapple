@@ -6,7 +6,7 @@ project "Pineapple"
     objdir ("%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
 
 
-    files { "src/**.cpp", "src/**.h"}
+    files { "src/**.cpp", "src/**.h", "include/**.h"}
 
     filter "action:vs*"
         pchheader "pinepch.h"

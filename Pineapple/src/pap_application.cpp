@@ -1,7 +1,8 @@
-#include "pnap_application.h"
-#include <iostream>
+#include "pinepch.h"
+#include "pap_application.h"
 
-namespace Pineapple {
+
+namespace pap {
 
     Application* Application::s_Instance = nullptr;
 
@@ -18,7 +19,7 @@ namespace Pineapple {
     }
 
     void Application::Init() {
-        std::cout << "Application initialized" << std::endl;
+        PAP_PRINT("Application initialized");
     }
 
     void Application::Update() {
@@ -31,7 +32,7 @@ namespace Pineapple {
     void Application::Run() {
         Init();
 
-        std::cout << "Application starting main loop" << std::endl;
+        PAP_PRINT("Application starting main loop");
 
         while (m_Running) {
             Update();
@@ -45,7 +46,7 @@ namespace Pineapple {
             }
         }
 
-        std::cout << "Application shutting down" << std::endl;
+        PAP_PRINT("Application shutting down");
     }
 
 }

@@ -2,9 +2,9 @@
 #include <vector>
 #include <memory>
 #include <type_traits>
-#include "pnap_layer.h"
+#include "pap_layer.h"
 
-namespace Pineapple {
+namespace pap {
 
     class Application {
     public:
@@ -12,8 +12,8 @@ namespace Pineapple {
         virtual ~Application();
 
         // Basic application lifecycle functions
-        virtual void Init();
-        virtual void Update();
+        void Init();
+        void Update();
         void Run();
 
         // Template function for pushing layer instances
@@ -42,6 +42,6 @@ namespace Pineapple {
     };
 
     // To be defined by client
-    Application* CreateApplication();
+    std::unique_ptr<Application> CreateApplication();
 
 }

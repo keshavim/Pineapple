@@ -15,12 +15,12 @@
       "-pedantic",
       "-c",
       "-o",
-      "bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o",
-      "../Pineapple/src/stdafx.cpp"
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_application.o",
+      "../Pineapple/include/pap_application.h"
     ],
-    "directory": "/home/overlord/CLionProjects/Pineapple/build",
-    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/stdafx.cpp",
-    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o"
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/include/pap_application.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_application.o"
   },
   {
     "arguments": [
@@ -38,12 +38,12 @@
       "-pedantic",
       "-c",
       "-o",
-      "bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o",
-      "../Pineapple/src/stdafx.h"
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_entrypoint.o",
+      "../Pineapple/include/pap_entrypoint.h"
     ],
-    "directory": "/home/overlord/CLionProjects/Pineapple/build",
-    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/stdafx.h",
-    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/stdafx.o"
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/include/pap_entrypoint.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_entrypoint.o"
   },
   {
     "arguments": [
@@ -61,12 +61,150 @@
       "-pedantic",
       "-c",
       "-o",
-      "bin-int/Debug-linux-x86_64/Debug/Pineapple/test.o",
-      "../Pineapple/src/test.cpp"
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_layer.o",
+      "../Pineapple/include/pap_layer.h"
     ],
-    "directory": "/home/overlord/CLionProjects/Pineapple/build",
-    "file": "/home/overlord/CLionProjects/Pineapple/Pineapple/src/test.cpp",
-    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/test.o"
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/include/pap_layer.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_layer.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_print.o",
+      "../Pineapple/include/pap_print.h"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/include/pap_print.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_print.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pineapple.o",
+      "../Pineapple/include/pineapple.h"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/include/pineapple.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pineapple.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_application.o",
+      "../Pineapple/src/pap_application.cpp"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/src/pap_application.cpp",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_application.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_layer.o",
+      "../Pineapple/src/pap_layer.cpp"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/src/pap_layer.cpp",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pap_layer.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pinepch.o",
+      "../Pineapple/src/pinepch.cpp"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/src/pinepch.cpp",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pinepch.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DPLATFORM_LINUX",
+      "-DDEBUG",
+      "-I../Pineapple/include",
+      "-m64",
+      "-g",
+      "-std=c++23",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-c",
+      "-o",
+      "bin-int/Debug-linux-x86_64/Debug/Pineapple/pinepch.o",
+      "../Pineapple/src/pinepch.h"
+    ],
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Pineapple/src/pinepch.h",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Pineapple/pinepch.o"
   },
   {
     "arguments": [
@@ -87,8 +225,8 @@
       "bin-int/Debug-linux-x86_64/Debug/Sandbox/main.o",
       "../Sandbox/src/main.cpp"
     ],
-    "directory": "/home/overlord/CLionProjects/Pineapple/build",
-    "file": "/home/overlord/CLionProjects/Pineapple/Sandbox/src/main.cpp",
-    "output": "/home/overlord/CLionProjects/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Sandbox/main.o"
+    "directory": "/home/overloard/dev/Pineapple/build",
+    "file": "/home/overloard/dev/Pineapple/Sandbox/src/main.cpp",
+    "output": "/home/overloard/dev/Pineapple/build/bin-int/Debug-linux-x86_64/Debug/Sandbox/main.o"
   },
 ]
