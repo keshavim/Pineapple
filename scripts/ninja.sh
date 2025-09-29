@@ -1,11 +1,11 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 python3 build.py --ninja
 
 pushd ..
 ninja -C build
-popd
+popd || exit
 
 python3 run.py

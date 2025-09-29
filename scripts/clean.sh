@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 pushd ..
 rm -rf build
-popd
+popd || exit
