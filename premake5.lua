@@ -7,22 +7,22 @@ workspace "Pineapple"
     startproject "App"
     location "build"
 
+    --compile venders with their own build systems
     include "vendor"
 
-
+    --seting up toolsets
     filter "system:linux"
-        toolset "gcc"     
+        toolset "gcc"
         defines {"PLATFORM_LINUX"}
-        buildoptions { "-Wall", "-Wextra", "-pedantic" } 
-
+        buildoptions { "-Wall", "-Wextra", "-pedantic" }
     filter "system:windows"
-        toolset "v143"       
+        toolset "v143"
         defines {"PLATFORM_WINDOWS"}
         buildoptions { "/W4" }
     filter "system:macosx"
         toolset "clang"
-        defines {"PLATFORM_MAC"}   
-        buildoptions { "-Wall", "-Wextra", "-pedantic" } 
+        defines {"PLATFORM_MAC"}
+        buildoptions { "-Wall", "-Wextra", "-pedantic" }
 
     filter{}
 
@@ -31,6 +31,3 @@ workspace "Pineapple"
     include "Pineapple"
     include "Sandbox"
 
-    buildcommands {"clangd"}
-
-    
