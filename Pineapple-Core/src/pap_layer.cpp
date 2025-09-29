@@ -9,15 +9,11 @@ namespace pap {
 
     }
 
-    void Layer::OnAttach() {
+    // void Layer::OnEvent() {
 
-    }
+    // }
 
-    void Layer::OnDetach() {
-
-    }
-
-    void Layer::OnUpdate() {
+    void Layer::OnUpdate(float dt) {
 
     }
     void Layer::OnRender() {

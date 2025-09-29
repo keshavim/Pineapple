@@ -50,7 +50,6 @@ def main():
         sys.exit(1)
 
     # Run the executable
-    print(f"Running: {exe_path}")
     try:
         subprocess.check_call([exe_path])
     except subprocess.CalledProcessError as e:

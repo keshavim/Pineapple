@@ -1,10 +1,7 @@
-require "vendor/premake/premake-ninja/ninja"
-require "vendor/premake/premake-ecc/ecc"
-
 workspace "Pineapple"
     architecture "x86_64"
+    startproject "Pineapple-App"
     configurations { "Debug", "Release", "Dist" }
-    startproject "App"
     location "build"
 
     --compile venders with their own build systems
@@ -14,7 +11,7 @@ workspace "Pineapple"
     filter "system:linux"
         toolset "gcc"
         defines {"PLATFORM_LINUX"}
-        buildoptions { "-Wall", "-Wextra", "-pedantic" }
+        buildoptions { "-Wall", "-Wextra", "-pedantic", "--std=c++23" }
     filter "system:windows"
         toolset "v143"
         defines {"PLATFORM_WINDOWS"}
@@ -28,5 +25,5 @@ workspace "Pineapple"
 
 
 
-    include "Pineapple"
-    include "Sandbox"
+    include "Pineapple-Core"
+    include "Pineapple-App"

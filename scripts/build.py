@@ -53,7 +53,6 @@ def main():
     cmd = [premake_exe, action, "--file=build.lua"]
 
     try:
-        print(f"Running: {' '.join(cmd)} in {root_dir}")
         subprocess.check_call(cmd)
     except subprocess.CalledProcessError as e:
         print(f"Premake failed with exit code {e.returncode}")

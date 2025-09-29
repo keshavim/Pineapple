@@ -4,9 +4,9 @@
 #include <format>
 #include <cstring>
 
-#ifdef __cpp_lib_print
+#if __has_include(<print>) && defined(__cpp_lib_print)
 #include <print>
-#define PAP_PRINT(...) std::println(__VA_ARGS__)
+#define PAP_PRINT(...) do {std::println(__VA_ARGS__);}while(0)
 #else
 namespace pap {
     template<typename... Args>
@@ -47,7 +47,7 @@ namespace pap {
 #define PAP_ERROR(...)  PAP_LOG(COLOR_RED,     PAP_LOG_LEVEL_NAME "/ERROR", __VA_ARGS__)
 #define PAP_CRITICAL(...)  PAP_LOG(COLOR_PINK,     PAP_LOG_LEVEL_NAME "/CRITICAL", __VA_ARGS__)
 
-#elif
+#else
 
 #define PAP_LOG(level_color, level_name, ...)
 #define PAP_TRACE(...)

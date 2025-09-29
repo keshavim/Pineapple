@@ -2,17 +2,15 @@
 // Example custom layer that inherits from Layer
 class TestLayer : public pap::Layer {
 public:
-    TestLayer(const std::string& name = "TestLayer") : Layer(name) {}
-
-    void OnAttach() override {
-        PAP_INFO("TestLayer ({}) attached!\n", GetName());
+    TestLayer()  {
+        Layer("testlayer");
     }
 
-    void OnDetach() override {
+    void OnRender() override {
         PAP_PRINT("TestLayer ({}) detached!\n", GetName());
     }
 
-    void OnUpdate() override {
+    void OnUpdate(float ts) override {
         PAP_PRINT("TestLayer ({}) updating...\n", GetName());
     }
 };
@@ -24,7 +22,7 @@ class SandboxApp : public pap::Application {
 public:
     SandboxApp() {
         // Demonstrate template function for pushing layer instances
-        PushLayer<TestLayer>("CustomTestLayer");
+        PushLayer<TestLayer>();
 
         PAP_PRINT("SandboxApp created and initalized!\n");
 

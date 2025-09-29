@@ -1,4 +1,4 @@
-project "Pineapple"
+project "Pineapple-Core"
     kind "StaticLib"
     language "C++"
     cppdialect "C++23"
@@ -11,14 +11,31 @@ project "Pineapple"
 
     filter "action:vs*"
         pchheader "pinepch.h"
-        pchsource "pinepch.cpp"
+        pchsource "src/pinepch.cpp"
 
     filter "action:not vs*"
         pchheader "src/pinepch.h"
+    filter{}
 
     includedirs {
-        "include"
+        "include",
+        "../vendor/glfw/include"
     }
+    libdirs {
+        "../vendor/glfw/build/src"
+    }
+
+    -- Cross-platform linking
+    filter "system:windows"
+        links { "glfw3", "opengl32", "gdi32", "user32", "shell32" }
+
+    filter "system:linux"
+        links { "glfw3", "GL", "dl", "m", "pthread", "X11" }
+
+    filter "system:macosx"
+        links { "glfw3", "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
+
+    filter {}  -- clear filter
 
     filter "configurations:Debug"
         defines { "DEBUG" }

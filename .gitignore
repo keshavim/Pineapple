@@ -71,3 +71,4 @@ Makefile
 *.DS_Store
 
 .cache/
+.clangd/
