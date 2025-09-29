@@ -34,6 +34,7 @@ namespace pap {
 
         PAP_PRINT("Application starting main loop");
 
+        m_Running = true;
         while (m_Running) {
             Update();
 

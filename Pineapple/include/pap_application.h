@@ -11,10 +11,8 @@ namespace pap {
         Application();
         virtual ~Application();
 
-        // Basic application lifecycle functions
-        void Init();
-        void Update();
         void Run();
+
 
         // Template function for pushing layer instances
         template<typename T>
@@ -36,8 +34,10 @@ namespace pap {
         static Application& Get() { return *s_Instance; }
 
     private:
+        void Init();
+        void Update();
         std::vector<std::unique_ptr<Layer>> m_LayerStack;
-        bool m_Running = true;
+        bool m_Running = false;
         static Application* s_Instance;
     };
 

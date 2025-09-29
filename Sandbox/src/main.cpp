@@ -19,11 +19,10 @@ public:
 
 
 // Example application class
+//might try to remove this step
 class SandboxApp : public pap::Application {
 public:
     SandboxApp() {
-
-
         // Demonstrate template function for pushing layer instances
         PushLayer<TestLayer>("CustomTestLayer");
 
