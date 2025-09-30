@@ -7,7 +7,22 @@ project "Pineapple-Core"
     defines { "PINEAPPLE_LIB" }
 
 
-    files { "src/**.cpp", "src/**.h", "include/**.h"}
+    files {
+        "src/**.cpp",
+        "src/**.h",
+        "include/**.h",
+
+        "../vendor/imgui/imgui.cpp",
+        "../vendor/imgui/imgui_draw.cpp",
+        "../vendor/imgui/imgui_tables.cpp",
+        "../vendor/imgui/imgui_widgets.cpp",
+        "../vendor/imgui/imgui_demo.cpp",
+
+        "../vendor/imgui/backends/imgui_impl_glfw.cpp",
+        "../vendor/imgui/backends/imgui_impl_glfw.h",
+        "../vendor/imgui/backends/imgui_impl_opengl3.cpp",
+        "../vendor/imgui/backends/imgui_impl_opengl3.h",
+    }
 
     filter "action:vs*"
         pchheader "pinepch.h"
@@ -19,21 +34,27 @@ project "Pineapple-Core"
 
     includedirs {
         "include",
-        "../vendor/glfw/include"
+        "../vendor/glfw/include",
+        "../vendor/glm",
+        "../vendor/stb_image",
+        "../vendor/imgui",
     }
     libdirs {
         "../vendor/glfw/build/src"
     }
+    links {
+        "glfw3"
+    }
 
     -- Cross-platform linking
     filter "system:windows"
-        links { "glfw3", "opengl32", "gdi32", "user32", "shell32" }
+        links { "opengl32", "gdi32", "user32", "shell32" }
 
     filter "system:linux"
-        links { "glfw3", "GL", "dl", "m", "pthread", "X11" }
+        links { "GL", "dl", "m", "pthread", "X11" }
 
     filter "system:macosx"
-        links { "glfw3", "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
+        links { "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
 
     filter {}  -- clear filter
 

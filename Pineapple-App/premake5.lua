@@ -16,17 +16,17 @@ project "Pineapple-App"
         "../vendor/glfw/build/src"
     }
 
-    links { "Pineapple-Core" }
+    links { "Pineapple-Core", "glfw3" }
 
     -- Cross-platform linking
     filter "system:windows"
-        links { "glfw3", "opengl32", "gdi32", "user32", "shell32" }
+        links { "opengl32", "gdi32", "user32", "shell32" }
 
     filter "system:linux"
-        links { "glfw3", "GL", "dl", "m", "pthread", "X11" }
+        links { "GL", "dl", "m", "pthread", "X11" }
 
     filter "system:macosx"
-        links { "glfw3", "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
+        links { "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
 
     filter {}  -- clear filter
 
