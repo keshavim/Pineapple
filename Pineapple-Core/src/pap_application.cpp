@@ -2,6 +2,7 @@
 #include "pap_application.h"
 
 #include "pap_print.h"
+#include "imgui/ImGuiLayer.h"
 
 
 
@@ -88,14 +89,12 @@ namespace pap {
         m_Window->Create();
 
 
-        Imgui_Init(m_Window->GetNativeWindow());
-
+        m_LayerStack.push_back(std::make_unique<ImGuiLayer>(m_Window->GetNativeWindow()));
     }
 
     Application::~Application() {
         // Clean up layers in reverse order
         m_LayerStack.clear();
-        Imgui_Destroy();
         m_Window->Destroy();
 
     }
@@ -137,11 +136,6 @@ namespace pap {
 			// NOTE: rendering can be done elsewhere (eg. render thread)
 			for (const std::unique_ptr<Layer>& layer : m_LayerStack)
 				layer->OnRender();
-
-
-
-            Imgui_Render();
-
 
             m_Window->Update();
         }
