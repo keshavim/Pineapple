@@ -40,10 +40,9 @@ project "Pineapple-Core"
         "../vendor/imgui",
     }
     libdirs {
-        "../vendor/glfw/build/src"
-    }
+        "../vendor/glfw/build/src",    }
     links {
-        "glfw3"
+        "glfw3",
     }
 
     -- Cross-platform linking
@@ -51,10 +50,11 @@ project "Pineapple-Core"
         links { "opengl32", "gdi32", "user32", "shell32" }
 
     filter "system:linux"
-        links { "GL", "dl", "m", "pthread", "X11" }
+        links { "GL", "dl", "m", "pthread", "X11", "odbc" }
 
     filter "system:macosx"
-        links { "Cocoa.framework", "OpenGL.framework", "IOKit.framework", "CoreVideo.framework" }
+        links { "Cocoa.framework", "OpenGL.framework",
+         "IOKit.framework", "CoreVideo.framework"}
 
     filter {}  -- clear filter
 
@@ -63,7 +63,7 @@ project "Pineapple-Core"
         symbols "On"
 
     filter "configurations:Release"
-        defines { "NDEBUG" }
+        defines { "RELEASE" }
         optimize "On"
 
     filter "configurations:Dist"

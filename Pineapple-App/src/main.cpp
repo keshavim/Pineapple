@@ -1,4 +1,10 @@
 #include <pineapple.h>
+
+
+
+
+
+
 // Example custom layer that inherits from Layer
 class TestLayer : public pap::Layer {
 public:
@@ -7,11 +13,9 @@ public:
     }
 
     void OnRender() override {
-        PAP_PRINT("TestLayer ({}) detached!\n", GetName());
     }
 
     void OnUpdate(float ts) override {
-        PAP_PRINT("TestLayer ({}) updating...\n", GetName());
     }
 };
 
@@ -25,6 +29,33 @@ public:
         PushLayer<TestLayer>();
 
         PAP_PRINT("SandboxApp created and initalized!\n");
+
+        // ODBCConfig cfg {
+        //     "MariaDBTest",          // DSN
+        //     "MariaDB",              // Driver
+        //     "/usr/lib/libmaodbc.so",// Driver path
+        //     "localhost",            // Server
+        //     "test",                 // Database
+        //     "root",                 // User
+        //     "jeoYfU*17g#!$B",                 // Password
+        //     3306                    // Port
+        // };
+
+        // ODBCManager manager(cfg);
+
+        // manager.create_driver_ini_if_missing();
+        // manager.create_dsn_if_missing();
+
+        // if (!manager.connect()) {
+        //     std::cerr << "Failed to connect.\n";
+        //     exit(1);
+        // }
+
+        // auto dbs = manager.list_databases();
+        // std::cout << "Databases found:\n";
+        // for (auto& db : dbs) {
+        //     std::cout << " - " << db << "\n";
+        // }
 
     }
 };
