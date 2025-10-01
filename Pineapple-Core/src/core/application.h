@@ -43,9 +43,6 @@ namespace pap {
         bool m_Running = false;
         static Application* s_Instance;
 
-        ImGuiManager m_ImGuiManager;
-
-
     };
 
     // To be defined by client

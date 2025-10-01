@@ -5,17 +5,18 @@
 #include <vector>
 
 #include "ImGuiWindow.h"
+#include "core/layer.h"
 
 namespace pap {
 
-    class ImGuiLayer{
+    class ImGuiLayer : public Layer{
     public:
         ImGuiLayer(GLFWwindow *window);
         ~ImGuiLayer();
 
 
-        void OnRender();
-        void OnUpdate(float ts);
+        virtual void OnRender() override;
+        virtual void OnUpdate(float ts) override;
 
         // Adds a new window to the internal list
         void addWindow(std::unique_ptr<ImGuiWindow> window);

@@ -9,7 +9,7 @@ namespace pap {
 
 int main() {
     // Create and run the application
-    auto app = pap::CreateApplication();
-    app->Run();
+    pap::Application app;
+    app.Run();
     return 0;
 }

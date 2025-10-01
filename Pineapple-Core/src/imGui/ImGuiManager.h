@@ -18,20 +18,19 @@ public:
     ~ImGuiManager() = default;
 
     // Setup ImGui context, style, backends, etc.
-    void setup(GLFWwindow *window);
-    void Destroy();
+    static void Setup(GLFWwindow *window);
+    static void Destroy();
 
     // Starts new ImGui frame (call once per frame before drawing)
-    void newFrame(float dt);
+    static void NewFrame(float dt);
 
     // Render all ImGui draw data (call once per frame after drawing)
-    void render();
+    static void Render();
 
-    void addLayer(std::unique_ptr<ImGuiLayer> layer);
+    static void AddLayer(std::unique_ptr<ImGuiLayer> layer);
 
 
 private:
-    std::vector<std::unique_ptr<ImGuiLayer>> m_LayerStack;
-
+    static std::vector<std::unique_ptr<ImGuiLayer>> m_LayerStack;
 };
 }

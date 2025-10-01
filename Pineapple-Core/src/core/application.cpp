@@ -36,7 +36,7 @@ namespace pap {
         m_Window->Create();
 
 
-        m_ImGuiManager.setup(m_Window->GetNativeWindow());
+        ImGuiManager::Setup(m_Window->GetNativeWindow());
 
         // Create a new ImGuiLayer
         auto layer = std::make_unique<ImGuiLayer>(m_Window->GetNativeWindow());
@@ -49,12 +49,12 @@ namespace pap {
         layer->addWindow(std::move(demoWin));
 
         // Push the layer into the manager
-        m_ImGuiManager.addLayer(std::move(layer));
+        ImGuiManager::AddLayer(std::move(layer));
     }
 
     Application::~Application() {
         // Clean up layers in reverse order
-        m_ImGuiManager.Destroy();
+        ImGuiManager::Destroy();
         m_Window->Destroy();
 
     }
@@ -89,9 +89,9 @@ namespace pap {
 			float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
 			lastTime = currentTime;
 
-            m_ImGuiManager.newFrame(dt);
+            ImGuiManager::NewFrame(dt);
 
-            m_ImGuiManager.render();
+            ImGuiManager::Render();
 
             m_Window->Update();
         }

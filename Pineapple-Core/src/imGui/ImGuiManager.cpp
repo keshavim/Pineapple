@@ -9,7 +9,9 @@
 
 namespace pap {
 
-void ImGuiManager::setup(GLFWwindow *window) {
+std::vector<std::unique_ptr<ImGuiLayer>> ImGuiManager::m_LayerStack;
+
+void ImGuiManager::Setup(GLFWwindow *window) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
@@ -37,7 +39,7 @@ void ImGuiManager::Destroy(){
 
 }
 
-void ImGuiManager::newFrame(float dt) {
+void ImGuiManager::NewFrame(float dt) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -69,7 +71,7 @@ void ImGuiManager::newFrame(float dt) {
 
 }
 
-void ImGuiManager::render() {
+void ImGuiManager::Render() {
     for (auto& layer : m_LayerStack) {
         layer->OnRender();
     }
@@ -89,7 +91,7 @@ void ImGuiManager::render() {
 }
 
 
-void ImGuiManager::addLayer(std::unique_ptr<ImGuiLayer> layer) {
+void ImGuiManager::AddLayer(std::unique_ptr<ImGuiLayer> layer) {
         m_LayerStack.push_back(std::move(layer));
     }
 }
