@@ -13,65 +13,36 @@ namespace pap {
 
     ImGuiLayer::ImGuiLayer(GLFWwindow *window)
     {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-
-        // Enable Docking
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;       // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-        ImGui::StyleColorsDark();
-
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init("#version 460");
-
     }
 
     ImGuiLayer::~ImGuiLayer()
     {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        m_Windows.clear();
+
     }
 
     void ImGuiLayer::OnRender() {
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        for (auto& window : m_Windows) {
+            window->draw();
+        }
     }
 
     void ImGuiLayer::OnUpdate(float ts) {
-        ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
 
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-            const ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->Pos);
-            ImGui::SetNextWindowSize(viewport->Size);
-            ImGui::SetNextWindowViewport(viewport->ID);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            ImGui::Begin("DockSpace", nullptr, window_flags);
-            ImGui::PopStyleVar(2);
-
-            // DockSpace
-            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
-
-            // Render demo window inside docking space
-            ImGui::ShowDemoWindow();
-
-            // -----------------------------
-            // New window for database info
-            // -----------------------------
-
-
-
-            ImGui::End();
+        for (auto& window : m_Windows) {
+            // For now we just let them draw in OnRender.
+        }
     }
+
+    void ImGuiLayer::addWindow(std::unique_ptr<ImGuiWindow> window) {
+        m_Windows.push_back(std::move(window));
+    }
+
+    void ImGuiLayer::removeWindow(const std::string& title) {
+        m_Windows.erase(std::remove_if(m_Windows.begin(), m_Windows.end(), [&](const std::unique_ptr<ImGuiWindow>& w) {
+            return w->getTitle() == title;
+        }), m_Windows.end());
+    }
+
 
 } // namespace pap

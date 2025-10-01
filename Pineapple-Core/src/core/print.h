@@ -14,7 +14,7 @@ namespace pap {
         std::cout << std::format(fmt, std::forward<Args>(args)...) << '\n';
     }
 }
-#define PAP_PRINT(...) pap::println(__VA_ARGS__)
+#define PAP_PRINT(...) do {pap::println(__VA_ARGS__);}while(0)
 #endif
 
 #ifdef DEBUG

@@ -15,7 +15,6 @@ project "Pineapple-App"
     }
     libdirs {
         "../vendor/glfw/build/src",
-
     }
 
     links { "Pineapple-Core", "glfw3" }
@@ -32,17 +31,3 @@ project "Pineapple-App"
          "IOKit.framework", "CoreVideo.framework" }
 
     filter {}  -- clear filter
-
-
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-
-    filter "configurations:Release"
-        defines { "NDEBUG" }
-        optimize "On"
-
-    filter "configurations:Dist"
-        defines { "DIST" }
-        optimize "On"
-    filter{}

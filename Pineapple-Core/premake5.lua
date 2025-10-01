@@ -12,6 +12,7 @@ project "Pineapple-Core"
         "src/**.h",
     }
 
+    --adding the imgui and nanodbc files
     files(external_files)
 
     filter "action:vs*"
@@ -50,15 +51,3 @@ project "Pineapple-Core"
 
     filter {}  -- clear filter
 
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-
-    filter "configurations:Release"
-        defines { "RELEASE" }
-        optimize "On"
-
-    filter "configurations:Dist"
-        defines { "DIST" }
-        optimize "On"
-    filter{}
