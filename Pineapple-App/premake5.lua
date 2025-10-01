@@ -2,11 +2,11 @@ project "Pineapple-App"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++23"
-    targetdir ("%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
-    objdir ("%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
+    targetdir (outputdir)
+    objdir (outputdir_obj)
 
 
-    files { "src/**.cpp", "src/**.h", "src/**.hpp", "src/**.cxx" }
+    files { "src/**.cpp", "src/**.h" }
 
     includedirs {
         "../Pineapple-Core/src",

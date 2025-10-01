@@ -2,30 +2,17 @@ project "Pineapple-Core"
     kind "StaticLib"
     language "C++"
     cppdialect "C++23"
-    targetdir ("%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
-    objdir ("%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}")
+    targetdir (outputdir)
+    objdir (outputdir_obj)
     defines { "PINEAPPLE_LIB" }
 
 
     files {
         "src/**.cpp",
         "src/**.h",
-        
-        "../vendor/imgui/imgui.cpp",
-        "../vendor/imgui/imgui_draw.cpp",
-        "../vendor/imgui/imgui_tables.cpp",
-        "../vendor/imgui/imgui_widgets.cpp",
-        "../vendor/imgui/imgui_demo.cpp",
-
-        "../vendor/imgui/backends/imgui_impl_glfw.cpp",
-        "../vendor/imgui/backends/imgui_impl_glfw.h",
-        "../vendor/imgui/backends/imgui_impl_opengl3.cpp",
-        "../vendor/imgui/backends/imgui_impl_opengl3.h",
-
-        "../vendor/nanodbc/nanodbc/nanodbc.h",
-        "../vendor/nanodbc/nanodbc/nanodbc.cpp",
-
     }
+
+    files(external_files)
 
     filter "action:vs*"
         pchheader "pinepch.h"

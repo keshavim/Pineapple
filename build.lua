@@ -5,7 +5,7 @@ workspace "Pineapple"
     location "build"
 
     --compile venders with their own build systems
-    include "vendor"
+    include "build_external"
 
     --seting up toolsets
     filter "system:linux"
