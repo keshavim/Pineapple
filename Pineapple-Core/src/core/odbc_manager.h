@@ -3,6 +3,8 @@
 #include <vector>
 #include <nanodbc/nanodbc.h>
 
+namespace pap {
+
 struct ODBCConfig {
     std::string dsn_name;
     std::string driver;
@@ -17,6 +19,7 @@ struct ODBCConfig {
 class ODBCManager {
 public:
     ODBCManager(const ODBCConfig& config);
+    ~ODBCManager();
 
     // Create DSN and driver ini files
     bool create_dsn_if_missing();
@@ -24,12 +27,20 @@ public:
 
     // Connect once
     bool connect();
+    void shutdown();
 
     // List all databases
     std::vector<std::string> list_databases();
+    std::string get_connection_info() const;
+
+    nanodbc::connection& getConnection() { return conn; }
+    const nanodbc::connection& getConnection() const { return conn; }
+
 
 private:
     ODBCConfig config;
     nanodbc::connection conn;
     bool connected = false;
 };
+
+}

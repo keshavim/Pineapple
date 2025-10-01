@@ -10,8 +10,7 @@ project "Pineapple-Core"
     files {
         "src/**.cpp",
         "src/**.h",
-        "include/**.h",
-
+        
         "../vendor/imgui/imgui.cpp",
         "../vendor/imgui/imgui_draw.cpp",
         "../vendor/imgui/imgui_tables.cpp",
@@ -22,6 +21,10 @@ project "Pineapple-Core"
         "../vendor/imgui/backends/imgui_impl_glfw.h",
         "../vendor/imgui/backends/imgui_impl_opengl3.cpp",
         "../vendor/imgui/backends/imgui_impl_opengl3.h",
+
+        "../vendor/nanodbc/nanodbc/nanodbc.h",
+        "../vendor/nanodbc/nanodbc/nanodbc.cpp",
+
     }
 
     filter "action:vs*"
@@ -33,14 +36,16 @@ project "Pineapple-Core"
     filter{}
 
     includedirs {
-        "include",
+        "src",
         "../vendor/glfw/include",
         "../vendor/glm",
         "../vendor/stb_image",
         "../vendor/imgui",
+        "../vendor/nanodbc",
     }
     libdirs {
-        "../vendor/glfw/build/src",    }
+        "../vendor/glfw/build/src",
+    }
     links {
         "glfw3",
     }

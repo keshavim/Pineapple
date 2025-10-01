@@ -1,13 +1,17 @@
 #include "../pinepch.h"
+#include "core/application.h"
 #include "ImGuiLayer.h"
+
+
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
+
+
 namespace pap {
 
     ImGuiLayer::ImGuiLayer(GLFWwindow *window)
-        : Layer("Imgui")
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -60,6 +64,12 @@ namespace pap {
 
             // Render demo window inside docking space
             ImGui::ShowDemoWindow();
+
+            // -----------------------------
+            // New window for database info
+            // -----------------------------
+
+
 
             ImGui::End();
     }

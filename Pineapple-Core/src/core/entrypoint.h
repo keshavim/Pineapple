@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pap_application.h"
+#include "application.h"
 namespace pap {
     extern std::unique_ptr<Application> CreateApplication();
 }

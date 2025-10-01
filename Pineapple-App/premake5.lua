@@ -9,9 +9,9 @@ project "Pineapple-App"
     files { "src/**.cpp", "src/**.h", "src/**.hpp", "src/**.cxx" }
 
     includedirs {
-        "../Pineapple-Core/include",
+        "../Pineapple-Core/src",
         "../vendor/glfw/include",
-
+        "../vendor/nanodbc",
     }
     libdirs {
         "../vendor/glfw/build/src",

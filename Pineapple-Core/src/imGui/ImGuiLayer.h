@@ -1,8 +1,9 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include <vector>
 
-#include "pap_layer.h"
+#include "core/layer.h"
 
 namespace pap {
 
@@ -13,8 +14,8 @@ namespace pap {
 
 
         void OnRender() override;
-
         void OnUpdate(float ts) override;
+
     };
 
 }

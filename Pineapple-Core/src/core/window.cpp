@@ -1,6 +1,6 @@
 #include "pinepch.h"
-#include "pap_window.h"
-#include "pap_print.h"
+#include "window.h"
+#include "print.h"
 
 
 
