@@ -3,13 +3,21 @@
 
 namespace pap {
 
-    class Layer {
-    public:
+class Layer {
+public:
+    Layer(const std::string& name = "Layer") : m_Name(name) {}
+    virtual ~Layer() = default;
 
-        virtual ~Layer() = default;
-        virtual void OnUpdate(float dt) = 0;
-        virtual void OnRender() = 0;
-        //virtual void OnEvent(Event event);
-    };
+    virtual void onAttach() {}
+    virtual void onDetach() {}
+    virtual void onUpdate(float dt) {}
+    virtual void onRender() {}
+
+    const std::string& getName() const { return m_Name; }
+
+private:
+    std::string m_Name;
+};
+
 
 }  // namespace Pineapple

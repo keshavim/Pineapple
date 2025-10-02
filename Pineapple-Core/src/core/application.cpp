@@ -2,7 +2,8 @@
 #include "application.h"
 
 #include "print.h"
-#include "imGui/ImGuiLayer.h"
+#include "layer_manager.h"
+#include "imGui/ImGuiDockSpaceLayer.h"
 
 
 
@@ -11,13 +12,6 @@
 #include <backends/imgui_impl_glfw.h>
 #include <GLFW/glfw3.h>
 #include <thread>
-
-static void GLFWErrorCallback(int error, const char* description) {
-    PAP_ERROR("[GLFW Error] ({}): {}", error, description);
-}
-
-
-
 
 namespace pap {
 
@@ -28,7 +22,9 @@ namespace pap {
      {
         s_Instance = this;
 
-        glfwSetErrorCallback(GLFWErrorCallback);
+        glfwSetErrorCallback([](int error, const char* description){
+            PAP_ERROR("[GLFW Error] ({}): {}", error, description);
+        });
         glfwInit();
 
 
@@ -36,25 +32,32 @@ namespace pap {
         m_Window->Create();
 
 
-        ImGuiManager::Setup(m_Window->GetNativeWindow());
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
 
-        // Create a new ImGuiLayer
-        auto layer = std::make_unique<ImGuiLayer>(m_Window->GetNativeWindow());
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-        // Create a new ImGuiWindow (builder)
-        auto demoWin = std::make_unique<ImGuiWindow>("Demo Window");
-        demoWin->IsDemoWindow();  // add the built-in ImGui demo
+        ImGui::StyleColorsDark();
 
-        // Add the window to the layer
-        layer->addWindow(std::move(demoWin));
+        ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
+        ImGui_ImplOpenGL3_Init("#version 460");
 
-        // Push the layer into the manager
-        ImGuiManager::AddLayer(std::move(layer));
+        LayerManager::pushLayer<ImGuiDockSpaceLayer>();
+
+
     }
 
     Application::~Application() {
         // Clean up layers in reverse order
-        ImGuiManager::Destroy();
+        LayerManager::clearAll();
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+
+
         m_Window->Destroy();
 
     }
@@ -89,9 +92,26 @@ namespace pap {
 			float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
 			lastTime = currentTime;
 
-            ImGuiManager::NewFrame(dt);
 
-            ImGuiManager::Render();
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            LayerManager::updateAll(dt);
+
+            LayerManager::renderAll();
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            ImGuiIO& io = ImGui::GetIO();
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+                GLFWwindow* backup = glfwGetCurrentContext();
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+                glfwMakeContextCurrent(backup);
+            }
 
             m_Window->Update();
         }

@@ -6,9 +6,6 @@
 #include <GLFW/glfw3.h>
 #include "layer.h"
 #include "window.h"
-#include "odbc_manager.h"
-#include "imGui/ImGuiManager.h"
-
 
 namespace pap {
     struct AppSpecifications{
@@ -46,6 +43,6 @@ namespace pap {
     };
 
     // To be defined by client
-    std::unique_ptr<Application> CreateApplication();
+    void InitApplication();
 
 }

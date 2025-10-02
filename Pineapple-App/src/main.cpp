@@ -1,6 +1,23 @@
 #include <pineapple.h>
 
+#include "imgui.h"
 
-std::unique_ptr<pap::Application> pap::CreateApplication(){
-    return std::make_unique<Application>();
+
+class DemoWindow : public pap::Layer {
+public:
+    DemoWindow() : Layer("ImGuiLayer") {}
+
+    void onRender() override {
+        ImGui::ShowDemoWindow();
+
+    }
+};
+
+
+
+
+void pap::InitApplication(){
+
+   pap::LayerManager::pushLayer<DemoWindow>();
+
 }

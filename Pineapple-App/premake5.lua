@@ -11,7 +11,7 @@ project "Pineapple-App"
     includedirs {
         "../Pineapple-Core/src",
         "../vendor/glfw/include",
-        "../vendor/nanodbc",
+        "../vendor/imgui",
     }
     libdirs {
         "../vendor/glfw/build/src",

@@ -4,7 +4,8 @@
 #include <format>
 #include <cstring>
 
-#if __has_include(<print>) && defined(__cpp_lib_print)
+
+#ifdef __cpp_lib_print
 #include <print>
 #define PAP_PRINT(...) do {std::println(__VA_ARGS__);}while(0)
 #else
