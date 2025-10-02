@@ -5,6 +5,8 @@
 #include "layer_manager.h"
 #include "ImGui/ImGuiDockSpaceLayer.h"
 
+#include "renderer/renderer.h"
+
 
 
 #include <imgui.h>
@@ -31,18 +33,7 @@ namespace pap {
         m_Window = std::make_shared<Window>(m_Specifications.winSpec);
         m_Window->Create();
 
-
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-        ImGui::StyleColorsDark();
-
-        ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
-        ImGui_ImplOpenGL3_Init("#version 460");
+        Renderer::Init(m_Window->GetNativeWindow());
 
         LayerManager::pushGuiLayer<ImGuiDockSpaceLayer>();
 
@@ -52,12 +43,7 @@ namespace pap {
     Application::~Application() {
         // Clean up layers in reverse order
         LayerManager::clear();
-
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-
-
+        Renderer::Destroy();
         m_Window->Destroy();
 
     }
@@ -97,26 +83,12 @@ namespace pap {
             LayerManager::renderLayers();
 
 
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
+            Renderer::BeginImGuiFrame();
 
             LayerManager::drawGuiLayers();
+            Renderer::RenderImGuiFrame();
 
-            ImGui::Render();
-            auto [x,y] = GetFramebufferSize();
-            glViewport(0, 0, x, y);
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            ImGuiIO& io = ImGui::GetIO();
-            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-                GLFWwindow* backup = glfwGetCurrentContext();
-                ImGui::UpdatePlatformWindows();
-                ImGui::RenderPlatformWindowsDefault();
-                glfwMakeContextCurrent(backup);
-            }
 
 
 
