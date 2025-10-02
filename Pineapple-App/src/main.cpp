@@ -3,11 +3,11 @@
 #include "imgui.h"
 
 
-class DemoWindow : public pap::Layer {
+class DemoWindow : public pap::ImGuiLayer {
 public:
-    DemoWindow() : Layer("ImGuiLayer") {}
+    DemoWindow() {}
 
-    void onRender() override {
+    void drawImGui() override {
         ImGui::ShowDemoWindow();
 
     }
@@ -18,6 +18,6 @@ public:
 
 void pap::InitApplication(){
 
-   pap::LayerManager::pushLayer<DemoWindow>();
+   pap::LayerManager::pushGuiLayer<DemoWindow>();
 
 }

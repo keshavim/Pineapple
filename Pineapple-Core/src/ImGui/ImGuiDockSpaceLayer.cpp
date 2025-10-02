@@ -6,20 +6,13 @@
 
 namespace pap {
 
-ImGuiDockSpaceLayer::ImGuiDockSpaceLayer()
-    : Layer("ImGuiCore"){}
+ImGuiDockSpaceLayer::ImGuiDockSpaceLayer(){
 
+}
 ImGuiDockSpaceLayer::~ImGuiDockSpaceLayer() {
-    onDetach(); // Ensure shutdown if not already done
 }
 
-void ImGuiDockSpaceLayer::onAttach() {
-}
-
-void ImGuiDockSpaceLayer::onDetach() {
-}
-
-void ImGuiDockSpaceLayer::onUpdate(float dt) {
+void ImGuiDockSpaceLayer::drawImGui() {
     // Dockspace window
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -41,10 +34,6 @@ void ImGuiDockSpaceLayer::onUpdate(float dt) {
     ImGui::End();
 
 }
-
-void ImGuiDockSpaceLayer::onRender() {
-}
-
 
 
 }

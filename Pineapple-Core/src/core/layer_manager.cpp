@@ -1,36 +1,31 @@
-#include "pinepch.h"
 #include "layer_manager.h"
-#include "application.h"
-
-
-#include <imgui.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_glfw.h>
 
 namespace pap {
 
-
-
+// Define static members
 std::vector<std::unique_ptr<Layer>> LayerManager::s_Layers;
+std::vector<std::unique_ptr<ImGuiLayer>> LayerManager::s_GuiLayers;
 
-void LayerManager::updateAll(float dt) {
+// Update/render non-GUI layers
+void LayerManager::updateLayers(float dt) {
     for (auto& layer : s_Layers)
         layer->onUpdate(dt);
 }
 
-void LayerManager::renderAll() {
+void LayerManager::renderLayers() {
     for (auto& layer : s_Layers)
         layer->onRender();
 }
 
-void LayerManager::clearAll() {
-    for (auto& layer : s_Layers)
-        layer->onDetach();
+// Draw GUI layers inside ImGui frame
+void LayerManager::drawGuiLayers() {
+    for (auto& layer : s_GuiLayers)
+        layer->drawImGui();
+}
+
+void LayerManager::clear(){
+    s_GuiLayers.clear();
     s_Layers.clear();
 }
 
-
-
-
-
-}
+} // namespace pap

@@ -3,7 +3,7 @@
 
 #include "print.h"
 #include "layer_manager.h"
-#include "imGui/ImGuiDockSpaceLayer.h"
+#include "ImGui/ImGuiDockSpaceLayer.h"
 
 
 
@@ -44,14 +44,14 @@ namespace pap {
         ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
         ImGui_ImplOpenGL3_Init("#version 460");
 
-        LayerManager::pushLayer<ImGuiDockSpaceLayer>();
+        LayerManager::pushGuiLayer<ImGuiDockSpaceLayer>();
 
 
     }
 
     Application::~Application() {
         // Clean up layers in reverse order
-        LayerManager::clearAll();
+        LayerManager::clear();
 
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -93,14 +93,13 @@ namespace pap {
 			lastTime = currentTime;
 
 
+            //LayerManager::updateLayers(dt);
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            LayerManager::updateAll(dt);
-
-            LayerManager::renderAll();
+            LayerManager::drawGuiLayers();
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -112,6 +111,9 @@ namespace pap {
                 ImGui::RenderPlatformWindowsDefault();
                 glfwMakeContextCurrent(backup);
             }
+
+            //LayerManager::renderLayers();
+
 
             m_Window->Update();
         }

@@ -7,5 +7,7 @@
 #include "core/print.h"
 #include "core/layer_manager.h"
 
+#include "ImGui/ImGuiLayer.h"
+
 
 #include "core/entrypoint.h"
