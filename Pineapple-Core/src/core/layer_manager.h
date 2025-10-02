@@ -23,7 +23,7 @@ public:
     requires(std::is_base_of_v<Layer, TLayer>)
     static void pushLayer(Args&&... args) {
         // Prevent duplicates
-        auto it = std::find_if(s_Layers.begin(), s_Layers.end(),
+        auto it = std::ranges::find_if(s_Layers.begin(), s_Layers.end(),
             [](const std::unique_ptr<Layer>& layer) {
                 return dynamic_cast<TLayer*>(layer.get()) != nullptr;
             });
@@ -38,7 +38,7 @@ public:
     template<typename TLayer, typename... Args>
     requires(std::is_base_of_v<ImGuiLayer, TLayer>)
     static void pushGuiLayer(Args&&... args) {
-        auto it = std::find_if(s_GuiLayers.begin(), s_GuiLayers.end(),
+        auto it = std::ranges::find_if(s_GuiLayers.begin(), s_GuiLayers.end(),
             [](const std::unique_ptr<ImGuiLayer>& layer) {
                 return dynamic_cast<TLayer*>(layer.get()) != nullptr;
             });
@@ -52,7 +52,7 @@ public:
     template<typename TLayer>
     requires(std::is_base_of_v<Layer, TLayer>)
     static void popLayer() {
-        auto it = std::find_if(s_Layers.begin(), s_Layers.end(),
+        auto it = std::ranges::find_if(s_Layers.begin(), s_Layers.end(),
             [](const std::unique_ptr<Layer>& layer) {
                 return dynamic_cast<TLayer*>(layer.get()) != nullptr;
             });
@@ -66,7 +66,7 @@ public:
     template<typename TLayer>
     requires(std::is_base_of_v<ImGuiLayer, TLayer>)
     static void popGuiLayer() {
-        auto it = std::find_if(s_GuiLayers.begin(), s_GuiLayers.end(),
+        auto it = std::ranges::find_if(s_GuiLayers.begin(), s_GuiLayers.end(),
             [](const std::unique_ptr<ImGuiLayer>& layer) {
                 return dynamic_cast<TLayer*>(layer.get()) != nullptr;
             });

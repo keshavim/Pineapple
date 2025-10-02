@@ -12,15 +12,22 @@ workspace "Pineapple"
             "-Wall",
             "-Wextra",
             "-pedantic",
+            "-fcolor-diagnostics",
+            "-fdiagnostics-show-option",
+            "-fdiagnostics-format=clang",
+            "-fdiagnostics-show-line-numbers",
+
+
         },
         msvc = {
-            "/W4",           
+            "/W4",
         }
     }
 
+
     -- Setting up toolsets per platform
     filter "system:linux"
-        toolset "gcc"
+        toolset "clang"
         defines { "PLATFORM_LINUX" }
         buildoptions(flags.gcc_clang)
 
@@ -46,6 +53,9 @@ workspace "Pineapple"
         defines { "DIST" }
         optimize "On"
     filter{}
+
+
+
 
 
 

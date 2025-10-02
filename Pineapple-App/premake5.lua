@@ -29,5 +29,3 @@ project "Pineapple-App"
     filter "system:macosx"
         links { "Cocoa.framework", "OpenGL.framework",
          "IOKit.framework", "CoreVideo.framework" }
-
-    filter {}  -- clear filter

@@ -49,5 +49,4 @@ project "Pineapple-Core"
         links { "Cocoa.framework", "OpenGL.framework",
          "IOKit.framework", "CoreVideo.framework"}
 
-    filter {}  -- clear filter
-
+    
