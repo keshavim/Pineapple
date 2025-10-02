@@ -29,6 +29,10 @@ namespace pap {
             return m_Window;
         }
 
+        std::pair<int, int> GetFramebufferSize() const {
+            return m_Window->GetFramebufferSize();
+        }
+
 
 
     private:

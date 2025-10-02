@@ -62,5 +62,11 @@ void Window::SetVSync(bool enabled) {
     m_Specs.VSync = enabled;
 }
 
+std::pair<int, int> Window::GetFramebufferSize(){
+    int display_w, display_h;
+    glfwGetFramebufferSize(m_Window, &display_w, &display_h);
+    return { display_w, display_h };
+}
+
 
 }

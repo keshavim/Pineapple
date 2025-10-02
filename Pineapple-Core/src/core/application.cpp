@@ -77,8 +77,7 @@ namespace pap {
 		float lastTime = GetTime();
         while (m_Running) {
 
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
             glfwPollEvents();
 
@@ -93,7 +92,10 @@ namespace pap {
 			lastTime = currentTime;
 
 
-            //LayerManager::updateLayers(dt);
+            LayerManager::updateLayers(dt);
+
+            LayerManager::renderLayers();
+
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -102,6 +104,10 @@ namespace pap {
             LayerManager::drawGuiLayers();
 
             ImGui::Render();
+            auto [x,y] = GetFramebufferSize();
+            glViewport(0, 0, x, y);
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             ImGuiIO& io = ImGui::GetIO();
@@ -112,7 +118,6 @@ namespace pap {
                 glfwMakeContextCurrent(backup);
             }
 
-            //LayerManager::renderLayers();
 
 
             m_Window->Update();

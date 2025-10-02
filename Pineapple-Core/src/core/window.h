@@ -25,9 +25,11 @@ public:
     void Update();         // Runs per-frame
     bool ShouldClose() const;
     void SetVSync(bool enabled);
-    bool IsVSync() const { return m_Specs.VSync; }
+    inline bool IsVSync() const { return m_Specs.VSync; }
 
-    GLFWwindow* GetNativeWindow() const { return m_Window; }
+    inline GLFWwindow* GetNativeWindow() const { return m_Window; }
+
+    std::pair<int, int> GetFramebufferSize();
 
 private:
 
