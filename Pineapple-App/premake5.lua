@@ -10,22 +10,37 @@ project "Pineapple-App"
 
     includedirs {
         "../Pineapple-Core/src",
-        "../vendor/glfw/include",
+        "../vendor/stb_image",
         "../vendor/imgui",
-    }
-    libdirs {
-        "../vendor/glfw/build/src",
+        "../vendor/nanodbc",
+        "../vendor/glfw"
     }
 
-    links { "Pineapple-Core", "glfw3" }
 
-    -- Cross-platform linking
-    filter "system:windows"
-        links { "opengl32", "gdi32", "user32", "shell32" }
+    links { "Pineapple-Core"}
+
 
     filter "system:linux"
-        links { "GL", "dl", "m", "pthread", "X11", "odbc" }
+        libdirs {
+            "../vendor/glfw"
+        }
+        links { "glfw3", "GL", "dl", "m", "pthread", "X11", "odbc", "wayland-client" }
 
-    filter "system:macosx"
-        links { "Cocoa.framework", "OpenGL.framework",
-         "IOKit.framework", "CoreVideo.framework" }
+    filter "configurations:Debug"
+        defines { "PAP_DEBUG" }
+        runtime "Debug"
+        symbols "On"
+
+    filter "configurations:Release"
+        defines { "PAP_RELEASE" }
+        runtime "Release"
+        optimize "On"
+        symbols "On"
+
+    filter "configurations:Dist"
+        kind "WindowedApp"
+        defines { "PAP_DIST" }
+        runtime "Release"
+        optimize "On"
+        symbols "Off"
+    filter{}

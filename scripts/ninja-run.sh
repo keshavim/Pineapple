@@ -8,4 +8,5 @@ pushd ..
 ninja -C build Debug
 popd || exit
 
+export GLFW_PLATFORM=x11
 python3 run.py

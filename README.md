@@ -1,8 +1,12 @@
 # Pineapple
 
+
+curently desiding to suport linux only. any cross platform stuff will come later. also will add a better way to
+handle libraries
+
 You will need some other dependences for nanodbc. Ill list them later
 
-this is also only tested on linux. 
+this is also only tested on linux.
 
 currently use build.py to make build files.
 --vs2022 (windows default)

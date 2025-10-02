@@ -17,6 +17,8 @@ namespace pap{
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+        io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+
         ImGui::StyleColorsDark();
 
         ImGui_ImplGlfw_InitForOpenGL(window, true);

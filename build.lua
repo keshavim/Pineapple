@@ -1,10 +1,10 @@
 workspace "Pineapple"
-    architecture "x86_64"
+    architecture "x64"
     startproject "Pineapple-App"
     configurations { "Debug", "Release", "Dist" }
     location "build"
 
-    --compile venders with their own build systems
+    --check external packages
     include "build_external"
 
     flags = {
@@ -16,48 +16,33 @@ workspace "Pineapple"
             "-fdiagnostics-show-option",
             "-fdiagnostics-format=clang",
             "-fdiagnostics-show-line-numbers",
-
-
         },
         msvc = {
             "/W4",
         }
     }
 
-
     -- Setting up toolsets per platform
     filter "system:linux"
         toolset "clang"
-        defines { "PLATFORM_LINUX" }
+        defines { "PAP_PLATFORM_LINUX" }
         buildoptions(flags.gcc_clang)
 
     filter "system:windows"
         toolset "v143"
-        defines  { "PLATFORM_WINDOWS" }
+        defines  { "PAP_PLATFORM_WINDOWS" }
         buildoptions(flags.msvc)
 
     filter "system:macosx"
         toolset "clang"
-        defines( "PLATFORM_MAC" )
+        defines( "PAP_PLATFORM_MAC" )
         buildoptions(flags.gcc_clang)
 
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-
-    filter "configurations:Release"
-        defines { "RELEASE" }
-        optimize "On"
-
-    filter "configurations:Dist"
-        defines { "DIST" }
-        optimize "On"
-    filter{}
+    filter {}
 
 
-
-
-
+    outputdir = "%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    outputdir_obj = "%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     include "Pineapple-Core"
     include "Pineapple-App"
