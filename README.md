@@ -1,19 +1,16 @@
 # Pineapple
 
 
-curently desiding to suport linux only. any cross platform stuff will come later. also will add a better way to
-handle libraries
+back to cross platform, (maybe)
 
-You will need some other dependences for nanodbc. Ill list them later
+You will need some other dependences for nanodbc. go to their github to see what is needed.
+will add information here later
+
+may have to deal with open gl, too
 
 this is also only tested on linux.
 
-currently use build.py to make build files.
---vs2022 (windows default)
---gmake (linux/mac default)
---ninja
 
-run.py should be used after calling the respective commads for ninja, make, and vs
-in build folder
+to build run the build_vendor first. then build_pineapple. the .sh of build_pineapple can take ninja as arg
 
-the ninja.sh is for my use. others scrips can be made depending on combination
+exe is in build/bin/
