@@ -17,35 +17,23 @@ end
 
 
 
-
-workspace "VendorBuild"
-    architecture "x64"
-    startproject "BuildVendor"
-    configurations { "Debug", "Release" }
-
 VENDOR_DIR = "../vendor"
 BUILD_DIR  = "../build_vendor"
 INCLUDE_DIR = VENDOR_DIR .. "/include"
 LIB_DIR = VENDOR_DIR .. "/libs"
 
--- Utility project to run all builds
-project "BuildVendor"
-    kind "Utility"
-    language "C++"
 
-    -- Make sure folders exist
-    prebuildcommands {
-        "{MKDIR} " .. BUILD_DIR,
-        "{MKDIR} " .. INCLUDE_DIR,
-        "{MKDIR} " .. LIB_DIR
-    }
+os.execute("{MKDIR} " .. BUILD_DIR)
+os.execute("{MKDIR} " .. INCLUDE_DIR)
+os.execute("{MKDIR} " .. LIB_DIR)
+
 
 -- =======================================
 -- GLFW
 -- =======================================
 os.execute("cmake " .. VENDOR_DIR .. "/glfw -B" .. BUILD_DIR .. "/glfw_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF")
 os.execute("cmake --build " .. BUILD_DIR .. "/glfw_build --config Release")
-os.execute(copy_dir(VENDOR_DIR .. "/glfw/include", INCLUDE_DIR .. "/GLFW"))
+os.execute(copy_dir(VENDOR_DIR .. "/glfw/include/GLFW", INCLUDE_DIR))
 os.execute(copy_files(BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR))
 
 -- =======================================
@@ -53,15 +41,19 @@ os.execute(copy_files(BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR))
 -- =======================================
 os.execute("cmake " .. VENDOR_DIR .. "/nanodbc -B" .. BUILD_DIR .. "/nanodbc_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DNANODBC_BUILD_EXAMPLES=OFF -DNANODBC_BUILD_TESTS=OFF -DNANODBC_DISABLE_ASYNC=ON")
 os.execute("cmake --build " .. BUILD_DIR .. "/nanodbc_build --config Release")
-os.execute(copy_dir(VENDOR_DIR .. "/nanodbc/nanodbc/*.h", INCLUDE_DIR .. "/nanodbc"))
+os.execute("{MKDIR} " .. INCLUDE_DIR .. "/nanodbc")
+os.execute(copy_files(VENDOR_DIR .. "/nanodbc/nanodbc/*.h", INCLUDE_DIR .. "/nanodbc"))
 os.execute(copy_files(BUILD_DIR .. "/nanodbc_build/*.a", LIB_DIR))
 
 
+workspace "build vendor"
+    configurations { "Release" }
 
     -- ImGui project (compile manually)
 project "imgui"
     kind "StaticLib"
     language "C++"
+    architecture "x64"
     targetdir (LIB_DIR)
     objdir (BUILD_DIR .. "/imgui_obj")
 
