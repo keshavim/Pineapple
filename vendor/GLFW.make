@@ -26,8 +26,8 @@ define POSTBUILDCMDS
 	@echo Running postbuild commands
 	cmake ../vendor/glfw -B../build_vendor/glfw_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF
 	cmake --build ../build_vendor/glfw_build --config Release
-	cp -rf ../vendor/glfw/include ../vendor/include/GLFW
-	{COPYFILES} ../build_vendor/glfw_build/*.a ../vendor/libs
+	cp -r ../vendor/glfw/include ../vendor/include/GLFW
+	cp ../build_vendor/glfw_build/*.a ../vendor/libs
 endef
 
 # File sets

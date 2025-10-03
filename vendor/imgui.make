@@ -29,7 +29,7 @@ ifeq ($(origin AR), default)
 endif
 RESCOMP = windres
 TARGETDIR = libs
-TARGET = $(TARGETDIR)/libImGui.a
+TARGET = $(TARGETDIR)/libimgui.a
 DEFINES +=
 INCLUDES += -Iimgui
 FORCE_INCLUDE +=
@@ -47,6 +47,11 @@ define POSTBUILDCMDS
 	@echo Running postbuild commands
 	mkdir -p ../vendor/include/imgui
 	cp -f ../vendor/imgui/imgui.h ../vendor/include/imgui/imgui.h
+	cp -f ../vendor/imgui/imconfig.h ../vendor/include/imgui/imconfig.h
+	cp -f ../vendor/imgui/imgui_internal.h ../vendor/include/imgui/imgui_internal.h
+	cp -f ../vendor/imgui/imstb_rectpack.h ../vendor/include/imgui/imstb_rectpack.h
+	cp -f ../vendor/imgui/imstb_textedit.h ../vendor/include/imgui/imstb_textedit.h
+	cp -f ../vendor/imgui/imstb_truetype.h ../vendor/include/imgui/imstb_truetype.h
 	mkdir -p ../vendor/include/imgui/backends
 	cp -f ../vendor/imgui/backends/imgui_impl_glfw.h ../vendor/include/imgui/backends/imgui_impl_glfw.h
 	cp -f ../vendor/imgui/backends/imgui_impl_opengl3.h ../vendor/include/imgui/backends/imgui_impl_opengl3.h
@@ -97,7 +102,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking ImGui
+	@echo Linking imgui
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -118,7 +123,7 @@ else
 endif
 
 clean:
-	@echo Cleaning ImGui
+	@echo Cleaning imgui
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)

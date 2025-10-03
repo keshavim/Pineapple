@@ -26,8 +26,8 @@ define POSTBUILDCMDS
 	@echo Running postbuild commands
 	cmake ../vendor/nanodbc -B../build_vendor/nanodbc_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DNANODBC_DISABLE_TESTS=ON -DNANODBC_DISABLE_EXAMPLES=ON -DNANODBC_DISABLE_INSTALL=ON -DNANODBC_DISABLE_ASYNC=ON
 	cmake --build ../build_vendor/nanodbc_build --config Release
-	cp -rf ../vendor/nanodbc/nanodbc ../vendor/include/nanodbc
-	{COPYFILES} ../build_vendor/nanodbc_build/*.a ../vendor/libs
+	cp -r ../vendor/nanodbc/nanodbc ../vendor/include/nanodbc
+	cp ../build_vendor/nanodbc_build/*.a ../vendor/libs
 endef
 
 # File sets

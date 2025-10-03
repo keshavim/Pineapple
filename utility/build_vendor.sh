@@ -10,7 +10,7 @@ cd "$VENDOR_DIR"
 
 # Run premake5 to generate Makefiles (you can change 'gmake2' to 'ninja' if needed)
 if command -v premake5 >/dev/null 2>&1; then
-    premake5 gmake2
+    premake5 gmake
 else
     echo "Error: premake5 not found in PATH"
     exit 1
