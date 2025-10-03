@@ -1,98 +1,50 @@
 [
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/ImGui/ImGuiDockSpaceLayer.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/ImGui/ImGuiDockSpaceLayer.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/ImGui/ImGuiDockSpaceLayer.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/ImGui/ImGuiDockSpaceLayer.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/ImGui/ImGuiDockSpaceLayer.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/ImGui/ImGuiDockSpaceLayer.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/ImGui/ImGuiDockSpaceLayer.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/application.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/application.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/core/application.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/application.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/core/application.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/application.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/core/application.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/layer_manager.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/layer_manager.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/core/layer_manager.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/layer_manager.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/core/layer_manager.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/layer_manager.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/core/layer_manager.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/odbc_manager.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/odbc_manager.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/core/odbc_manager.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/odbc_manager.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/core/odbc_manager.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/odbc_manager.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/core/odbc_manager.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/window.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/window.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/core/window.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/core/window.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/core/window.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/core/window.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/core/window.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/pinepch.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/pinepch.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/pinepch.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/pinepch.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/pinepch.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/pinepch.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/pinepch.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/renderer/renderer.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/renderer/renderer.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-Core",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -std=gnu++23 -o CMakeFiles/Pineapple-Core.dir/src/renderer/renderer.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-Core/src/renderer/renderer.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-Core/src/renderer/renderer.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/Pineapple-Core/src/renderer/renderer.cpp.o"
+  "output": "Pineapple-Core/CMakeFiles/Pineapple-Core.dir/src/renderer/renderer.cpp.o"
 },
 {
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/imgui.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/imgui.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_draw.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/imgui_draw.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/imgui_draw.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_draw.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_tables.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/imgui_tables.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/imgui_tables.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_tables.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_widgets.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/imgui_widgets.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/imgui_widgets.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_widgets.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_demo.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/imgui_demo.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/imgui_demo.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/imgui_demo.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/backends/imgui_impl_glfw.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/backends/imgui_impl_glfw.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/overloard/dev/Pineapple/vendor/imgui/backends/imgui_impl_opengl3.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/imgui/backends/imgui_impl_opengl3.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -o CMakeFiles/PineappleCoreDummy.dir/vendor/nanodbc/nanodbc/nanodbc.cpp.o -c /home/overloard/dev/Pineapple/vendor/nanodbc/nanodbc/nanodbc.cpp",
-  "file": "/home/overloard/dev/Pineapple/vendor/nanodbc/nanodbc/nanodbc.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleCoreDummy.dir/vendor/nanodbc/nanodbc/nanodbc.cpp.o"
-},
-{
-  "directory": "/home/overloard/dev/Pineapple/temp_build",
-  "command": "clang++ -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/glfw/include -I/home/overloard/dev/Pineapple/vendor/glm -I/home/overloard/dev/Pineapple/vendor/stb_image -I/home/overloard/dev/Pineapple/vendor/imgui -I/home/overloard/dev/Pineapple/vendor/nanodbc -std=gnu++23 -fcolor-diagnostics -Wall -Wextra -pedantic -o CMakeFiles/PineappleAppDummy.dir/Pineapple-App/src/main.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-App/src/main.cpp",
+  "directory": "/home/overloard/dev/Pineapple/build/Pineapple-App",
+  "command": "/usr/bin/c++ -DPINEAPPLE_LIB -DPLATFORM_LINUX -I/home/overloard/dev/Pineapple/Pineapple-Core/src -I/home/overloard/dev/Pineapple/vendor/include -I/home/overloard/dev/Pineapple/vendor/include/imgui -I/home/overloard/dev/Pineapple/vendor/stb_image -std=gnu++23 -o CMakeFiles/Pineapple-App.dir/src/main.cpp.o -c /home/overloard/dev/Pineapple/Pineapple-App/src/main.cpp",
   "file": "/home/overloard/dev/Pineapple/Pineapple-App/src/main.cpp",
-  "output": "/home/overloard/dev/Pineapple/temp_build/CMakeFiles/PineappleAppDummy.dir/Pineapple-App/src/main.cpp.o"
+  "output": "Pineapple-App/CMakeFiles/Pineapple-App.dir/src/main.cpp.o"
 }
 ]
