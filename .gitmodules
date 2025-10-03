@@ -6,3 +6,6 @@
 [submodule "vendor/nanodbc"]
 	path = vendor/nanodbc
 	url = https://github.com/nanodbc/nanodbc.git
+[submodule "vendor/glfw"]
+	path = vendor/glfw
+	url = https://github.com/glfw/glfw.git
