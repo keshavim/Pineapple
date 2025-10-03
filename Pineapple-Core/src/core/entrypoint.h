@@ -1,16 +1,17 @@
 #pragma once
 
 #include "application.h"
-namespace pap {
-    extern void InitApplication();
+namespace pap
+{
+extern void InitApplication();
 }
 // Define the CreateApplication function required by the engine
 
-
-int main() {
+int main()
+{
     // Create and run the application
-    pap::Application app;
+    //pap::Application app;
     pap::InitApplication();
-    app.Run();
+    //app.Run();
     return 0;
 }

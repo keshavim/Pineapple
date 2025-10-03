@@ -15,10 +15,10 @@ cd "$BUILD_DIR"
 
 case "$GENERATOR" in
     ninja)
-        cmake -G Ninja "$ROOT_DIR"
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug "$ROOT_DIR"
         ;;
     make)
-        cmake -G "Unix Makefiles" "$ROOT_DIR"
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug "$ROOT_DIR"
         ;;
     *)
         echo "Unknown generator: $GENERATOR"
@@ -28,9 +28,5 @@ case "$GENERATOR" in
 esac
 
 echo "=== Building ==="
-cmake --build . -j"$(nproc)"
+cmake --build  . -j"$(nproc)"
 echo "=== Project build complete ==="
-if [ -f "compile_commands.json" ]; then
-    echo "=== Moving compile_commands.json to project root ==="
-    mv -f compile_commands.json "${ROOT_DIR}/"
-fi

@@ -2,13 +2,15 @@
 #include <string>
 
 
-namespace pap {
+namespace pap
+{
 
 // Base for GUI layers
-class ImGuiLayer {
+class ImGuiLayer
+{
 public:
     virtual ~ImGuiLayer() = default;
     virtual void drawImGui() = 0; // pure virtual
 };
 
-}  // namespace Pineapple
+} // namespace pap

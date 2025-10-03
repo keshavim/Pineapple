@@ -1,9 +1,9 @@
 project(Pineapple-Core LANGUAGES CXX)
 
-# Source files (use absolute paths to be safe)
+# Source files
 file(GLOB_RECURSE SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+    src/*.cpp
+    src/*.h
 )
 
 
@@ -12,9 +12,9 @@ add_library(Pineapple-Core STATIC ${SOURCES})
 
 # Include directories
 target_include_directories(Pineapple-Core PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src        # project headers
-    ${VENDOR_INCLUDE}                      # vendor headers (covers imgui/imgui.h)
-    ${VENDOR_IMGUI_INCLUDE}                # covers direct "imgui.h" includes
+    src # project headers
+    ${VENDOR_INCLUDE} # vendor headers (covers imgui/imgui.h)
+    ${VENDOR_IMGUI_INCLUDE} # covers direct "imgui.h" includes
 )
 
 # Precompiled headers (optional)
@@ -23,24 +23,36 @@ if(MSVC)
 endif()
 
 
+
+if(WIN32)
+    set(IMGUI_LIB "imgui.lib")
+    set(NANODBC_LIB "nanodbc.lib")
+    set(GLFW3_LIB "glfw3.lib")
+elseif(UNIX)
+    set(IMGUI_LIB "libimgui.a")
+    set(NANODBC_LIB "libnanodbc.a")
+    set(GLFW3_LIB "libglfw3.a")
+endif()
+
+
 # ImGui
 add_library(imgui_lib STATIC IMPORTED)
 set_target_properties(imgui_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/libimgui.a"    # <-- use libImGui.a if you didn't rename
+    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${IMGUI_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 
 # nanodbc
 add_library(nanodbc_lib STATIC IMPORTED)
 set_target_properties(nanodbc_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/libnanodbc.a"
+    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${NANODBC_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 
 # glfw3
 add_library(glfw3_lib STATIC IMPORTED)
 set_target_properties(glfw3_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/libglfw3.a"
+    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${GLFW3_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 

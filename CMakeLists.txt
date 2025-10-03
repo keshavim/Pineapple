@@ -11,10 +11,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # -------------------------
 # Global vendor paths (use CACHE so subdirs can see them)
 # -------------------------
-set(VENDOR_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/vendor           CACHE INTERNAL "")
-set(VENDOR_INCLUDE       ${VENDOR_DIR}/include                       CACHE INTERNAL "")
-set(VENDOR_IMGUI_INCLUDE ${VENDOR_DIR}/include/imgui                 CACHE INTERNAL "")
-set(VENDOR_LIB_DIR       ${VENDOR_DIR}/libs                          CACHE INTERNAL "")
+set(VENDOR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor CACHE INTERNAL "")
+set(VENDOR_INCLUDE ${VENDOR_DIR}/include CACHE INTERNAL "")
+set(VENDOR_IMGUI_INCLUDE ${VENDOR_DIR}/include/imgui CACHE INTERNAL "")
+set(VENDOR_LIB_DIR ${VENDOR_DIR}/libs CACHE INTERNAL "")
 
 
 # Output directories
@@ -32,6 +32,11 @@ elseif(APPLE)
     add_definitions(-DPLATFORM_MAC)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(PAP_DEBUG)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_definitions(PAP_RELEASE)
+endif()
 
 
 # Add subprojects

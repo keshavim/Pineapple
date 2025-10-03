@@ -1,16 +1,26 @@
 #pragma once
 #include <string>
 
-namespace pap {
+namespace pap
+{
 
-class Layer {
+class Layer
+{
 public:
     virtual ~Layer() = default;
-    virtual void onAttach() {}
-    virtual void onDetach() {}
-    virtual void onUpdate(float dt) {}
-    virtual void onRender() {}
+    virtual void onAttach()
+    {
+    }
+    virtual void onDetach()
+    {
+    }
+    virtual void onUpdate(float dt)
+    {
+    }
+    virtual void onRender()
+    {
+    }
 };
 
 
-}  // namespace Pineapple
+} // namespace pap
