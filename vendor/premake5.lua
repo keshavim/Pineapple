@@ -33,8 +33,8 @@ os.execute("{MKDIR} " .. LIB_DIR)
 -- =======================================
 os.execute("cmake " .. VENDOR_DIR .. "/glfw -B" .. BUILD_DIR .. "/glfw_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF")
 os.execute("cmake --build " .. BUILD_DIR .. "/glfw_build --config Release")
-os.execute(copy_dir(VENDOR_DIR .. "/glfw/include/GLFW", INCLUDE_DIR))
-os.execute(copy_files(BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR))
+os.execute("{COPYDIR} " .. VENDOR_DIR .. "/glfw/include/GLFW", INCLUDE_DIR)
+os.execute("{COPYFILES}" .. BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR)
 
 -- =======================================
 -- nanodbc
@@ -42,8 +42,8 @@ os.execute(copy_files(BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR))
 os.execute("cmake " .. VENDOR_DIR .. "/nanodbc -B" .. BUILD_DIR .. "/nanodbc_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DNANODBC_BUILD_EXAMPLES=OFF -DNANODBC_BUILD_TESTS=OFF -DNANODBC_DISABLE_ASYNC=ON")
 os.execute("cmake --build " .. BUILD_DIR .. "/nanodbc_build --config Release")
 os.execute("{MKDIR} " .. INCLUDE_DIR .. "/nanodbc")
-os.execute(copy_files(VENDOR_DIR .. "/nanodbc/nanodbc/*.h", INCLUDE_DIR .. "/nanodbc"))
-os.execute(copy_files(BUILD_DIR .. "/nanodbc_build/*.a", LIB_DIR))
+os.execute("{COPYFILES}" .. VENDOR_DIR .. "/nanodbc/nanodbc/*.h", INCLUDE_DIR .. "/nanodbc")
+os.execute("{COPYFILES}" .. BUILD_DIR .. "/nanodbc_build/*.a", LIB_DIR)
 
 
 workspace "build vendor"
