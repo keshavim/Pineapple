@@ -3,12 +3,10 @@
 	path = vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 
-[submodule "vendor/nanodbc"]
-	path = vendor/nanodbc
-	url = https://github.com/nanodbc/nanodbc.git
 [submodule "vendor/glfw"]
 	path = vendor/glfw
 	url = https://github.com/glfw/glfw.git
 
-
-1278-59CE
+[submodule "vendor/mariadbc"]
+	path = vendor/mariadbc
+	url = https://github.com/mariadb-corporation/mariadb-connector-cpp.git
