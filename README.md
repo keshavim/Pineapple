@@ -1,10 +1,17 @@
 # Pineapple
 
 
-back to cross platform, (maybe)
+cross platform, (maybe)
 
-You will need some other dependences for nanodbc. go to their github to see what is needed.
-will add information here later
+useing mariadb connector right now because that is what arch has by default.
+for now, this will only work with maria becuse the is the best open src opion i have.
+
+I need to fix up a lot of the structure. but i have an idea of how this will work
+
+
+![Screenshot of the current app](./assets/readme/Screenshot_20251005_150646.png)
+
+
 
 may have to deal with open gl, too
 

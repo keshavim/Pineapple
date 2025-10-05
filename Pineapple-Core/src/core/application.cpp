@@ -1,4 +1,5 @@
 #include "application.h"
+#include "ImGui/dblayer.h"
 #include "pinepch.h"
 
 #include "ImGui/ImGuiDockSpaceLayer.h"
@@ -34,6 +35,7 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
     Renderer::Init(m_Window->GetNativeWindow());
 
     LayerManager::pushGuiLayer<ImGuiDockSpaceLayer>();
+    LayerManager::pushGuiLayer<DatabaseLayer>();
 }
 
 Application::~Application()

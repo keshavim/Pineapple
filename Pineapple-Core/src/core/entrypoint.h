@@ -10,8 +10,8 @@ extern void InitApplication();
 int main()
 {
     // Create and run the application
-    //pap::Application app;
+    pap::Application app;
     pap::InitApplication();
-    //app.Run();
+    app.Run();
     return 0;
 }

@@ -1,55 +1,79 @@
 -- Determine copy commands based on OS
-local function copy_dir(src, dst)
-    if os.host() == "windows" then
-        return "{COPYDIR} " .. src .. " " .. dst
-    else
-        return "cp -r " .. src .. " " .. dst
-    end
-end
 
-local function copy_files(src_pattern, dst)
-    if os.host() == "windows" then
-        return "{COPYFILES} " .. src_pattern .. " " .. dst
-    else
-        return "cp " .. src_pattern .. " " .. dst
-    end
-end
-
-
+workspace "build vendor"
+    configurations { "Release" }
 
 VENDOR_DIR = "../vendor"
 BUILD_DIR  = "../build_vendor"
 INCLUDE_DIR = VENDOR_DIR .. "/include"
 LIB_DIR = VENDOR_DIR .. "/libs"
 
-
 os.execute("{MKDIR} " .. BUILD_DIR)
 os.execute("{MKDIR} " .. INCLUDE_DIR)
 os.execute("{MKDIR} " .. LIB_DIR)
 
-
 -- =======================================
 -- GLFW
 -- =======================================
-os.execute("cmake " .. VENDOR_DIR .. "/glfw -B" .. BUILD_DIR .. "/glfw_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF")
-os.execute("cmake --build " .. BUILD_DIR .. "/glfw_build --config Release")
-os.execute("{COPYDIR} " .. VENDOR_DIR .. "/glfw/include/GLFW", INCLUDE_DIR)
-os.execute("{COPYFILES}" .. BUILD_DIR .. "/glfw_build/src/*.a", LIB_DIR)
+local GLFW_LIB = BUILD_DIR .. "/glfw_build/src/libglfw3.a"
+if not os.isfile(GLFW_LIB) then
+    os.execute("cmake " .. VENDOR_DIR .. "/glfw -B" .. BUILD_DIR .. "/glfw_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF")
+    os.execute("cmake --build " .. BUILD_DIR .. "/glfw_build --config Release")
+    os.execute("{COPYDIR} " .. VENDOR_DIR .. "/glfw/include/GLFW " .. INCLUDE_DIR)
+
+    if os.host() == "windows" then
+        os.execute("xcopy /Y /I \"" .. BUILD_DIR .. "\\glfw_build\\src\\*.a\" \"" .. LIB_DIR .. "\\\"")
+    else
+        os.execute("cp -v " .. BUILD_DIR .. "/glfw_build/src/*.a " .. LIB_DIR)
+    end
+else
+    print("GLFW already built. Skipping build.")
+end
 
 -- =======================================
--- nanodbc
+-- MariaDB Connector/C++
 -- =======================================
-os.execute("cmake " .. VENDOR_DIR .. "/nanodbc -B" .. BUILD_DIR .. "/nanodbc_build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DNANODBC_BUILD_EXAMPLES=OFF -DNANODBC_BUILD_TESTS=OFF -DNANODBC_DISABLE_ASYNC=ON")
-os.execute("cmake --build " .. BUILD_DIR .. "/nanodbc_build --config Release")
-os.execute("{MKDIR} " .. INCLUDE_DIR .. "/nanodbc")
-os.execute("{COPYFILES}" .. VENDOR_DIR .. "/nanodbc/nanodbc/*.h", INCLUDE_DIR .. "/nanodbc")
-os.execute("{COPYFILES}" .. BUILD_DIR .. "/nanodbc_build/*.a", LIB_DIR)
+local MARIADB_DIR = VENDOR_DIR .. "/mariadbc"
+local MARIADB_BUILD_DIR = BUILD_DIR .. "/mariadb_build"
+local MARIADB_INCLUDE_DIR = INCLUDE_DIR .. "/mariadbc"
 
+local function mariadbLibExists()
+    if os.host() == "windows" then
+        return os.isfile(MARIADB_BUILD_DIR .. "/Release/mariadb.dll")
+    elseif os.host() == "macosx" then
+        return os.isfile(MARIADB_BUILD_DIR .. "/libmariadb.dylib")
+    else
+        return os.isfile(MARIADB_BUILD_DIR .. "/libmariadb.so")
+    end
+end
 
-workspace "build vendor"
-    configurations { "Release" }
+if not os.isdir(MARIADB_BUILD_DIR) then
+    os.execute("cmake " .. MARIADB_DIR ..
+        " -B" .. MARIADB_BUILD_DIR ..
+        " -DCMAKE_BUILD_TYPE=Release" ..
+        " -DBUILD_SHARED_LIBS=ON" ..
+        " -DWITH_SSL=OFF" ..
+        " -DWITH_UNIT_TESTS=OFF" ..
+        " -DWITH_EXAMPLES=OFF" ..
+        " -DCMAKE_POLICY_VERSION_MINIMUM=3.5")
+    os.execute("cmake --build " .. MARIADB_BUILD_DIR .. " --config Release")
+    os.execute("{COPYDIR} " .. MARIADB_DIR .. "/include/ " .. INCLUDE_DIR)
+    os.rename(INCLUDE_DIR .. "/include", INCLUDE_DIR .. "/mariadbc")
+elseif mariadbLibExists() then
+    -- Copy shared library per platform
+    if os.host() == "windows" then
+        os.execute("xcopy /Y /I \"" .. MARIADB_BUILD_DIR .. "\\Release\\*.dll\" \"" .. LIB_DIR .. "\\\"")
+    elseif os.host() == "macosx" then
+        os.execute("cp -v " .. MARIADB_BUILD_DIR .. "/*.dylib " .. LIB_DIR)
+    else
+        os.execute("cp -v " .. MARIADB_BUILD_DIR .. "/*.so " .. LIB_DIR)
+    end
+    print("MariaDB build already exists. Skipping build.")
+end
 
-    -- ImGui project (compile manually)
+-- =======================================
+-- ImGui project (compile manually)
+-- =======================================
 project "imgui"
     kind "StaticLib"
     language "C++"
@@ -74,22 +98,15 @@ project "imgui"
         VENDOR_DIR .. "/imgui"
     }
 
-    -- After build, copy headers to vendor/include
     postbuildcommands {
-        -- Create main imgui include folder
         "{MKDIR} " .. INCLUDE_DIR .. "/imgui",
-        -- Copy only imgui.h
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imgui.h " .. INCLUDE_DIR .. "/imgui/imgui.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imconfig.h " .. INCLUDE_DIR .. "/imgui/imconfig.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imgui_internal.h " .. INCLUDE_DIR .. "/imgui/imgui_internal.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imstb_rectpack.h " .. INCLUDE_DIR .. "/imgui/imstb_rectpack.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imstb_textedit.h " .. INCLUDE_DIR .. "/imgui/imstb_textedit.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/imstb_truetype.h " .. INCLUDE_DIR .. "/imgui/imstb_truetype.h",
-
-
-        -- Create backends folder
         "{MKDIR} " .. INCLUDE_DIR .. "/imgui/backends",
-        -- Copy backend headers
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/backends/imgui_impl_glfw.h " .. INCLUDE_DIR .. "/imgui/backends/imgui_impl_glfw.h",
         "{COPYFILE} " .. VENDOR_DIR .. "/imgui/backends/imgui_impl_opengl3.h " .. INCLUDE_DIR .. "/imgui/backends/imgui_impl_opengl3.h"
     }

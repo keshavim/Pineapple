@@ -24,46 +24,56 @@ endif()
 
 
 
+# ===============================
+# Vendor library filenames
+# ===============================
 if(WIN32)
     set(IMGUI_LIB "imgui.lib")
-    set(NANODBC_LIB "nanodbc.lib")
+    set(MARIADB_LIB "mariadbcpp.dll")
     set(GLFW3_LIB "glfw3.lib")
-elseif(UNIX)
+elseif(APPLE)
     set(IMGUI_LIB "libimgui.a")
-    set(NANODBC_LIB "libnanodbc.a")
+    set(MARIADB_LIB "libmariadbcpp.dylib")  # macOS uses .dylib
+    set(GLFW3_LIB "libglfw3.a")
+else() # Linux/other UNIX
+    set(IMGUI_LIB "libimgui.a")
+    set(MARIADB_LIB "libmariadbcpp.so")
     set(GLFW3_LIB "libglfw3.a")
 endif()
 
-
-# ImGui
+# ===============================
+# Imported vendor libraries
+# ===============================
 add_library(imgui_lib STATIC IMPORTED)
 set_target_properties(imgui_lib PROPERTIES
     IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${IMGUI_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 
-# nanodbc
-add_library(nanodbc_lib STATIC IMPORTED)
-set_target_properties(nanodbc_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${NANODBC_LIB}"
+add_library(mariadb_lib SHARED IMPORTED)
+set_target_properties(mariadb_lib PROPERTIES
+    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${MARIADB_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 
-# glfw3
 add_library(glfw3_lib STATIC IMPORTED)
 set_target_properties(glfw3_lib PROPERTIES
     IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${GLFW3_LIB}"
     IMPORTED_NO_SONAME TRUE
 )
 
-# Link imported targets into Pineapple-Core (these will propagate to the final exe)
+# ===============================
+# Link vendor libraries into Pineapple-Core
+# ===============================
 target_link_libraries(Pineapple-Core PRIVATE
     imgui_lib
-    nanodbc_lib
+    mariadb_lib
     glfw3_lib
 )
 
-# Platform-specific libraries
+# ===============================
+# Platform-specific dependencies
+# ===============================
 if(WIN32)
     target_link_libraries(Pineapple-Core PRIVATE
         opengl32
@@ -71,17 +81,8 @@ if(WIN32)
         user32
         shell32
     )
-elseif(UNIX AND NOT APPLE)
-    target_link_libraries(Pineapple-Core PRIVATE
-        GL
-        dl
-        m
-        pthread
-        X11
-        wayland-client
-        odbc
-    )
 elseif(APPLE)
+    # Only needed for macOS frameworks
     find_library(COCOA_FRAMEWORK Cocoa)
     find_library(IOKIT_FRAMEWORK IOKit)
     find_library(COREVIDEO_FRAMEWORK CoreVideo)
@@ -92,7 +93,17 @@ elseif(APPLE)
         ${COREVIDEO_FRAMEWORK}
         ${OPENGL_FRAMEWORK}
     )
+else() # Linux
+    # Only essential libraries for MariaDB and OpenGL
+    target_link_libraries(Pineapple-Core PRIVATE
+        GL
+        dl
+        m
+        pthread
+        X11
+    )
 endif()
+
 
 # Compile definitions
 target_compile_definitions(Pineapple-Core PUBLIC PINEAPPLE_LIB)
