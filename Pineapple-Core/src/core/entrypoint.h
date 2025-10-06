@@ -1,6 +1,7 @@
 #pragma once
 
 #include "application.h"
+
 namespace pap
 {
 extern void InitApplication();
@@ -9,6 +10,7 @@ extern void InitApplication();
 
 int main()
 {
+
     // Create and run the application
     pap::Application app;
     pap::InitApplication();

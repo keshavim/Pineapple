@@ -14,7 +14,16 @@ public:
         : dbWindow("Database Viewer")
     {
         // Connect to DB
-        bool ok = dbManager.connect(DBDriver::MariaDB, "tcp://127.0.0.1:3306", "root", "jeoYfU*17g#!$B", "students");
+        //authentication will be handled in gui later
+        std::string user;
+        std::cout << "user: ";
+        std::getline(std::cin, user);
+
+        std::string password;
+        std::cout << "password: ";
+        std::getline(std::cin, password);
+
+        bool ok = dbManager.connect(DBDriver::MariaDB, "tcp://127.0.0.1:3306", user, password, "students");
         PAP_INFO("connected");
         if (ok) {
             std::cout << "[DEBUG] Running query: SELECT * FROM student_info;" << std::endl;
