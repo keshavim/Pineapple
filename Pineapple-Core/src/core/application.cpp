@@ -64,6 +64,15 @@ void Application::OnEvent(Event::Base &e)
 
 
     }
+
+    PAP_EVENT_DISPATCH(Event::KeyPressed, e,
+        if (e.key == GLFW_KEY_ESCAPE) {
+            e.handled = true;
+            m_Running = false;
+        }
+    );
+
+
     if (e.getType() == EventType::WindowClosed)
     {
         Stop();

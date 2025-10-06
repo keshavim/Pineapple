@@ -12,7 +12,7 @@ DBWindow::DBWindow(const std::string &title) : m_Title(title)
     std::string password;
     std::cout << "password: ";
     std::getline(std::cin, password);
-
+//this will really need to change
     auto ok = pap::DBManager::connect(pap::DBDriver::MariaDB, "tcp://127.0.0.1:3306", user, password, "students");
 
     //todo: make gui
