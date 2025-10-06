@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include <string>
+#include "core.h"
 
 namespace pap
 {

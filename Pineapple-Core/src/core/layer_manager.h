@@ -23,13 +23,8 @@ public:
     // Push a non-GUI Layer
     template <typename TLayer, typename... Args>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void pushLayer(Args &&...args)
-    {
-        // Prevent duplicates
-        auto it = std::ranges::find_if(s_Layers.begin(), s_Layers.end(), [](const std::unique_ptr<Layer> &layer) {
-            return dynamic_cast<TLayer *>(layer.get()) != nullptr;
-        });
-        if (it != s_Layers.end())
+    static void pushLayer(Args &&...args) {
+        if (findLayer<TLayer>(s_Layers) != s_Layers.end())
             return;
 
         auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
@@ -40,48 +35,35 @@ public:
     // Push a GUI Layer
     template <typename TLayer, typename... Args>
         requires(std::is_base_of_v<ImGuiLayer, TLayer>)
-    static void pushGuiLayer(Args &&...args)
-    {
-        auto it =
-            std::ranges::find_if(s_GuiLayers.begin(), s_GuiLayers.end(), [](const std::unique_ptr<ImGuiLayer> &layer) {
-                return dynamic_cast<TLayer *>(layer.get()) != nullptr;
-            });
-        if (it != s_GuiLayers.end())
+    static void pushGuiLayer(Args &&...args) {
+        if (findLayer<TLayer>(s_GuiLayers) != s_GuiLayers.end())
             return;
 
         auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
         s_GuiLayers.push_back(std::move(newLayer));
     }
 
-    // Pop non-GUI layer
+    // Pop non-GUI Layer
     template <typename TLayer>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void popLayer()
-    {
-        auto it = std::ranges::find_if(s_Layers.begin(), s_Layers.end(), [](const std::unique_ptr<Layer> &layer) {
-            return dynamic_cast<TLayer *>(layer.get()) != nullptr;
-        });
-        if (it != s_Layers.end())
-        {
+    static void popLayer() {
+        auto it = findLayer<TLayer>(s_Layers);
+        if (it != s_Layers.end()) {
             (*it)->onDetach();
             s_Layers.erase(it);
         }
     }
 
-    // Pop GUI layer
+    // Pop GUI Layer
     template <typename TLayer>
         requires(std::is_base_of_v<ImGuiLayer, TLayer>)
-    static void popGuiLayer()
-    {
-        auto it =
-            std::ranges::find_if(s_GuiLayers.begin(), s_GuiLayers.end(), [](const std::unique_ptr<ImGuiLayer> &layer) {
-                return dynamic_cast<TLayer *>(layer.get()) != nullptr;
-            });
-        if (it != s_GuiLayers.end())
-        {
+    static void popGuiLayer() {
+        auto it = findLayer<TLayer>(s_GuiLayers);
+        if (it != s_GuiLayers.end()) {
             s_GuiLayers.erase(it);
         }
     }
+
 
 private:
     friend class Application;
@@ -90,6 +72,13 @@ private:
     static void renderLayers();
     static void drawGuiLayers();
     static void clear();
+
+    template <typename LayerType, typename Container>
+    static auto findLayer(Container &layers) {
+        return std::ranges::find_if(layers, [](const auto &layer) {
+            return dynamic_cast<LayerType *>(layer.get()) != nullptr;
+    });
+}
 
 private:
     static std::vector<std::unique_ptr<Layer>> s_Layers;
