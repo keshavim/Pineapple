@@ -1,33 +1,39 @@
 // DBResult.h
 #ifndef DBRESULT_H
 #define DBRESULT_H
+#include <core/core.h>
 #include <mariadbc/conncpp.hpp>
 
-class DBResult {
+namespace pap{
+class DBResult
+{
 public:
     // Constructor from ResultSet
-    DBResult(sql::ResultSet* rs);
+    DBResult(sql::ResultSet *rs);
 
     // Immutable getters
     size_t getRowCount() const;
     size_t getColumnCount() const;
-    std::string getColumnName(size_t index) const;
-    std::vector<std::string> getColumnNames() const;
-    std::string getValue(size_t row, size_t col) const;
-    std::string getValue(size_t row, const std::string& colName) const;
-    std::vector<std::string> getRow(size_t row) const;
+    Result<std::string> getColumnName(size_t index) const;
 
-    // Database-specific operations (from metadata)
-    std::string getColumnType(size_t col) const; // Requires storing types or metadata
-    std::string getTableName(size_t col) const; // Requires storing table names or metadata
+    const std::vector<std::string> &getColumnNames() const;
 
+    Result<std::string> getValue(size_t row, size_t col) const;
+
+    Result<std::string> getValue(size_t row, const std::string &colName) const;
+
+    Result<std::vector<std::string>> getRow(size_t row) const;
+
+    Result<std::string> getColumnType(size_t col) const;
+
+    Result<std::string> getTableName(size_t col) const;
 
 
     // toString
     std::string toString() const;
 
     // Operator overload for printing
-    friend std::ostream& operator<<(std::ostream& os, const DBResult& res);
+    friend std::ostream &operator<<(std::ostream &os, const DBResult &res);
 
 private:
     std::vector<std::string> m_ColumnTypes;
@@ -36,19 +42,19 @@ private:
     std::vector<std::vector<std::string>> m_Data;
 
     // Helper to populate from ResultSet
-    void populateFromResultSet(sql::ResultSet* rs);
-
+    void populateFromResultSet(sql::ResultSet *rs);
 };
-
+}
 // C++20/23 std::formatter specialization
-template<>
-struct std::formatter<DBResult> : std::formatter<std::string> {
+template <>
+struct std::formatter<pap::DBResult> : std::formatter<std::string>
+{
     // parse is inherited from std::formatter<std::string>
 
-    auto format(const DBResult& res, auto& ctx) {
+    auto format(const pap::DBResult &res, auto &ctx)
+    {
         // Use DBResult::toString()
         return std::formatter<std::string>::format(res.toString(), ctx);
     }
 };
-
 #endif // DBRESULT_H

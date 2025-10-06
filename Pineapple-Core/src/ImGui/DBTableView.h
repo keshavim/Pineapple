@@ -31,7 +31,12 @@ public:
             // Rows
             for (size_t r = 0; r < m_Result.getRowCount(); ++r) {
                 ImGui::TableNextRow();
-                const auto row = m_Result.getRow(r);
+                auto rowRes = m_Result.getRow(r);
+                auto row = unwrap_or_else(rowRes, [&](const std::string& err) {
+                    std::cerr << "Failed to get row: " << err << "\n";
+                    return;
+                });
+                
                 for (size_t c = 0; c < row.size(); ++c) {
                     ImGui::TableSetColumnIndex(static_cast<int>(c));
                     ImGui::TextUnformatted(row[c].c_str());

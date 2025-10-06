@@ -5,6 +5,8 @@
 #include <string>
 #include "DBResult.h"
 #include "DBConnector.h"
+#include <expected>
+
 
 namespace pap {
 
@@ -21,7 +23,7 @@ public:
     DBManager() = default;
     ~DBManager() = default;
 
-    bool connect(DBDriver driver,
+    Result<void> connect(DBDriver driver,
                  const std::string& uri,
                  const std::string& user,
                  const std::string& password,
@@ -29,7 +31,7 @@ public:
 
     bool isConnected() const;
 
-    DBResult executeQuery(const std::string& query);
+    Result<DBResult> executeQuery(const std::string& query);
 
 private:
     std::unique_ptr<DBConnector> m_Database;

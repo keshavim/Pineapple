@@ -3,7 +3,7 @@
 #include "dbc/DBManager.h"
 #include "DBWindow.h"
 #include "ImGuiLayer.h"  // Your ImGui layer base
-#include "core/print.h"
+#include "core/core.h"
 
 namespace pap {
 
@@ -23,15 +23,21 @@ public:
         std::cout << "password: ";
         std::getline(std::cin, password);
 
-        bool ok = dbManager.connect(DBDriver::MariaDB, "tcp://127.0.0.1:3306", user, password, "students");
-        PAP_INFO("connected");
-        if (ok) {
-            std::cout << "[DEBUG] Running query: SELECT * FROM student_info;" << std::endl;
-            DBResult test = dbManager.executeQuery("SELECT * FROM student_info;");
-            std::cout << test << std::endl;
+        auto ok = dbManager.connect(DBDriver::MariaDB, "tcp://127.0.0.1:3306", user, password, "students");
 
-            dbWindow.setResult(test);
+        //todo: make gui
+        if(!ok){
+            PAP_INFO("failed");
+            return;
         }
+        std::cout << "[DEBUG] Running query: SELECT * FROM student_info;" << std::endl;
+        auto test = dbManager.executeQuery("SELECT * FROM student_info;");
+        if(!test){
+            std::cout << "aFailed query: " << test.error() << "\n";
+        }
+
+
+        dbWindow.setResult(test.value());
     }
 
     void drawImGui() override {

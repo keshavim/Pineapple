@@ -1,36 +1,48 @@
+#include "pinepch.h"
+
 #include "DBManager.h"
 #include "drivers/MariaDBConnector.h"
-#include <stdexcept>
+
 
 namespace pap {
 
-bool DBManager::connect(DBDriver driver,
-                        const std::string& uri,
-                        const std::string& user,
-                        const std::string& password,
-                        const std::string& database) {
+// only if your database interface currently throws
+
+Result<void> DBManager::connect(
+    DBDriver driver,
+    const std::string& uri,
+    const std::string& user,
+    const std::string& password,
+    const std::string& database)
+{
     switch (driver) {
         case DBDriver::MariaDB:
             m_Database = std::make_unique<MariaDatabase>();
             break;
+
         // case DBDriver::MySQL:
         //     m_Database = std::make_unique<MySQLDatabase>();
         //     break;
+
         default:
-            throw std::invalid_argument("[DBManager] Unsupported driver");
+            return std::unexpected("[DBManager] Unsupported driver");
     }
 
-    return m_Database->connect(uri, user, password, database);
+    // Assuming m_Database->connect returns bool (true = success, false = fail)
+    if (!m_Database->connect(uri, user, password, database)) {
+        return std::unexpected("[DBManager] Failed to connect to database");
+    }
+
+    return {}; // success (void expected)
 }
+
 
 bool DBManager::isConnected() const {
     return m_Database && m_Database->isConnected();
 }
 
-DBResult DBManager::executeQuery(const std::string& query) {
-    if (!m_Database) {
-        throw std::runtime_error("[DBManager] No database driver initialized");
-    }
+Result<DBResult> DBManager::executeQuery(const std::string& query) {
+    assert(m_Database && "[DBManager] No database driver initialized");
     return m_Database->executeQuery(query);
 }
 

@@ -3,6 +3,10 @@
 #include "DBResult.h"
 
 
+namespace pap {
+
+
+
 void DBResult::populateFromResultSet(sql::ResultSet* rs) {
     if (!rs) {
         throw std::invalid_argument("ResultSet is null");
@@ -49,53 +53,54 @@ size_t DBResult::getColumnCount() const {
     return m_ColumnNames.size();
 }
 
-std::string DBResult::getColumnName(size_t index) const {
+std::expected<std::string, std::string> DBResult::getColumnName(size_t index) const {
     if (index >= m_ColumnNames.size()) {
-        throw std::out_of_range("Column index out of range");
+        return std::unexpected("Column index out of range");
     }
     return m_ColumnNames[index];
 }
 
-std::vector<std::string> DBResult::getColumnNames() const {
+const std::vector<std::string>& DBResult::getColumnNames() const {
     return m_ColumnNames;
 }
 
-std::string DBResult::getValue(size_t row, size_t col) const {
+std::expected<std::string, std::string> DBResult::getValue(size_t row, size_t col) const {
     if (row >= m_Data.size() || col >= m_ColumnNames.size()) {
-        throw std::out_of_range("Row or column index out of range");
+        return std::unexpected("Row or column index out of range");
     }
     return m_Data[row][col];
 }
 
-std::string DBResult::getValue(size_t row, const std::string& colName) const {
+std::expected<std::string, std::string> DBResult::getValue(size_t row, const std::string& colName) const {
     auto it = std::find(m_ColumnNames.begin(), m_ColumnNames.end(), colName);
     if (it == m_ColumnNames.end()) {
-        throw std::invalid_argument("Column name not found");
+        return std::unexpected("Column name not found: " + colName);
     }
     size_t col = std::distance(m_ColumnNames.begin(), it);
     return getValue(row, col);
 }
 
-std::vector<std::string> DBResult::getRow(size_t row) const {
+std::expected<std::vector<std::string>, std::string> DBResult::getRow(size_t row) const {
     if (row >= m_Data.size()) {
-        throw std::out_of_range("Row index out of range");
+        return std::unexpected("Row index out of range");
     }
     return m_Data[row];
 }
 
-std::string DBResult::getColumnType(size_t col) const {
+std::expected<std::string, std::string> DBResult::getColumnType(size_t col) const {
     if (col >= m_ColumnTypes.size()) {
-        throw std::out_of_range("Column index out of range");
+        return std::unexpected("Column index out of range");
     }
     return m_ColumnTypes[col];
 }
 
-std::string DBResult::getTableName(size_t col) const {
+std::expected<std::string, std::string> DBResult::getTableName(size_t col) const {
     if (col >= m_TableNames.size()) {
-        throw std::out_of_range("Column index out of range");
+        return std::unexpected("Column index out of range");
     }
     return m_TableNames[col];
 }
+
 
 std::string DBResult::toString() const {
     std::stringstream ss;
@@ -142,4 +147,5 @@ std::string DBResult::toString() const {
 std::ostream& operator<<(std::ostream& os, const DBResult& res) {
     os << res.toString();
     return os;
+}
 }
