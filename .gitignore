@@ -75,5 +75,5 @@ Makefile
 .cache/
 .clangd/
 
-vendor/include
-vendor/libs
+vendor/include/
+vendor/libs/

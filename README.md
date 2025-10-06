@@ -12,10 +12,12 @@ I need to fix up a lot of the structure. but i have an idea of how this will wor
 ![Screenshot of the current app](./assets/readme/Screenshot_20251005_150646.png)
 
 
-
-may have to deal with open gl, too
-
+you will need some dependinces for this to work.
+will make more comprehensive later
+this use mariadb because that is in the standered arch repo
 this is also only tested on linux.
+idk if it actually works on windows or mac
+
 
 
 to build run the build_vendor first. then build_pineapple. the .sh of build_pineapple can take ninja as arg
