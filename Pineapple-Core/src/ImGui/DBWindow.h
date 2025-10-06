@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 #include <imgui.h>
-#include "db_tableview.h"
+#include "DBTableView.h"
 
 namespace pap {
 

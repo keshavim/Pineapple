@@ -1,6 +1,6 @@
 // DBResult.cpp
 #include "pinepch.h"
-#include "db_result.h"
+#include "DBResult.h"
 
 
 void DBResult::populateFromResultSet(sql::ResultSet* rs) {

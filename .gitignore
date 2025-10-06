@@ -44,6 +44,7 @@
 bin/
 obj/
 build/
+build_vendor/
 
 # CMake files
 CMakeFiles/

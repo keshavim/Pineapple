@@ -2,7 +2,7 @@
 #ifndef DB_RESULT_VIEW_COMPONENT_H
 #define DB_RESULT_VIEW_COMPONENT_H
 
-#include "dbc/db_result.h"
+#include "dbc/DBResult.h"
 #include <imgui.h>
 
 namespace pap {
