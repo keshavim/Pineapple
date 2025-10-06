@@ -18,12 +18,12 @@ class Application; // friend
 class LayerManager
 {
 public:
-    LayerManager() = delete;
+    LayerManager() = default;
 
     // Push a non-GUI Layer
     template <typename TLayer, typename... Args>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void pushLayer(Args &&...args)
+    void pushLayer(Args &&...args)
     {
         if (findLayer<TLayer>(s_Layers) != s_Layers.end())
             return;
@@ -36,7 +36,7 @@ public:
     // Push a GUI Layer
     template <typename TLayer, typename... Args>
         requires(std::is_base_of_v<ImGuiWindow, TLayer>)
-    static void pushGuiWindow(Args &&...args)
+    void pushGuiWindow(Args &&...args)
     {
         if (findLayer<TLayer>(s_GuiLayers) != s_GuiLayers.end())
             return;
@@ -48,7 +48,7 @@ public:
     // Pop non-GUI Layer
     template <typename TLayer>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void popLayer()
+    void popLayer()
     {
         auto it = findLayer<TLayer>(s_Layers);
         if (it != s_Layers.end())
@@ -61,7 +61,7 @@ public:
     // Pop GUI Layer
     template <typename TLayer>
         requires(std::is_base_of_v<ImGuiWindow, TLayer>)
-    static void popGuiWindow()
+    void popGuiWindow()
     {
         auto it = findLayer<TLayer>(s_GuiLayers);
         if (it != s_GuiLayers.end())
@@ -74,13 +74,13 @@ public:
 private:
     friend class Application;
 
-    static void updateLayers(float dt);
-    static void renderLayers();
-    static void drawGuiLayers();
-    static void clear();
+    void updateLayers(float dt);
+    void renderLayers();
+    void drawGuiLayers();
+    void clear();
 
     template <typename LayerType, typename Container>
-    static auto findLayer(Container &layers)
+    auto findLayer(Container &layers)
     {
         return std::ranges::find_if(layers, [](const auto &layer) {
             return dynamic_cast<LayerType *>(layer.get()) != nullptr;
@@ -88,8 +88,8 @@ private:
     }
 
 private:
-    static std::vector<std::unique_ptr<Layer>> s_Layers;
-    static std::vector<std::unique_ptr<ImGuiWindow>> s_GuiLayers;
+    std::vector<std::unique_ptr<Layer>> s_Layers;
+    std::vector<std::unique_ptr<ImGuiWindow>> s_GuiLayers;
 };
 
 } // namespace pap

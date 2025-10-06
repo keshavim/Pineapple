@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "core/layer_manager.h"
 #include "layer.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
@@ -40,12 +41,28 @@ public:
         return m_Window->GetFramebufferSize();
     }
 
+    template <typename TLayer, typename... Args>
+        requires std::is_base_of_v<Layer, TLayer>
+    static void pushLayer(Args&&... args)
+    {
+        Application::Get().layerManager.pushLayer<TLayer>(std::forward<Args>(args)...);
+    }
+
+    // Push a GUI Layer
+    template <typename TLayer, typename... Args>
+        requires std::is_base_of_v<ImGuiWindow, TLayer>
+    static void pushGuiWindow(Args&&... args)
+    {
+        Application::Get().layerManager.pushGuiWindow<TLayer>(std::forward<Args>(args)...);
+    }
+
 
 private:
     void Update();
 
     AppSpecifications m_Specifications;
     std::shared_ptr<Window> m_Window;
+    LayerManager layerManager;
 
     bool m_Running = false;
     static Application *s_Instance;

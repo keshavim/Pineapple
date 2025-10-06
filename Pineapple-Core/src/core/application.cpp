@@ -2,8 +2,7 @@
 #include "event.h"
 #include "pinepch.h"
 
-#include "ImGui/windows/DBWindow.h"
-#include "ImGui/windows/ImGuiDockSpaceLayer.h"
+#include "ImGui/ImGuiDockSpaceLayer.h"
 #include "core.h"
 #include "layer_manager.h"
 
@@ -38,14 +37,13 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
 
     Renderer::Init(m_Window->GetNativeWindow());
 
-    LayerManager::pushGuiWindow<ImGuiDockSpace>();
-    LayerManager::pushGuiWindow<DBWindow>("Database Table");
+    pushGuiWindow<ImGuiDockSpace>();
 }
 
 Application::~Application()
 {
     // Clean up layers in reverse order
-    LayerManager::clear();
+    layerManager.clear();
     Renderer::Destroy();
     m_Window->Destroy();
 }
@@ -64,10 +62,11 @@ void Application::OnEvent(const Event::Base &e)
         if (key.key == GLFW_KEY_ESCAPE)
             Stop();
 
-        if (e.getType() == EventType::WindowClosed)
-        {
-            Stop();
-        }
+
+    }
+    if (e.getType() == EventType::WindowClosed)
+    {
+        Stop();
     }
 }
 
@@ -96,14 +95,14 @@ void Application::Run()
         lastTime = currentTime;
 
 
-        LayerManager::updateLayers(dt);
+        layerManager.updateLayers(dt);
 
-        LayerManager::renderLayers();
+        layerManager.renderLayers();
 
 
         Renderer::BeginImGuiFrame();
 
-        LayerManager::drawGuiLayers();
+        layerManager.drawGuiLayers();
         Renderer::RenderImGuiFrame();
 
 
