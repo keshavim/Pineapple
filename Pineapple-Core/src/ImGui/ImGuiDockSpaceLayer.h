@@ -13,6 +13,7 @@ public:
     ~ImGuiDockSpace() override;
 
     void drawImGui() override;
+    bool wantsCapture() const override{return false;}
 };
 
 } // namespace pap

@@ -25,7 +25,7 @@ public:
     void Run();
     void Stop();
 
-    void OnEvent(const Event::Base& e);
+    void OnEvent(Event::Base& e);
 
     static Application &Get();
     static float GetTime();

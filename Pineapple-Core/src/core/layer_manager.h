@@ -25,12 +25,12 @@ public:
         requires(std::is_base_of_v<Layer, TLayer>)
     void pushLayer(Args &&...args)
     {
-        if (findLayer<TLayer>(s_Layers) != s_Layers.end())
+        if (findLayer<TLayer>(m_Layers) != m_Layers.end())
             return;
 
         auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
         newLayer->onAttach();
-        s_Layers.push_back(std::move(newLayer));
+        m_Layers.push_back(std::move(newLayer));
     }
 
     // Push a GUI Layer
@@ -38,11 +38,11 @@ public:
         requires(std::is_base_of_v<ImGuiWindow, TLayer>)
     void pushGuiWindow(Args &&...args)
     {
-        if (findLayer<TLayer>(s_GuiLayers) != s_GuiLayers.end())
+        if (findLayer<TLayer>(m_ImGuiWindows) != m_ImGuiWindows.end())
             return;
 
         auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
-        s_GuiLayers.push_back(std::move(newLayer));
+        m_ImGuiWindows.push_back(std::move(newLayer));
     }
 
     // Pop non-GUI Layer
@@ -50,11 +50,11 @@ public:
         requires(std::is_base_of_v<Layer, TLayer>)
     void popLayer()
     {
-        auto it = findLayer<TLayer>(s_Layers);
-        if (it != s_Layers.end())
+        auto it = findLayer<TLayer>(m_Layers);
+        if (it != m_Layers.end())
         {
             (*it)->onDetach();
-            s_Layers.erase(it);
+            m_Layers.erase(it);
         }
     }
 
@@ -63,10 +63,10 @@ public:
         requires(std::is_base_of_v<ImGuiWindow, TLayer>)
     void popGuiWindow()
     {
-        auto it = findLayer<TLayer>(s_GuiLayers);
-        if (it != s_GuiLayers.end())
+        auto it = findLayer<TLayer>(m_ImGuiWindows);
+        if (it != m_ImGuiWindows.end())
         {
-            s_GuiLayers.erase(it);
+            m_ImGuiWindows.erase(it);
         }
     }
 
@@ -74,9 +74,10 @@ public:
 private:
     friend class Application;
 
-    void updateLayers(float dt);
-    void renderLayers();
-    void drawGuiLayers();
+    void OnUpdate(float dt);
+    void OnRender();
+    void OnEvent(Event::Base& e);
+    void drawImGuiWindows();
     void clear();
 
     template <typename LayerType, typename Container>
@@ -88,8 +89,8 @@ private:
     }
 
 private:
-    std::vector<std::unique_ptr<Layer>> s_Layers;
-    std::vector<std::unique_ptr<ImGuiWindow>> s_GuiLayers;
+    std::vector<std::unique_ptr<Layer>> m_Layers;
+    std::vector<std::unique_ptr<ImGuiWindow>> m_ImGuiWindows;
 };
 
 } // namespace pap

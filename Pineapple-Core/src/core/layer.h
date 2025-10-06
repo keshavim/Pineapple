@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "core/event.h"
 
 namespace pap
 {
@@ -8,17 +9,20 @@ class Layer
 {
 public:
     virtual ~Layer() = default;
-    virtual void onAttach()
+    virtual void OnAttach()
     {
     }
-    virtual void onDetach()
+    virtual void OnDetach()
     {
     }
-    virtual void onUpdate(float dt)
+    virtual void OnUpdate(float dt)
     {
     }
-    virtual void onRender()
+    virtual void OnRender()
     {
+    }
+    virtual void OnEvent(Event::Base& e){
+
     }
 };
 

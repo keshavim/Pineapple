@@ -54,7 +54,7 @@ void Application::Update()
     // Update all layers
 }
 
-void Application::OnEvent(const Event::Base &e)
+void Application::OnEvent(Event::Base &e)
 {
     if (e.getType() == EventType::KeyPressed)
     {
@@ -68,6 +68,8 @@ void Application::OnEvent(const Event::Base &e)
     {
         Stop();
     }
+
+    layerManager.OnEvent(e);
 }
 
 void Application::Run()
@@ -95,14 +97,14 @@ void Application::Run()
         lastTime = currentTime;
 
 
-        layerManager.updateLayers(dt);
+        layerManager.OnUpdate(dt);
 
-        layerManager.renderLayers();
+        layerManager.OnRender();
 
 
         Renderer::BeginImGuiFrame();
 
-        layerManager.drawGuiLayers();
+        layerManager.drawImGuiWindows();
         Renderer::RenderImGuiFrame();
 
 
