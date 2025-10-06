@@ -20,21 +20,23 @@ enum class DBDriver {
 
 class DBManager {
 public:
-    DBManager() = default;
-    ~DBManager() = default;
+    DBManager() = delete;
+    ~DBManager() = delete;
+    DBManager(const DBManager&) = delete;
+    DBManager& operator=(const DBManager&) = delete;
 
-    Result<void> connect(DBDriver driver,
-                 const std::string& uri,
-                 const std::string& user,
-                 const std::string& password,
-                 const std::string& database);
+    static Result<void> connect(DBDriver driver,
+                                const std::string& uri,
+                                const std::string& user,
+                                const std::string& password,
+                                const std::string& database);
 
-    bool isConnected() const;
+    static bool isConnected();
 
-    Result<DBResult> executeQuery(const std::string& query);
+    static Result<DBResult> executeQuery(const std::string& query);
 
 private:
-    std::unique_ptr<DBConnector> m_Database;
+    static std::unique_ptr<DBConnector> s_Database;
 };
 
 } // namespace pap

@@ -1,10 +1,11 @@
 #include "application.h"
-#include "ImGui/DBLayer.h"
+#include "event.h"
 #include "pinepch.h"
 
-#include "ImGui/ImGuiDockSpaceLayer.h"
-#include "layer_manager.h"
+#include "ImGui/windows/DBWindow.h"
+#include "ImGui/windows/ImGuiDockSpaceLayer.h"
 #include "core.h"
+#include "layer_manager.h"
 
 #include "renderer/renderer.h"
 
@@ -18,6 +19,7 @@
 namespace pap
 {
 
+
 Application *Application::s_Instance = nullptr;
 
 Application::Application(const AppSpecifications &specs) : m_Specifications(specs)
@@ -30,12 +32,14 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
 
 
     m_Window = std::make_shared<Window>(m_Specifications.winSpec);
+    m_Window->SetEventCallback([this](Event::Base &e) { this->OnEvent(e); });
     m_Window->Create();
+
 
     Renderer::Init(m_Window->GetNativeWindow());
 
-    LayerManager::pushGuiLayer<ImGuiDockSpaceLayer>();
-    LayerManager::pushGuiLayer<DatabaseLayer>();
+    LayerManager::pushGuiWindow<ImGuiDockSpace>();
+    LayerManager::pushGuiWindow<DBWindow>("Database Table");
 }
 
 Application::~Application()
@@ -52,6 +56,21 @@ void Application::Update()
     // Update all layers
 }
 
+void Application::OnEvent(const Event::Base &e)
+{
+    if (e.getType() == EventType::KeyPressed)
+    {
+        auto key = static_cast<const Event::KeyPressed &>(e);
+        if (key.key == GLFW_KEY_ESCAPE)
+            Stop();
+
+        if (e.getType() == EventType::WindowClosed)
+        {
+            Stop();
+        }
+    }
+}
+
 void Application::Run()
 {
 
@@ -66,9 +85,9 @@ void Application::Run()
 
         glfwPollEvents();
 
-        if (m_Window->ShouldClose())
+
+        if (!m_Running)
         {
-            Stop();
             break;
         }
 
@@ -109,5 +128,4 @@ float Application::GetTime()
 {
     return (float)glfwGetTime();
 }
-
 } // namespace pap

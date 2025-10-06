@@ -7,14 +7,14 @@
 namespace pap
 {
 
-ImGuiDockSpaceLayer::ImGuiDockSpaceLayer()
+ImGuiDockSpace::ImGuiDockSpace()
 {
 }
-ImGuiDockSpaceLayer::~ImGuiDockSpaceLayer()
+ImGuiDockSpace::~ImGuiDockSpace()
 {
 }
 
-void ImGuiDockSpaceLayer::drawImGui()
+void ImGuiDockSpace::drawImGui()
 {
     // Dockspace window
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

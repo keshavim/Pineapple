@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "ImGui/ImGuiLayer.h"
+#include "ImGui/ImGuiWindow.h"
 #include "layer.h"
 
 
@@ -23,7 +23,8 @@ public:
     // Push a non-GUI Layer
     template <typename TLayer, typename... Args>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void pushLayer(Args &&...args) {
+    static void pushLayer(Args &&...args)
+    {
         if (findLayer<TLayer>(s_Layers) != s_Layers.end())
             return;
 
@@ -34,8 +35,9 @@ public:
 
     // Push a GUI Layer
     template <typename TLayer, typename... Args>
-        requires(std::is_base_of_v<ImGuiLayer, TLayer>)
-    static void pushGuiLayer(Args &&...args) {
+        requires(std::is_base_of_v<ImGuiWindow, TLayer>)
+    static void pushGuiWindow(Args &&...args)
+    {
         if (findLayer<TLayer>(s_GuiLayers) != s_GuiLayers.end())
             return;
 
@@ -46,9 +48,11 @@ public:
     // Pop non-GUI Layer
     template <typename TLayer>
         requires(std::is_base_of_v<Layer, TLayer>)
-    static void popLayer() {
+    static void popLayer()
+    {
         auto it = findLayer<TLayer>(s_Layers);
-        if (it != s_Layers.end()) {
+        if (it != s_Layers.end())
+        {
             (*it)->onDetach();
             s_Layers.erase(it);
         }
@@ -56,10 +60,12 @@ public:
 
     // Pop GUI Layer
     template <typename TLayer>
-        requires(std::is_base_of_v<ImGuiLayer, TLayer>)
-    static void popGuiLayer() {
+        requires(std::is_base_of_v<ImGuiWindow, TLayer>)
+    static void popGuiWindow()
+    {
         auto it = findLayer<TLayer>(s_GuiLayers);
-        if (it != s_GuiLayers.end()) {
+        if (it != s_GuiLayers.end())
+        {
             s_GuiLayers.erase(it);
         }
     }
@@ -74,15 +80,16 @@ private:
     static void clear();
 
     template <typename LayerType, typename Container>
-    static auto findLayer(Container &layers) {
+    static auto findLayer(Container &layers)
+    {
         return std::ranges::find_if(layers, [](const auto &layer) {
             return dynamic_cast<LayerType *>(layer.get()) != nullptr;
-    });
-}
+        });
+    }
 
 private:
     static std::vector<std::unique_ptr<Layer>> s_Layers;
-    static std::vector<std::unique_ptr<ImGuiLayer>> s_GuiLayers;
+    static std::vector<std::unique_ptr<ImGuiWindow>> s_GuiLayers;
 };
 
 } // namespace pap

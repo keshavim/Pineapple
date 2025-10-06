@@ -1,10 +1,10 @@
-#include <pineapple.h>
 #include <dbc/DBManager.h>
+#include <pineapple.h>
 
 #include "imgui.h"
 
 
-class DemoWindow : public pap::ImGuiLayer
+class DemoWindow : public pap::ImGuiWindow
 {
 public:
     DemoWindow()
@@ -20,6 +20,5 @@ public:
 
 void pap::InitApplication()
 {
-    LayerManager::pushGuiLayer<DemoWindow>();
-
+    LayerManager::pushGuiWindow<DemoWindow>();
 }

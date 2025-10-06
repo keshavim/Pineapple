@@ -9,6 +9,7 @@ class DBResult
 {
 public:
     // Constructor from ResultSet
+    DBResult() = default;
     DBResult(sql::ResultSet *rs);
 
     // Immutable getters

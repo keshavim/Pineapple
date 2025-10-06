@@ -8,6 +8,9 @@ namespace pap {
 
 // only if your database interface currently throws
 
+// Define the static member
+std::unique_ptr<DBConnector> DBManager::s_Database = nullptr;
+
 Result<void> DBManager::connect(
     DBDriver driver,
     const std::string& uri,
@@ -17,33 +20,31 @@ Result<void> DBManager::connect(
 {
     switch (driver) {
         case DBDriver::MariaDB:
-            m_Database = std::make_unique<MariaDatabase>();
+            s_Database = std::make_unique<MariaDatabase>();
             break;
 
         // case DBDriver::MySQL:
-        //     m_Database = std::make_unique<MySQLDatabase>();
+        //     s_Database = std::make_unique<MySQLDatabase>();
         //     break;
 
         default:
             return std::unexpected("[DBManager] Unsupported driver");
     }
 
-    // Assuming m_Database->connect returns bool (true = success, false = fail)
-    if (!m_Database->connect(uri, user, password, database)) {
+    if (!s_Database->connect(uri, user, password, database)) {
         return std::unexpected("[DBManager] Failed to connect to database");
     }
 
-    return {}; // success (void expected)
+    return {};
 }
 
-
-bool DBManager::isConnected() const {
-    return m_Database && m_Database->isConnected();
+bool DBManager::isConnected() {
+    return s_Database && s_Database->isConnected();
 }
 
 Result<DBResult> DBManager::executeQuery(const std::string& query) {
-    assert(m_Database && "[DBManager] No database driver initialized");
-    return m_Database->executeQuery(query);
+    assert(s_Database && "[DBManager] No database driver initialized");
+    return s_Database->executeQuery(query);
 }
 
 } // namespace pap

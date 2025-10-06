@@ -5,7 +5,7 @@ namespace pap
 
 // Define static members
 std::vector<std::unique_ptr<Layer>> LayerManager::s_Layers;
-std::vector<std::unique_ptr<ImGuiLayer>> LayerManager::s_GuiLayers;
+std::vector<std::unique_ptr<ImGuiWindow>> LayerManager::s_GuiLayers;
 
 // Update/render non-GUI layers
 void LayerManager::updateLayers(float dt)

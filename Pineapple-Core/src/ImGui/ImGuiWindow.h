@@ -6,10 +6,10 @@ namespace pap
 {
 
 // Base for GUI layers
-class ImGuiLayer
+class ImGuiWindow
 {
 public:
-    virtual ~ImGuiLayer() = default;
+    virtual ~ImGuiWindow() = default;
     virtual void drawImGui() = 0; // pure virtual
 };
 
