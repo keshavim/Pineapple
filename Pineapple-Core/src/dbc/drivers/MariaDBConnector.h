@@ -6,21 +6,23 @@
 #include <memory>
 #include <mutex>
 
-namespace pap {
+namespace pap
+{
 
-class MariaDatabase : public DBConnector {
+class MariaDatabase : public DBConnector
+{
 public:
     MariaDatabase() = default;
     ~MariaDatabase() override = default;
 
-    Result<void> connect(const std::string& uri,
-                 const std::string& user,
-                 const std::string& password,
-                 const std::string& database) override;
+    Result<void> connect(const std::string &uri,
+                         const std::string &user,
+                         const std::string &password,
+                         const std::string &database) override;
 
     bool isConnected() const override;
 
-    Result<DBResult> executeQuery(const std::string& query) override;
+    Result<DBResult> executeQuery(const std::string &query) override;
 
 private:
     std::unique_ptr<sql::Connection> m_Connection;

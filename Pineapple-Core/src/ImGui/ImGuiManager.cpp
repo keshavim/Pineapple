@@ -108,63 +108,70 @@ void ImGuiManager::onEvent(Event::Base &e)
     ImGuiIO &io = ImGui::GetIO();
 
     // Key pressed
-PAP_EVENT_DISPATCH(Event::KeyPressed, e,
-    ImGuiKey key = toImGuiKey(e.key);
-    if (key != ImGuiKey_None) io.AddKeyEvent(key, true);
+    PAP_EVENT_DISPATCH(
+        Event::KeyPressed, e, ImGuiKey key = toImGuiKey(e.key); if (key != ImGuiKey_None) io.AddKeyEvent(key, true);
 
-    switch (e.key)
-    {
-        case KeyCode::LeftControl: case KeyCode::RightControl: io.AddKeyEvent(ImGuiMod_Ctrl, true); break;
-        case KeyCode::LeftShift:   case KeyCode::RightShift:   io.AddKeyEvent(ImGuiMod_Shift, true); break;
-        case KeyCode::LeftAlt:     case KeyCode::RightAlt:     io.AddKeyEvent(ImGuiMod_Alt, true); break;
-        case KeyCode::LeftSuper:   case KeyCode::RightSuper:   io.AddKeyEvent(ImGuiMod_Super, true); break;
-        default: break;
-    }
-);
+        switch (e.key) {
+            case KeyCode::LeftControl:
+            case KeyCode::RightControl:
+                io.AddKeyEvent(ImGuiMod_Ctrl, true);
+                break;
+            case KeyCode::LeftShift:
+            case KeyCode::RightShift:
+                io.AddKeyEvent(ImGuiMod_Shift, true);
+                break;
+            case KeyCode::LeftAlt:
+            case KeyCode::RightAlt:
+                io.AddKeyEvent(ImGuiMod_Alt, true);
+                break;
+            case KeyCode::LeftSuper:
+            case KeyCode::RightSuper:
+                io.AddKeyEvent(ImGuiMod_Super, true);
+                break;
+            default:
+                break;
+        });
 
-// Key released
-PAP_EVENT_DISPATCH(Event::KeyReleased, e,
-    ImGuiKey key = toImGuiKey(e.key);
-    if (key != ImGuiKey_None) io.AddKeyEvent(key, false);
+    // Key released
+    PAP_EVENT_DISPATCH(
+        Event::KeyReleased, e, ImGuiKey key = toImGuiKey(e.key); if (key != ImGuiKey_None) io.AddKeyEvent(key, false);
 
-    switch (e.key)
-    {
-        case KeyCode::LeftControl: case KeyCode::RightControl: io.AddKeyEvent(ImGuiMod_Ctrl, false); break;
-        case KeyCode::LeftShift:   case KeyCode::RightShift:   io.AddKeyEvent(ImGuiMod_Shift, false); break;
-        case KeyCode::LeftAlt:     case KeyCode::RightAlt:     io.AddKeyEvent(ImGuiMod_Alt, false); break;
-        case KeyCode::LeftSuper:   case KeyCode::RightSuper:   io.AddKeyEvent(ImGuiMod_Super, false); break;
-        default: break;
-    }
-);
+        switch (e.key) {
+            case KeyCode::LeftControl:
+            case KeyCode::RightControl:
+                io.AddKeyEvent(ImGuiMod_Ctrl, false);
+                break;
+            case KeyCode::LeftShift:
+            case KeyCode::RightShift:
+                io.AddKeyEvent(ImGuiMod_Shift, false);
+                break;
+            case KeyCode::LeftAlt:
+            case KeyCode::RightAlt:
+                io.AddKeyEvent(ImGuiMod_Alt, false);
+                break;
+            case KeyCode::LeftSuper:
+            case KeyCode::RightSuper:
+                io.AddKeyEvent(ImGuiMod_Super, false);
+                break;
+            default:
+                break;
+        });
 
-// Char input
-PAP_EVENT_DISPATCH(Event::CharTyped, e,
-    io.AddInputCharacter(e.character);
-);
+    // Char input
+    PAP_EVENT_DISPATCH(Event::CharTyped, e, io.AddInputCharacter(e.character););
 
-// Mouse buttons
-PAP_EVENT_DISPATCH(Event::MouseButtonPressed, e,
-    io.AddMouseButtonEvent((int)e.button, true);
-);
-PAP_EVENT_DISPATCH(Event::MouseButtonReleased, e,
-    io.AddMouseButtonEvent((int)e.button, false);
-);
+    // Mouse buttons
+    PAP_EVENT_DISPATCH(Event::MouseButtonPressed, e, io.AddMouseButtonEvent((int)e.button, true););
+    PAP_EVENT_DISPATCH(Event::MouseButtonReleased, e, io.AddMouseButtonEvent((int)e.button, false););
 
-// Mouse moved
-PAP_EVENT_DISPATCH(Event::MouseMoved, e,
-    io.AddMousePosEvent((float)e.x, (float)e.y);
-);
+    // Mouse moved
+    PAP_EVENT_DISPATCH(Event::MouseMoved, e, io.AddMousePosEvent((float)e.x, (float)e.y););
 
-// Mouse scroll
-PAP_EVENT_DISPATCH(Event::MouseScrolled, e,
-    io.AddMouseWheelEvent(e.xOffset, e.yOffset);
-);
+    // Mouse scroll
+    PAP_EVENT_DISPATCH(Event::MouseScrolled, e, io.AddMouseWheelEvent(e.xOffset, e.yOffset););
 
-// Window focus
-PAP_EVENT_DISPATCH(Event::WindowFocused, e,
-    io.AddFocusEvent(e.focused);
-);
-
+    // Window focus
+    PAP_EVENT_DISPATCH(Event::WindowFocused, e, io.AddFocusEvent(e.focused););
 }
 
 

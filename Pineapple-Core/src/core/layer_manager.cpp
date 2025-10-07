@@ -23,21 +23,27 @@ void LayerManager::drawImGuiWindows()
         window->drawImGui();
 }
 
-void LayerManager::OnEvent(Event::Base& e){
-     // 1️⃣ First, let ImGui windows handle events if they want to
-    for (auto& window : m_ImGuiWindows) {
+void LayerManager::OnEvent(Event::Base &e)
+{
+    // 1️⃣ First, let ImGui windows handle events if they want to
+    for (auto &window : m_ImGuiWindows)
+    {
         window->onEvent(e);
-        if (window->wantsCapture()) {
+        if (window->wantsCapture())
+        {
             e.handled = true; // block lower layers
             break;
         }
     }
 
     // 2️⃣ Then propagate to layers if event not handled
-    if (!e.handled) {
-        for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it) {
+    if (!e.handled)
+    {
+        for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
+        {
             (*it)->OnEvent(e);
-            if (e.handled) break;
+            if (e.handled)
+                break;
         }
     }
 }

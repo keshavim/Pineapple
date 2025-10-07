@@ -26,7 +26,7 @@ public:
     void Run();
     void Stop();
 
-    void OnEvent(Event::Base& e);
+    void OnEvent(Event::Base &e);
 
     static Application &Get();
     static float GetTime();
@@ -44,7 +44,7 @@ public:
 
     template <typename TLayer, typename... Args>
         requires std::is_base_of_v<Layer, TLayer>
-    static void pushLayer(Args&&... args)
+    static void pushLayer(Args &&...args)
     {
         Application::Get().layerManager.pushLayer<TLayer>(std::forward<Args>(args)...);
     }
@@ -52,7 +52,7 @@ public:
     // Push a GUI Layer
     template <typename TLayer, typename... Args>
         requires std::is_base_of_v<ImGuiWindow, TLayer>
-    static void pushGuiWindow(Args&&... args)
+    static void pushGuiWindow(Args &&...args)
     {
         Application::Get().layerManager.pushGuiWindow<TLayer>(std::forward<Args>(args)...);
     }

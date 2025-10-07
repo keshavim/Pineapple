@@ -4,7 +4,8 @@
 #include <core/core.h>
 #include <mariadbc/conncpp.hpp>
 
-namespace pap{
+namespace pap
+{
 class DBResult
 {
 public:
@@ -45,7 +46,7 @@ private:
     // Helper to populate from ResultSet
     void populateFromResultSet(sql::ResultSet *rs);
 };
-}
+} // namespace pap
 // C++20/23 std::formatter specialization
 template <>
 struct std::formatter<pap::DBResult> : std::formatter<std::string>

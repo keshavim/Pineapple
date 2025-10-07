@@ -53,12 +53,13 @@ void Application::OnEvent(Event::Base &e)
 {
     imguiManager.onEvent(e);
 
-    PAP_EVENT_DISPATCH(Event::KeyPressed, e,
+    PAP_EVENT_DISPATCH(
+        Event::KeyPressed,
+        e,
         if (e.key == KeyCode::Escape) {
             e.handled = true;
             m_Running = false;
-        }
-    );
+        });
 
     if (e.getType() == EventType::WindowClosed)
     {

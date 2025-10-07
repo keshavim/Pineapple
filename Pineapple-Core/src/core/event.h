@@ -1,9 +1,9 @@
 #pragma once
+#include "keycodes.h"
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include "keycodes.h"
 
 namespace pap
 {
@@ -365,5 +365,5 @@ void dispatch(Event::Base &e, const std::function<void(T &)> &func)
 
 
 // Macro to simplify event dispatch
-#define PAP_EVENT_DISPATCH(EventType, EventVar, ...) \
-    Event::dispatch<EventType>(EventVar, [&](EventType& e) { __VA_ARGS__; })
+#define PAP_EVENT_DISPATCH(EventType, EventVar, ...)                                                                   \
+    Event::dispatch<EventType>(EventVar, [&](EventType &e) { __VA_ARGS__; })

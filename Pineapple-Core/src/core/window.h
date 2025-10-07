@@ -1,16 +1,15 @@
 #pragma once
 
+#include "core.h"
+#include "event.h"
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <string>
-#include "core.h"
-#include "event.h"
-
 
 
 namespace pap
 {
-using EventCallbackFn = std::function<void(Event::Base&)>;
+using EventCallbackFn = std::function<void(Event::Base &)>;
 
 
 struct WindowSpecifications
@@ -34,30 +33,47 @@ public:
     void Update(); // Runs per-frame
     bool ShouldClose() const;
     void SetVSync(bool enabled);
-    inline bool IsVSync() const { return m_Data.VSync; }
+    inline bool IsVSync() const
+    {
+        return m_Data.VSync;
+    }
 
-    inline GLFWwindow* GetNativeWindow() const { return m_Window; }
+    inline GLFWwindow *GetNativeWindow() const
+    {
+        return m_Window;
+    }
     std::pair<int, int> GetFramebufferSize();
 
     // -------------------------
     // Event Callback
     // -------------------------
-    void SetEventCallback(const EventCallbackFn& callback) {
+    void SetEventCallback(const EventCallbackFn &callback)
+    {
         m_Data.EventCallback = callback;
     }
 
     // -------------------------
     // Getters for data
     // -------------------------
-    const std::string& GetTitle() const { return m_Data.Title; }
-    int GetWidth() const { return m_Data.Width; }
-    int GetHeight() const { return m_Data.Height; }
+    const std::string &GetTitle() const
+    {
+        return m_Data.Title;
+    }
+    int GetWidth() const
+    {
+        return m_Data.Width;
+    }
+    int GetHeight() const
+    {
+        return m_Data.Height;
+    }
 
 private:
     // -------------------------
     // Runtime Data (modifiable by events)
     // -------------------------
-    struct Data {
+    struct Data
+    {
         std::string Title = "Pineapple";
         int Width = 1280;
         int Height = 720;
@@ -67,6 +83,6 @@ private:
         EventCallbackFn EventCallback;
     } m_Data;
 
-    GLFWwindow* m_Window = nullptr;
+    GLFWwindow *m_Window = nullptr;
 };
 } // namespace pap

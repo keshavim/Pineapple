@@ -1,6 +1,6 @@
 #pragma once
-#include <string>
 #include "core/event.h"
+#include <string>
 
 namespace pap
 {
@@ -21,8 +21,8 @@ public:
     virtual void OnRender()
     {
     }
-    virtual void OnEvent(Event::Base& e){
-
+    virtual void OnEvent(Event::Base &e)
+    {
     }
 };
 

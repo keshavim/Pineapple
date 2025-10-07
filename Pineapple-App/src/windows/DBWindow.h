@@ -2,19 +2,19 @@
 #ifndef DB_WINDOW_H
 #define DB_WINDOW_H
 
-#include <memory>
-#include <string>
-#include <imgui.h>
 #include "ImGui/ImGuiWindow.h"
 #include "dbc/DBManager.h"
 #include "dbc/DBResult.h"
+#include <imgui.h>
 #include <iostream>
+#include <memory>
+#include <string>
 
 
-
-class DBWindow : public pap::ImGuiWindow{
+class DBWindow : public pap::ImGuiWindow
+{
 public:
-    DBWindow(const std::string& title);
+    DBWindow(const std::string &title);
 
 
     void drawImGui() override;

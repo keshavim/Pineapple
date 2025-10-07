@@ -72,7 +72,7 @@ private:
 
     void OnUpdate(float dt);
     void OnRender();
-    void OnEvent(Event::Base& e);
+    void OnEvent(Event::Base &e);
     void drawImGuiWindows();
     void clear();
 

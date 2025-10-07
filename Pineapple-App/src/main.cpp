@@ -19,11 +19,8 @@ public:
 };
 
 
-
-
 void pap::InitApplication()
 {
     Application::pushGuiWindow<DemoWindow>();
     Application::pushGuiWindow<DBWindow>("Database Table");
-
 }
