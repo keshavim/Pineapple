@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0) # Updated to a more modern version
+cmake_minimum_required(VERSION 3.27)
 set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_SUPPORT OFF)
 
 project(Pineapple LANGUAGES C CXX)
@@ -11,15 +11,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(UNIX AND NOT APPLE) # Linux only
+    set(CMAKE_C_COMPILER "gcc" CACHE STRING "C compiler" FORCE)
+    set(CMAKE_CXX_COMPILER "g++" CACHE STRING "C++ compiler" FORCE)
+endif()
+
 # Compiler-specific flags
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     # GCC-specific flags for better warnings and errors
     add_compile_options(
-        -Wall              # Enable all standard warnings
-        -Wextra            # Extra warnings
-        -Wpedantic         # Strict standard compliance
-        -fdiagnostics-color=always        # Colorized diagnostics
-        -fdiagnostics-show-option         # Show which warning flag triggered it
+        -Wall # Enable all standard warnings
+        -Wextra # Extra warnings
+        -Wpedantic # Strict standard compliance
+        -fdiagnostics-color=always # Colorized diagnostics
+        -fdiagnostics-show-option # Show which warning flag triggered it
     )
 endif()
 
@@ -52,5 +57,5 @@ add_subdirectory(vendor)
 # -------------------------
 # Add main subprojects
 # -------------------------
-add_subdirectory(Pineapple-Core)
-add_subdirectory(Pineapple-App)
+add_subdirectory(Core)
+add_subdirectory(Sandbox)

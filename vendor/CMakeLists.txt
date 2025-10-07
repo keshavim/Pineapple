@@ -35,7 +35,6 @@ add_subdirectory(mariadbc)
 # -------------------------
 # ImGui
 # -------------------------
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_SUPPORT OFF)
 file(GLOB IMGUI_SRC
     ${VENDOR_INCLUDE_DIR}/imgui/*.cpp
     ${VENDOR_INCLUDE_DIR}/imgui/backends/imgui_impl_glfw.cpp
