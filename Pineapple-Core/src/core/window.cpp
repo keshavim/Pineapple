@@ -110,7 +110,7 @@ void Window::Create()
     glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int c){
         auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
 
-        Event::CharInput e(c);
+        Event::CharTyped e(c);
         if (data.EventCallback) data.EventCallback(e);
     });
 

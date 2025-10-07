@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "ImGui/ImGuiManager.h"
 #include "core/layer_manager.h"
 #include "layer.h"
 #include "window.h"
@@ -58,11 +59,10 @@ public:
 
 
 private:
-    void Update();
-
     AppSpecifications m_Specifications;
     std::shared_ptr<Window> m_Window;
     LayerManager layerManager;
+    ImGuiManager imguiManager;
 
     bool m_Running = false;
     static Application *s_Instance;

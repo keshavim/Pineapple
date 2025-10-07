@@ -35,7 +35,7 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
     m_Window->Create();
 
 
-    Renderer::Init(m_Window->GetNativeWindow());
+    imguiManager.init(m_Window->GetNativeWindow());
 
     pushGuiWindow<ImGuiDockSpace>();
 }
@@ -44,26 +44,14 @@ Application::~Application()
 {
     // Clean up layers in reverse order
     layerManager.clear();
-    Renderer::Destroy();
+    imguiManager.shutdown();
     m_Window->Destroy();
 }
 
 
-void Application::Update()
-{
-    // Update all layers
-}
-
 void Application::OnEvent(Event::Base &e)
 {
-    if (e.getType() == EventType::KeyPressed)
-    {
-        auto key = static_cast<const Event::KeyPressed &>(e);
-        if (key.key == GLFW_KEY_ESCAPE)
-            Stop();
-
-
-    }
+    imguiManager.onEvent(e);
 
     PAP_EVENT_DISPATCH(Event::KeyPressed, e,
         if (e.key == GLFW_KEY_ESCAPE) {
@@ -71,7 +59,6 @@ void Application::OnEvent(Event::Base &e)
             m_Running = false;
         }
     );
-
 
     if (e.getType() == EventType::WindowClosed)
     {
@@ -111,10 +98,11 @@ void Application::Run()
         layerManager.OnRender();
 
 
-        Renderer::BeginImGuiFrame();
+        imguiManager.newFrame(dt);
 
         layerManager.drawImGuiWindows();
-        Renderer::RenderImGuiFrame();
+
+        imguiManager.render();
 
 
         m_Window->Update();

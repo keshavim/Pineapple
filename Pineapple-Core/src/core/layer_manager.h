@@ -57,7 +57,6 @@ public:
 
     // Pop GUI Layer
     template <std::derived_from<ImGuiWindow>, typename TLayer>
-        requires(std::is_base_of_v<ImGuiWindow, TLayer>)
     void popGuiWindow()
     {
         auto it = findLayer<TLayer>(m_ImGuiWindows);

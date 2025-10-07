@@ -99,11 +99,11 @@ public:
     }
 };
 
-class CharInput : public Base
+class CharTyped : public Base
 {
 public:
-    unsigned int c;
-    CharInput(unsigned int c) : c(c)
+    unsigned int character;
+    CharTyped(unsigned int character) : character(character)
     {
     }
     static EventType StaticType()
@@ -116,7 +116,7 @@ public:
     }
     std::string toString() const override
     {
-        return "CharInput: " + std::to_string(c);
+        return "CharInput: " + std::to_string(character);
     }
 };
 
