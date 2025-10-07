@@ -21,8 +21,7 @@ public:
     LayerManager() = default;
 
     // Push a non-GUI Layer
-    template <typename TLayer, typename... Args>
-        requires(std::is_base_of_v<Layer, TLayer>)
+    template <std::derived_from<Layer> TLayer, typename... Args>
     void pushLayer(Args &&...args)
     {
         if (findLayer<TLayer>(m_Layers) != m_Layers.end())
@@ -34,8 +33,7 @@ public:
     }
 
     // Push a GUI Layer
-    template <typename TLayer, typename... Args>
-        requires(std::is_base_of_v<ImGuiWindow, TLayer>)
+    template <std::derived_from<ImGuiWindow> TLayer, typename... Args>
     void pushGuiWindow(Args &&...args)
     {
         if (findLayer<TLayer>(m_ImGuiWindows) != m_ImGuiWindows.end())
@@ -46,8 +44,7 @@ public:
     }
 
     // Pop non-GUI Layer
-    template <typename TLayer>
-        requires(std::is_base_of_v<Layer, TLayer>)
+    template <std::derived_from<Layer> TLayer>
     void popLayer()
     {
         auto it = findLayer<TLayer>(m_Layers);
@@ -59,7 +56,7 @@ public:
     }
 
     // Pop GUI Layer
-    template <typename TLayer>
+    template <std::derived_from<ImGuiWindow>, typename TLayer>
         requires(std::is_base_of_v<ImGuiWindow, TLayer>)
     void popGuiWindow()
     {
