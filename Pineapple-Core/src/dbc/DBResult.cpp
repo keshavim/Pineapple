@@ -1,4 +1,3 @@
-// DBResult.cpp
 #include "DBResult.h"
 #include "pinepch.h"
 
@@ -16,7 +15,7 @@ void DBResult::populateFromResultSet(sql::ResultSet *rs)
 
     sql::ResultSetMetaData *meta = rs->getMetaData();
     size_t colCount = meta->getColumnCount();
-    std::cout << "metadata" << std::endl;
+    PAP_INFO("metadata");
     // Populate column names, types, table names
     m_ColumnNames.reserve(colCount);
     m_ColumnTypes.reserve(colCount);
@@ -28,7 +27,7 @@ void DBResult::populateFromResultSet(sql::ResultSet *rs)
         m_TableNames.push_back(meta->getTableName(i).c_str());
     }
 
-    std::cout << "populate" << std::endl;
+    PAP_INFO("populate");
 
     // Populate data
     while (rs->next())
@@ -42,7 +41,7 @@ void DBResult::populateFromResultSet(sql::ResultSet *rs)
         }
         m_Data.push_back(row);
     }
-    std::cerr << "complete" << std::endl;
+    PAP_INFO("complete");
 }
 
 DBResult::DBResult(sql::ResultSet *rs)

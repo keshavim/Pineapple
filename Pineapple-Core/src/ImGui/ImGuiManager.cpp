@@ -49,7 +49,7 @@ void ImGuiManager::newFrame(float dt)
 
     io.DisplaySize = ImVec2((float)window_w, (float)window_h);
     io.DisplayFramebufferScale =
-        ImVec2(window_w > 0 ? (float)display_w / window_w : 0.0f, window_h > 0 ? (float)display_h / window_h : 0.0f);
+        ImVec2(window_w > 0 ? (float)display_w / (float)window_w : 0.0f, window_h > 0 ? (float)display_h / (float)window_h : 0.0f);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
@@ -168,10 +168,15 @@ void ImGuiManager::onEvent(Event::Base &e)
     PAP_EVENT_DISPATCH(Event::MouseMoved, e, io.AddMousePosEvent((float)e.x, (float)e.y););
 
     // Mouse scroll
-    PAP_EVENT_DISPATCH(Event::MouseScrolled, e, io.AddMouseWheelEvent(e.xOffset, e.yOffset););
+    PAP_EVENT_DISPATCH(Event::MouseScrolled, e, io.AddMouseWheelEvent((float)e.xOffset, (float)e.yOffset););
 
     // Window focus
     PAP_EVENT_DISPATCH(Event::WindowFocused, e, io.AddFocusEvent(e.focused););
+
+    //window resize
+    PAP_EVENT_DISPATCH(Event::WindowResized, e,
+        io.DisplaySize = ImVec2((float)e.width, (float)e.height);
+    );
 }
 
 

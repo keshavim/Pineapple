@@ -2,7 +2,7 @@
 #define MARIADATABASE_H
 
 #include "../DBConnector.h"
-#include <mariadbc/conncpp.hpp>
+#include <conncpp.hpp>
 #include <memory>
 #include <mutex>
 

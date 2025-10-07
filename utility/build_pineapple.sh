@@ -1,32 +1,43 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="${SCRIPT_DIR}/.."
-BUILD_DIR="${ROOT_DIR}/build"
+# Default configuration
+CONFIG=${1:-Debug}
 
-# Allow generator selection: default Makefiles, or pass "ninja" or "vs" as arg
-GENERATOR=${1:-make}
+# Ensure we're in the parent directory of the script (where CMakeLists.txt is)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR/.." || exit 1
 
-echo "=== Configuring CMake project with generator: $GENERATOR ==="
-rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
+# Create build directory if it doesn't exist
+mkdir -p build
 
-case "$GENERATOR" in
-    ninja)
-        cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug "$ROOT_DIR"
-        ;;
-    make)
-        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug "$ROOT_DIR"
-        ;;
-    *)
-        echo "Unknown generator: $GENERATOR"
-        echo "Usage: $0 [make|ninja]"
-        exit 1
-        ;;
-esac
+# Check if Ninja is available
+if command -v ninja >/dev/null 2>&1; then
+    GENERATOR="Ninja"
+    echo "Using Ninja as the build system generator"
+else
+    GENERATOR="Unix Makefiles"
+    echo "Ninja not found, falling back to Make"
+fi
 
-echo "=== Building ==="
-cmake --build  . -j"$(nproc)"
-echo "=== Project build complete ==="
+# Configure with CMake, ensuring compile_commands.json is generated
+cmake -S . -B build -G "$GENERATOR" -DCMAKE_BUILD_TYPE="$CONFIG" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+if [ $? -ne 0 ]; then
+    echo "CMake configuration failed"
+    exit 1
+fi
+
+# Build the project
+cmake --build build --config "$CONFIG"
+if [ $? -ne 0 ]; then
+    echo "Build failed"
+    exit 1
+fi
+
+# Ensure compile_commands.json is in build/
+if [ -f "compile_commands.json" ]; then
+    mv compile_commands.json build/
+fi
+
+echo "Build completed successfully in build/bin/$CONFIG"

@@ -1,8 +1,7 @@
-// DBResult.h
 #ifndef DBRESULT_H
 #define DBRESULT_H
-#include <core/core.h>
-#include <mariadbc/conncpp.hpp>
+#include "core/core.h"
+#include <conncpp.hpp>
 
 namespace pap
 {

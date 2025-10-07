@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include <memory>
 #include <vector>
@@ -72,3 +73,5 @@ private:
 void InitApplication();
 
 } // namespace pap
+
+#endif // APPLICATION_H

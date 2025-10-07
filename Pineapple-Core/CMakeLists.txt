@@ -1,88 +1,35 @@
+
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_SUPPORT OFF)
 project(Pineapple-Core LANGUAGES CXX)
 
-# Source files
+
+
+
+# Source files (recursive to include subdirectories)
 file(GLOB_RECURSE SOURCES
-    src/*.cpp
-    src/*.h
+    "src/*.cpp"
+    "src/*.h"
 )
-
-
-# Create static library
 add_library(Pineapple-Core STATIC ${SOURCES})
+
+# Explicitly set output name to ensure consistency
+set_target_properties(Pineapple-Core PROPERTIES OUTPUT_NAME "Pineapple-Core")
 
 # Include directories
 target_include_directories(Pineapple-Core PUBLIC
-    src # project headers
-    ${VENDOR_INCLUDE} # vendor headers (covers imgui/imgui.h)
-    ${VENDOR_IMGUI_INCLUDE} # covers direct "imgui.h" includes
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${VENDOR_INCLUDE_DIRS}
 )
 
-# Precompiled headers (optional)
-if(MSVC)
-    target_precompile_headers(Pineapple-Core PRIVATE src/pinepch.h)
-endif()
-
-
-
-# ===============================
-# Vendor library filenames
-# ===============================
-if(WIN32)
-    set(IMGUI_LIB "imgui.lib")
-    set(MARIADB_LIB "mariadbcpp.dll")
-    set(GLFW3_LIB "glfw3.lib")
-elseif(APPLE)
-    set(IMGUI_LIB "libimgui.a")
-    set(MARIADB_LIB "libmariadbcpp.dylib")  # macOS uses .dylib
-    set(GLFW3_LIB "libglfw3.a")
-else() # Linux/other UNIX
-    set(IMGUI_LIB "libimgui.a")
-    set(MARIADB_LIB "libmariadbcpp.so")
-    set(GLFW3_LIB "libglfw3.a")
-endif()
-
-# ===============================
-# Imported vendor libraries
-# ===============================
-add_library(imgui_lib STATIC IMPORTED)
-set_target_properties(imgui_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${IMGUI_LIB}"
-    IMPORTED_NO_SONAME TRUE
-)
-
-add_library(mariadb_lib SHARED IMPORTED)
-set_target_properties(mariadb_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${MARIADB_LIB}"
-    IMPORTED_NO_SONAME TRUE
-)
-
-add_library(glfw3_lib STATIC IMPORTED)
-set_target_properties(glfw3_lib PROPERTIES
-    IMPORTED_LOCATION "${VENDOR_LIB_DIR}/${GLFW3_LIB}"
-    IMPORTED_NO_SONAME TRUE
-)
-
-# ===============================
-# Link vendor libraries into Pineapple-Core
-# ===============================
+# Link libraries
 target_link_libraries(Pineapple-Core PRIVATE
-    imgui_lib
-    mariadb_lib
-    glfw3_lib
+    ${VENDOR_LIBRARIES}
 )
 
-# ===============================
-# Platform-specific dependencies
-# ===============================
+# Platform-specific libraries
 if(WIN32)
-    target_link_libraries(Pineapple-Core PRIVATE
-        opengl32
-        gdi32
-        user32
-        shell32
-    )
+    target_link_libraries(Pineapple-Core PRIVATE opengl32 gdi32 user32 shell32)
 elseif(APPLE)
-    # Only needed for macOS frameworks
     find_library(COCOA_FRAMEWORK Cocoa)
     find_library(IOKIT_FRAMEWORK IOKit)
     find_library(COREVIDEO_FRAMEWORK CoreVideo)
@@ -93,17 +40,6 @@ elseif(APPLE)
         ${COREVIDEO_FRAMEWORK}
         ${OPENGL_FRAMEWORK}
     )
-else() # Linux
-    # Only essential libraries for MariaDB and OpenGL
-    target_link_libraries(Pineapple-Core PRIVATE
-        GL
-        dl
-        m
-        pthread
-        X11
-    )
+else()
+    target_link_libraries(Pineapple-Core PRIVATE GL dl m pthread X11)
 endif()
-
-
-# Compile definitions
-target_compile_definitions(Pineapple-Core PUBLIC PINEAPPLE_LIB)

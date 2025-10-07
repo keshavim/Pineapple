@@ -35,10 +35,8 @@ T unwrap_or_else(std::expected<T, E> &res, F onError)
 #else
 namespace pap
 {
-template <typename... Args>
-void println(std::format_string<Args...> fmt, Args &&...args)
-{
-    std::cout << std::format(fmt, std::forward<Args>(args)...) << '\n';
+constexpr void print(const std::string_view str_fmt, auto&&... args ){
+    fputs(std::vformat(str_format, std::make_format_args(args...)).c_str(), stdout)
 }
 } // namespace pap
 #define PAP_PRINT(...)                                                                                                 \
