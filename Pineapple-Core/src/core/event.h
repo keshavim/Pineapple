@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "keycodes.h"
 
 namespace pap
 {
@@ -52,8 +53,8 @@ public:
 class Key : public Base
 {
 public:
-    int key;
-    Key(int key) : key(key)
+    KeyCode key;
+    Key(KeyCode key) : key(key)
     {
     }
 };
@@ -62,7 +63,7 @@ class KeyPressed : public Key
 {
 public:
     bool repeat;
-    KeyPressed(int key, bool repeat = false) : Key(key), repeat(repeat)
+    KeyPressed(KeyCode key, bool repeat = false) : Key(key), repeat(repeat)
     {
     }
     static EventType StaticType()
@@ -75,14 +76,14 @@ public:
     }
     std::string toString() const override
     {
-        return "KeyPressed: " + std::to_string(key) + (repeat ? " (repeat)" : "");
+        return "KeyPressed: " + std::to_string((int)key) + (repeat ? " (repeat)" : "");
     }
 };
 
 class KeyReleased : public Key
 {
 public:
-    KeyReleased(int key) : Key(key)
+    KeyReleased(KeyCode key) : Key(key)
     {
     }
     static EventType StaticType()
@@ -95,15 +96,15 @@ public:
     }
     std::string toString() const override
     {
-        return "KeyReleased: " + std::to_string(key);
+        return "KeyReleased: " + std::to_string((int)key);
     }
 };
 
 class CharTyped : public Base
 {
 public:
-    unsigned int character;
-    CharTyped(unsigned int character) : character(character)
+    uint32_t character;
+    CharTyped(uint32_t character) : character(character)
     {
     }
     static EventType StaticType()
@@ -116,7 +117,7 @@ public:
     }
     std::string toString() const override
     {
-        return "CharInput: " + std::to_string(character);
+        return "CharInput: " + std::to_string((unsigned int)character);
     }
 };
 
@@ -155,8 +156,8 @@ public:
 class MouseButtonPressed : public Mouse
 {
 public:
-    int button;
-    MouseButtonPressed(int button, double x, double y) : Mouse(x, y), button(button)
+    MouseButton button;
+    MouseButtonPressed(MouseButton button, double x, double y) : Mouse(x, y), button(button)
     {
     }
     static EventType StaticType()
@@ -169,7 +170,7 @@ public:
     }
     std::string toString() const override
     {
-        return "MouseButtonPressed: " + std::to_string(button) + " at (" + std::to_string(x) + ", " +
+        return "MouseButtonPressed: " + std::to_string((int)button) + " at (" + std::to_string(x) + ", " +
                std::to_string(y) + ")";
     }
 };
@@ -177,8 +178,8 @@ public:
 class MouseButtonReleased : public Mouse
 {
 public:
-    int button;
-    MouseButtonReleased(int button, double x, double y) : Mouse(x, y), button(button)
+    MouseButton button;
+    MouseButtonReleased(MouseButton button, double x, double y) : Mouse(x, y), button(button)
     {
     }
     static EventType StaticType()
@@ -191,7 +192,7 @@ public:
     }
     std::string toString() const override
     {
-        return "MouseButtonReleased: " + std::to_string(button) + " at (" + std::to_string(x) + ", " +
+        return "MouseButtonReleased: " + std::to_string((int)button) + " at (" + std::to_string(x) + ", " +
                std::to_string(y) + ")";
     }
 };
@@ -365,4 +366,4 @@ void dispatch(Event::Base &e, const std::function<void(T &)> &func)
 
 // Macro to simplify event dispatch
 #define PAP_EVENT_DISPATCH(EventType, EventVar, ...) \
-    Event::dispatch<EventType>(EventVar, [this](EventType& e) { __VA_ARGS__; })
+    Event::dispatch<EventType>(EventVar, [&](EventType& e) { __VA_ARGS__; })

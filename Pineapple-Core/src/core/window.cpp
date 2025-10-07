@@ -48,102 +48,122 @@ void Window::Create()
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
     // Assuming m_Window is your GLFWwindow* and WindowData is your Window::Data
-    glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
         data.Width = width;
         data.Height = height;
 
         Event::WindowResized e(width, height);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::WindowClosed e;
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowFocusCallback(m_Window, [](GLFWwindow *window, int focused) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::WindowFocused e(focused != 0);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window, int iconified){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow *window, int iconified) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::WindowMinimized e(iconified != 0);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetWindowMaximizeCallback(m_Window, [](GLFWwindow* window, int maximized){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowMaximizeCallback(m_Window, [](GLFWwindow *window, int maximized) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::WindowMaximized e(maximized != 0);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetWindowContentScaleCallback(m_Window, [](GLFWwindow* window, float xScale, float yScale){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetWindowContentScaleCallback(m_Window, [](GLFWwindow *window, float xScale, float yScale) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::WindowContentScaleChanged e(xScale, yScale);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
-        if (action == GLFW_PRESS) {
-            Event::KeyPressed e(key, false);
-            if (data.EventCallback) data.EventCallback(e);
-        } else if (action == GLFW_REPEAT) {
-            Event::KeyPressed e(key, true);
-            if (data.EventCallback) data.EventCallback(e);
-        } else if (action == GLFW_RELEASE) {
-            Event::KeyReleased e(key);
-            if (data.EventCallback) data.EventCallback(e);
+        if (action == GLFW_PRESS)
+        {
+            Event::KeyPressed e(static_cast<KeyCode>(key), false);
+            if (data.EventCallback)
+                data.EventCallback(e);
+        }
+        else if (action == GLFW_REPEAT)
+        {
+            Event::KeyPressed e(static_cast<KeyCode>(key), true);
+            if (data.EventCallback)
+                data.EventCallback(e);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            Event::KeyReleased e(static_cast<KeyCode>(key));
+            if (data.EventCallback)
+                data.EventCallback(e);
         }
     });
 
-    glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int c){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetCharCallback(m_Window, [](GLFWwindow *window, uint32_t c) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::CharTyped e(c);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         double x, y;
         glfwGetCursorPos(window, &x, &y);
 
-        if (action == GLFW_PRESS) {
-            Event::MouseButtonPressed e(button, x, y);
-            if (data.EventCallback) data.EventCallback(e);
-        } else if (action == GLFW_RELEASE) {
-            Event::MouseButtonReleased e(button, x, y);
-            if (data.EventCallback) data.EventCallback(e);
+        if (action == GLFW_PRESS)
+        {
+            Event::MouseButtonPressed e(static_cast<MouseButton>(button), x, y);
+            if (data.EventCallback)
+                data.EventCallback(e);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            Event::MouseButtonReleased e(static_cast<MouseButton>(button), x, y);
+            if (data.EventCallback)
+                data.EventCallback(e);
         }
     });
 
-    glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, double x, double y) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::MouseMoved e(x, y);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
 
-    glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset){
-        auto& data = *(Window::Data*)glfwGetWindowUserPointer(window);
+    glfwSetScrollCallback(m_Window, [](GLFWwindow *window, double xOffset, double yOffset) {
+        auto &data = *(Window::Data *)glfwGetWindowUserPointer(window);
 
         Event::MouseScrolled e(xOffset, yOffset);
-        if (data.EventCallback) data.EventCallback(e);
+        if (data.EventCallback)
+            data.EventCallback(e);
     });
-
-
 }
 
 void Window::Destroy()

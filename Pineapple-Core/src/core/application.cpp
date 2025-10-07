@@ -54,7 +54,7 @@ void Application::OnEvent(Event::Base &e)
     imguiManager.onEvent(e);
 
     PAP_EVENT_DISPATCH(Event::KeyPressed, e,
-        if (e.key == GLFW_KEY_ESCAPE) {
+        if (e.key == KeyCode::Escape) {
             e.handled = true;
             m_Running = false;
         }

@@ -37,8 +37,7 @@ private:
     static const char *getClipboardText(void *user_data);
     static void setClipboardText(void *user_data, const char *text);
 
-    static ImGuiKey glfwToImGuiKey(int key);
-    static void updateModifiers(ImGuiIO &io);
+    ImGuiKey toImGuiKey(KeyCode key) const;
 };
 } // namespace pap
 #endif
