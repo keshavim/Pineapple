@@ -1,7 +1,9 @@
 #include "DBWindow.h"
 
 
-DBWindow::DBWindow(const std::string &title) : m_Title(title)
+DBWindow::DBWindow(const std::string &title) :
+    m_Title(title),
+    m_Table("DBResultTable")
 {
     // Connect to DB
     //authentication will be handled in gui later
@@ -29,56 +31,41 @@ DBWindow::DBWindow(const std::string &title) : m_Title(title)
         return;
     }
     m_Result = *test;
+
+
+    // Configure your table flags
+    m_Table.setFlags(
+        pap::Table_Resizable |
+        pap::Table_Sortable |
+        pap::Table_Borders |
+        pap::Table_RowBg |
+        pap::Table_Foldable |
+        pap::Table_AutoResize
+    );
 }
 
 void DBWindow::drawImGui()
 {
     ImGui::Begin(m_Title.c_str());
-    if (!drawTable())
-        ImGui::TextUnformatted("No data loaded yet.");
+
+    // Set columns if not set yet (or every frame if dynamic)
+    m_Table.setColumns(m_Result.getColumnNames());
+
+    // Populate table data
+    std::vector<std::vector<std::string>> rows;
+    for (size_t r = 0; r < m_Result.getRowCount(); ++r)
+    {
+        auto rowRes = m_Result.getRow(r);
+        rows.push_back(pap::unwrap_or_else(rowRes, [](const std::string& err){
+            std::cerr << "Failed to get row: " << err << "\n";
+            return std::vector<std::string>{};
+        }));
+    }
+
+    m_Table.setData(rows);
+
+    // Draw table
+    m_Table.draw();
+
     ImGui::End();
-}
-
-bool DBWindow::drawTable()
-{
-
-    if (m_Result.getRowCount() == 0)
-    {
-        ImGui::TextUnformatted("No results to display.");
-        return false;
-    }
-
-    const auto cols = m_Result.getColumnCount();
-    const auto &colNames = m_Result.getColumnNames();
-
-    if (ImGui::BeginTable("DBResultTable", static_cast<int>(cols), ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
-    {
-        // Header
-        ImGui::TableHeadersRow();
-        for (const auto &name : colNames)
-        {
-            ImGui::TableSetColumnIndex(static_cast<int>(&name - &colNames[0]));
-            ImGui::TextUnformatted(name.c_str());
-        }
-
-        // Rows
-        for (size_t r = 0; r < m_Result.getRowCount(); ++r)
-        {
-            ImGui::TableNextRow();
-            auto rowRes = m_Result.getRow(r);
-            auto row = pap::unwrap_or_else(rowRes, [&](const std::string &err) {
-                std::cerr << "Failed to get row: " << err << "\n";
-                return;
-            });
-
-            for (size_t c = 0; c < row.size(); ++c)
-            {
-                ImGui::TableSetColumnIndex(static_cast<int>(c));
-                ImGui::TextUnformatted(row[c].c_str());
-            }
-        }
-
-        ImGui::EndTable();
-    }
-    return true;
 }

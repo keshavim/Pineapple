@@ -9,6 +9,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include "ImGui/widgets/Table.h"
 
 
 class DBWindow : public pap::ImGuiWindow
@@ -24,8 +25,7 @@ private:
 
     pap::DBResult m_Result;
 
-    //need to make this into wigets
-    bool drawTable();
+    pap::widgets::Table m_Table;
 };
 
 
