@@ -1,8 +1,6 @@
+#include "windows/DBConnectionWindow.h"
 #include <dbc/DBManager.h>
 #include <pineapple.h>
-
-#include "imgui.h"
-#include "windows/DBWindow.h"
 
 
 class DemoWindow : public pap::ImGuiWindow
@@ -22,5 +20,5 @@ public:
 void pap::InitApplication()
 {
     Application::pushGuiWindow<DemoWindow>();
-    Application::pushGuiWindow<DBWindow>("Database Table");
+    Application::pushGuiWindow<DBConnectionWindow>("Database Connection");
 }

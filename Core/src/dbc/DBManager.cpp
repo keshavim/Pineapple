@@ -1,54 +1,148 @@
-#include "pinepch.h"
-
 #include "DBManager.h"
-#include "drivers/MariaDBConnector.h"
-
 
 namespace pap
 {
-
-// only if your database interface currently throws
-
-// Define the static member
-std::unique_ptr<DBConnector> DBManager::s_Database = nullptr;
-
-Result<void> DBManager::connect(DBDriver driver,
-                                const std::string &uri,
-                                const std::string &user,
-                                const std::string &password,
-                                const std::string &database)
-{
-    switch (driver)
+    Result<void> DBManager::connect(const ConnectInfo& info)
     {
-    case DBDriver::MariaDB:
-        s_Database = std::make_unique<MariaDatabase>();
-        break;
 
-        // case DBDriver::MySQL:
-        //     s_Database = std::make_unique<MySQLDatabase>();
-        //     break;
 
-    default:
-        return std::unexpected("[DBManager] Unsupported driver");
+        // Create new connector instance
+        std::shared_ptr<DBConnector> conn;
+        switch (info.driver)
+        {
+        case DBDriver::MariaDB:
+            conn = createMariaDatabase();
+            break;
+        default:
+            return std::unexpected("Unsupported driver");
+        }
+
+        // Connect
+        auto res = conn->connect(info.uri, info.user, info.password);
+        if (!res) return std::unexpected(res.error());
+
+        m_CurrentConnection = conn;
+        // Check for duplicate connection
+        auto it = std::find(m_Connections.begin(), m_Connections.end(), info);
+        if (it == m_Connections.end())
+        {
+            m_Connections.push_back(info);
+        }
+
+        return {};
     }
 
-    if (!s_Database->connect(uri, user, password, database))
+    void DBManager::disconnect()
     {
-        return std::unexpected("[DBManager] Failed to connect to database");
+        if (m_CurrentConnection)
+        {
+            m_CurrentConnection->disconnect();
+            m_CurrentConnection.reset();
+            m_CurrentSchema.reset();
+        }
     }
 
-    return {};
-}
+    bool DBManager::isConnected() const
+    {
+        return m_CurrentConnection && m_CurrentConnection->isConnected();
+    }
 
-bool DBManager::isConnected()
-{
-    return s_Database && s_Database->isConnected();
-}
+    Result<DBResult> DBManager::executeQuery(const std::string& query)
+    {
+        assert(m_CurrentConnection && "No current connection");
+        return m_CurrentConnection->executeQuery(query);
+    }
 
-Result<DBResult> DBManager::executeQuery(const std::string &query)
-{
-    assert(s_Database && "[DBManager] No database driver initialized");
-    return s_Database->executeQuery(query);
-}
+    Result<void> DBManager::dryRun(const std::string& query)
+    {
+        assert(m_CurrentConnection && "No current connection");
+        return m_CurrentConnection->dryRun(query);
+    }
 
-} // namespace pap
+    Result<void> DBManager::beginTransaction()
+    {
+        assert(m_CurrentConnection && "No current connection");
+        return m_CurrentConnection->beginTransaction();
+    }
+
+    Result<void> DBManager::commitTransaction()
+    {
+        assert(m_CurrentConnection && "No current connection");
+        return m_CurrentConnection->commitTransaction();
+    }
+
+    Result<void> DBManager::rollbackTransaction()
+    {
+        assert(m_CurrentConnection && "No current connection");
+        return m_CurrentConnection->rollbackTransaction();
+    }
+
+    Result<std::vector<std::string>> DBManager::listSchemas()
+    {
+        assert(m_CurrentConnection && "No current connection");
+
+        auto res = m_CurrentConnection->executeQuery("SHOW DATABASES;");
+        if (!res) return std::unexpected(res.error());
+
+        std::vector<std::string> schemas;
+        for (size_t i = 0; i < res->getRowCount(); ++i)
+        {
+            auto row = res->getRow(i);
+            if (!row) return std::unexpected(row.error());
+            schemas.push_back((*row)[0]);
+        }
+        return schemas;
+    }
+
+    Result<void> DBManager::switchSchema(const std::string& schema)
+    {
+        assert(m_CurrentConnection && "No current connection");
+
+        auto res = m_CurrentConnection->executeQuery("USE " + schema + ";");
+        if (!res) return std::unexpected(res.error());
+
+        m_CurrentSchema = schema;
+        return {};
+    }
+
+    Result<std::vector<TableInfo>> DBManager::listTables(const std::string& schema)
+    {
+        assert(m_CurrentConnection && "No current connection");
+
+        auto res = m_CurrentConnection->executeQuery("SHOW TABLES FROM " + schema + ";");
+        if (!res) return std::unexpected(res.error());
+
+        std::vector<TableInfo> tables;
+        for (size_t i = 0; i < res->getRowCount(); ++i)
+        {
+            auto row = res->getRow(i);
+            if (!row) return std::unexpected(row.error());
+            tables.push_back({ (*row)[0], {} });
+        }
+        return tables;
+    }
+
+    Result<TableInfo> DBManager::getTableInfo(const std::string& schema, const std::string& table)
+    {
+        assert(m_CurrentConnection && "No current connection");
+
+        auto res = m_CurrentConnection->executeQuery("SHOW COLUMNS FROM " + schema + "." + table + ";");
+        if (!res) return std::unexpected(res.error());
+
+        TableInfo tinfo;
+        tinfo.name = table;
+        for (size_t i = 0; i < res->getRowCount(); ++i)
+        {
+            auto row = res->getRow(i);
+            if (!row) return std::unexpected(row.error());
+
+            ColumnInfo col;
+            col.name = (*row)[0];
+            col.type = (*row)[1];
+            col.isNullable = ((*row)[2] == "YES");
+            col.isPrimaryKey = ((*row)[3] == "PRI");
+            tinfo.columns.push_back(col);
+        }
+        return tinfo;
+    }
+}

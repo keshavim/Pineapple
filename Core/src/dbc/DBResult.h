@@ -1,61 +1,61 @@
-#ifndef DBRESULT_H
-#define DBRESULT_H
-#include "core/core.h"
-#include <conncpp.hpp>
+#pragma once
+
+#include <string>
+#include <vector>
+#include <expected>
+#include <ostream>
+#include <cstddef>
+#include <core/core.h>
+
+
+namespace sql {
+    class ResultSet;
+}
 
 namespace pap
 {
-class DBResult
-{
-public:
-    // Constructor from ResultSet
-    DBResult() = default;
-    DBResult(sql::ResultSet *rs);
 
-    // Immutable getters
-    size_t getRowCount() const;
-    size_t getColumnCount() const;
-    Result<std::string> getColumnName(size_t index) const;
+    struct DBResult
+    {
+    public:
+        DBResult() = default;
+        explicit DBResult(sql::ResultSet* rs);
 
-    const std::vector<std::string> &getColumnNames() const;
+        // Row / column info
+        size_t getRowCount() const noexcept { return m_Data.size(); }
+        size_t getColumnCount() const noexcept { return m_ColumnNames.size(); }
 
-    Result<std::string> getValue(size_t row, size_t col) const;
+        const std::vector<std::string>& getColumnNames() const noexcept { return m_ColumnNames; }
 
-    Result<std::string> getValue(size_t row, const std::string &colName) const;
+        // Data access with error handling via Result
+        Result<std::string> getColumnName(size_t index) const;
+        Result<std::string> getValue(size_t row, size_t col) const;
+        Result<std::string> getValue(size_t row, const std::string& colName) const;
+        Result<std::vector<std::string>> getRow(size_t row) const;
+        Result<std::string> getColumnType(size_t col) const;
+        Result<std::string> getTableName(size_t col) const;
 
-    Result<std::vector<std::string>> getRow(size_t row) const;
+        // Utility
+        std::string toString() const;
 
-    Result<std::string> getColumnType(size_t col) const;
+        friend std::ostream& operator<<(std::ostream& os, const DBResult& res);
 
-    Result<std::string> getTableName(size_t col) const;
+    private:
+        std::vector<std::string> m_ColumnTypes;
+        std::vector<std::string> m_TableNames;
+        std::vector<std::string> m_ColumnNames;
+        std::vector<std::vector<std::string>> m_Data;
 
-
-    // toString
-    std::string toString() const;
-
-    // Operator overload for printing
-    friend std::ostream &operator<<(std::ostream &os, const DBResult &res);
-
-private:
-    std::vector<std::string> m_ColumnTypes;
-    std::vector<std::string> m_TableNames;
-    std::vector<std::string> m_ColumnNames;
-    std::vector<std::vector<std::string>> m_Data;
-
-    // Helper to populate from ResultSet
-    void populateFromResultSet(sql::ResultSet *rs);
-};
+        void populateFromResultSet(sql::ResultSet* rs);
+    };
 } // namespace pap
+
 // C++20/23 std::formatter specialization
 template <>
 struct std::formatter<pap::DBResult> : std::formatter<std::string>
 {
-    // parse is inherited from std::formatter<std::string>
-
-    auto format(const pap::DBResult &res, auto &ctx)
+    auto format(const pap::DBResult& res, auto& ctx)
     {
-        // Use DBResult::toString()
         return std::formatter<std::string>::format(res.toString(), ctx);
     }
 };
-#endif // DBRESULT_H

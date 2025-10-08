@@ -1,47 +1,65 @@
-#ifndef DBMANAGER_H
-#define DBMANAGER_H
-
+#pragma once
 #include "DBConnector.h"
-#include "DBResult.h"
-#include <expected>
-#include <memory>
-#include <string>
-
+#include "drivers/MariaDB.h"
+#include "dbc/DBResult.h"
 
 namespace pap
 {
+    enum class DBDriver
+    {
+        MariaDB,
+        // MySQL, PostgreSQL, SQLite etc. can be added later
+    };
 
+    struct ConnectInfo
+    {
+        DBDriver driver;
+        std::string uri;
+        std::string user;
+        std::string password;
 
-enum class DBDriver
-{
-    MariaDB,
-    // MySQL,
-    // SQLite,
-    // PostgreSQL
-};
+        bool operator==(const ConnectInfo& other) const
+        {
+            return driver == other.driver &&
+                   uri == other.uri &&
+                   user == other.user &&
+                   password == other.password;
+        }
+    };
 
-class DBManager
-{
-public:
-    DBManager() = delete;
-    ~DBManager() = delete;
-    DBManager(const DBManager &) = delete;
-    DBManager &operator=(const DBManager &) = delete;
+    class DBManager
+    {
+    public:
+        DBManager() = default;
 
-    static Result<void> connect(DBDriver driver,
-                                const std::string &uri,
-                                const std::string &user,
-                                const std::string &password,
-                                const std::string &database);
+        // Connection management
+        Result<void> connect(const ConnectInfo& info);
+        void disconnect();
+        bool isConnected() const;
 
-    static bool isConnected();
+        // Query execution
+        Result<DBResult> executeQuery(const std::string& query);
+        Result<void> dryRun(const std::string& query);
 
-    static Result<DBResult> executeQuery(const std::string &query);
+        // Transactions
+        Result<void> beginTransaction();
+        Result<void> commitTransaction();
+        Result<void> rollbackTransaction();
 
-private:
-    static std::unique_ptr<DBConnector> s_Database;
-};
+        // Schema management
+        Result<std::vector<std::string>> listSchemas();
+        Result<void> switchSchema(const std::string& schema);
+        Result<std::vector<TableInfo>> listTables(const std::string& schema);
+        Result<TableInfo> getTableInfo(const std::string& schema, const std::string& table);
+        std::optional<std::string> currentSchema() const { return m_CurrentSchema; }
 
-} // namespace pap
+        // Connection history
+        const std::vector<ConnectInfo>& getConnections() const { return m_Connections; }
+        std::shared_ptr<DBConnector> currentConnection() const { return m_CurrentConnection; }
 
-#endif // DBMANAGER_H
+    private:
+        std::vector<ConnectInfo> m_Connections;
+        std::shared_ptr<DBConnector> m_CurrentConnection;
+        std::optional<std::string> m_CurrentSchema;
+    };
+}

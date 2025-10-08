@@ -1,179 +1,119 @@
-#include "DBResult.h"
+#include "conncpp/ResultSet.hpp"
+#include "conncpp/ResultSetMetaData.hpp"
 #include "pinepch.h"
-
+#include "DBResult.h"
+#include <cassert>
+#include <stdexcept>
+#include <sstream>
 
 namespace pap
 {
-
-
-void DBResult::populateFromResultSet(sql::ResultSet *rs)
-{
-    if (!rs)
+    DBResult::DBResult(sql::ResultSet* rs)
     {
-        throw std::invalid_argument("ResultSet is null");
+        assert(rs != nullptr && "ResultSet cannot be null");
+        populateFromResultSet(rs);
     }
 
-    sql::ResultSetMetaData *meta = rs->getMetaData();
-    size_t colCount = meta->getColumnCount();
-    PAP_INFO("metadata");
-    // Populate column names, types, table names
-    m_ColumnNames.reserve(colCount);
-    m_ColumnTypes.reserve(colCount);
-    m_TableNames.reserve(colCount);
-    for (size_t i = 1; i <= colCount; ++i)
-    { // 1-based index
-        m_ColumnNames.push_back(meta->getColumnLabel(i).c_str());
-        m_ColumnTypes.push_back(meta->getColumnTypeName(i).c_str());
-        m_TableNames.push_back(meta->getTableName(i).c_str());
+    Result<std::string> DBResult::getColumnName(size_t index) const
+    {
+        if (index >= m_ColumnNames.size())
+            return std::unexpected("Column index out of range");
+        return m_ColumnNames[index];
     }
 
-    PAP_INFO("populate");
-
-    // Populate data
-    while (rs->next())
+    Result<std::string> DBResult::getValue(size_t row, size_t col) const
     {
-        std::vector<std::string> row;
-        row.reserve(colCount);
-        for (size_t i = 1; i <= colCount; ++i)
+        if (row >= m_Data.size())
+            return std::unexpected("Row index out of range");
+        if (col >= m_ColumnNames.size())
+            return std::unexpected("Column index out of range");
+
+        return m_Data[row][col];
+    }
+
+    Result<std::string> DBResult::getValue(size_t row, const std::string& colName) const
+    {
+        auto it = std::find(m_ColumnNames.begin(), m_ColumnNames.end(), colName);
+        if (it == m_ColumnNames.end())
+            return std::unexpected("Column name not found: " + colName);
+
+        size_t colIndex = static_cast<size_t>(std::distance(m_ColumnNames.begin(), it));
+        return getValue(row, colIndex);
+    }
+
+    Result<std::vector<std::string>> DBResult::getRow(size_t row) const
+    {
+        if (row >= m_Data.size())
+            return std::unexpected("Row index out of range");
+        return m_Data[row];
+    }
+
+    Result<std::string> DBResult::getColumnType(size_t col) const
+    {
+        if (col >= m_ColumnTypes.size())
+            return std::unexpected("Column index out of range");
+        return m_ColumnTypes[col];
+    }
+
+    Result<std::string> DBResult::getTableName(size_t col) const
+    {
+        if (col >= m_TableNames.size())
+            return std::unexpected("Column index out of range");
+        return m_TableNames[col];
+    }
+
+    void DBResult::populateFromResultSet(sql::ResultSet* rs)
+    {
+        auto meta = rs->getMetaData();
+        const int columnCount = meta->getColumnCount();
+
+        m_ColumnNames.reserve(columnCount);
+        m_ColumnTypes.reserve(columnCount);
+        m_TableNames.reserve(columnCount);
+
+        for (int i = 1; i <= columnCount; ++i)
         {
-            sql::SQLString val = rs->getString(i);
-            row.push_back(val.c_str());
+            m_ColumnNames.push_back(meta->getColumnLabel(i).c_str());
+            m_ColumnTypes.push_back(meta->getColumnTypeName(i).c_str());
+            m_TableNames.push_back(meta->getTableName(i).c_str());
         }
-        m_Data.push_back(row);
-    }
-    PAP_INFO("complete");
-}
 
-DBResult::DBResult(sql::ResultSet *rs)
-{
-    populateFromResultSet(rs);
-}
-
-size_t DBResult::getRowCount() const
-{
-    return m_Data.size();
-}
-
-size_t DBResult::getColumnCount() const
-{
-    return m_ColumnNames.size();
-}
-
-std::expected<std::string, std::string> DBResult::getColumnName(size_t index) const
-{
-    if (index >= m_ColumnNames.size())
-    {
-        return std::unexpected("Column index out of range");
-    }
-    return m_ColumnNames[index];
-}
-
-const std::vector<std::string> &DBResult::getColumnNames() const
-{
-    return m_ColumnNames;
-}
-
-std::expected<std::string, std::string> DBResult::getValue(size_t row, size_t col) const
-{
-    if (row >= m_Data.size() || col >= m_ColumnNames.size())
-    {
-        return std::unexpected("Row or column index out of range");
-    }
-    return m_Data[row][col];
-}
-
-std::expected<std::string, std::string> DBResult::getValue(size_t row, const std::string &colName) const
-{
-    auto it = std::find(m_ColumnNames.begin(), m_ColumnNames.end(), colName);
-    if (it == m_ColumnNames.end())
-    {
-        return std::unexpected("Column name not found: " + colName);
-    }
-    size_t col = std::distance(m_ColumnNames.begin(), it);
-    return getValue(row, col);
-}
-
-std::expected<std::vector<std::string>, std::string> DBResult::getRow(size_t row) const
-{
-    if (row >= m_Data.size())
-    {
-        return std::unexpected("Row index out of range");
-    }
-    return m_Data[row];
-}
-
-std::expected<std::string, std::string> DBResult::getColumnType(size_t col) const
-{
-    if (col >= m_ColumnTypes.size())
-    {
-        return std::unexpected("Column index out of range");
-    }
-    return m_ColumnTypes[col];
-}
-
-std::expected<std::string, std::string> DBResult::getTableName(size_t col) const
-{
-    if (col >= m_TableNames.size())
-    {
-        return std::unexpected("Column index out of range");
-    }
-    return m_TableNames[col];
-}
-
-
-std::string DBResult::toString() const
-{
-    std::stringstream ss;
-
-    // Determine column widths
-    std::vector<size_t> colWidths(m_ColumnNames.size(), 0);
-
-    // Check header widths
-    for (size_t i = 0; i < m_ColumnNames.size(); ++i)
-    {
-        colWidths[i] = m_ColumnNames[i].size();
-    }
-
-    // Check each row for max width per column
-    for (const auto &row : m_Data)
-    {
-        for (size_t i = 0; i < row.size(); ++i)
+        while (rs->next())
         {
-            colWidths[i] = std::max(colWidths[i], row[i].size());
+            std::vector<std::string> row;
+            row.reserve(columnCount);
+
+            for (int i = 1; i <= columnCount; ++i)
+            {
+                row.push_back(rs->getString(i).c_str());
+            }
+
+            m_Data.push_back(std::move(row));
         }
     }
 
-    // Print column names with formatting
-    for (size_t i = 0; i < m_ColumnNames.size(); ++i)
+    std::string DBResult::toString() const
     {
-        ss << std::format("{:<{}}  ", m_ColumnNames[i], colWidths[i]);
-    }
-    ss << "\n";
+        std::ostringstream oss;
 
-    // Print separator
-    for (size_t i = 0; i < colWidths.size(); ++i)
-    {
-        ss << std::format("{:-<{}}  ", "", colWidths[i]);
-    }
-    ss << "\n";
+        // Header
+        for (const auto& col : m_ColumnNames)
+            oss << col << "\t";
+        oss << "\n";
 
-    // Print rows
-    for (const auto &row : m_Data)
-    {
-        for (size_t i = 0; i < row.size(); ++i)
+        // Rows
+        for (const auto& row : m_Data)
         {
-            ss << std::format("{:<{}}  ", row[i], colWidths[i]);
+            for (const auto& cell : row)
+                oss << cell << "\t";
+            oss << "\n";
         }
-        ss << "\n";
+
+        return oss.str();
     }
 
-    return ss.str();
-}
-
-// operator<< just calls toString()
-std::ostream &operator<<(std::ostream &os, const DBResult &res)
-{
-    os << res.toString();
-    return os;
-}
+    std::ostream& operator<<(std::ostream& os, const DBResult& res)
+    {
+        return os << res.toString();
+    }
 } // namespace pap

@@ -13,15 +13,6 @@ namespace pap
 template <typename T>
 using Result = std::expected<T, std::string>;
 
-template <typename T, typename E, typename F>
-T unwrap_or_else(std::expected<T, E> &res, F onError)
-{
-    if (!res)
-    {
-        onError(res.error());
-    }
-    return *res; // unwrap safely
-}
 
 } // namespace pap
 

@@ -6,6 +6,7 @@
 
 #include "ImGui/ImGuiManager.h"
 #include "core/layer_manager.h"
+#include "dbc/DBManager.h"
 #include "layer.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
@@ -43,6 +44,10 @@ public:
         return m_Window->GetFramebufferSize();
     }
 
+    DBManager& getDBManager(){
+        return dbManager;
+    }
+
     template <typename TLayer, typename... Args>
         requires std::is_base_of_v<Layer, TLayer>
     static void pushLayer(Args &&...args)
@@ -64,6 +69,7 @@ private:
     std::shared_ptr<Window> m_Window;
     LayerManager layerManager;
     ImGuiManager imguiManager;
+    DBManager dbManager;
 
     bool m_Running = false;
     static Application *s_Instance;
