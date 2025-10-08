@@ -6,5 +6,5 @@ cd "$SCRIPT_DIR/" || exit 1
 
 export CC=gcc
 export CXX=g++
-./build_pineapple.sh
+./build_pineapple.sh ninja
 ./../build/bin/Debug/Sandbox

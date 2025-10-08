@@ -19,6 +19,6 @@ public:
 
 void pap::InitApplication()
 {
-    Application::pushGuiWindow<DemoWindow>();
-    Application::pushGuiWindow<DBConnectionWindow>("Database Connection");
+    Application::pushImGuiWindow<DemoWindow>();
+    Application::pushImGuiWindow<DBConnectionWindow>("Database Connection");
 }

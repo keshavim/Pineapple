@@ -34,7 +34,7 @@ public:
 
     // Push a GUI Layer
     template <std::derived_from<ImGuiWindow> TLayer, typename... Args>
-    void pushGuiWindow(Args &&...args)
+    void pushImGuiLayer(Args &&...args)
     {
         if (findLayer<TLayer>(m_ImGuiWindows) != m_ImGuiWindows.end())
             return;
@@ -57,7 +57,7 @@ public:
 
     // Pop GUI Layer
     template <std::derived_from<ImGuiWindow>, typename TLayer>
-    void popGuiWindow()
+    void popImGuiLayer()
     {
         auto it = findLayer<TLayer>(m_ImGuiWindows);
         if (it != m_ImGuiWindows.end())

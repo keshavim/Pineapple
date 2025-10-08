@@ -58,9 +58,9 @@ public:
     // Push a GUI Layer
     template <typename TLayer, typename... Args>
         requires std::is_base_of_v<ImGuiWindow, TLayer>
-    static void pushGuiWindow(Args &&...args)
+    static void pushImGuiWindow(Args &&...args)
     {
-        Application::Get().layerManager.pushGuiWindow<TLayer>(std::forward<Args>(args)...);
+        Application::Get().layerManager.pushImGuiLayer<TLayer>(std::forward<Args>(args)...);
     }
 
 

@@ -24,9 +24,9 @@ private:
     std::string m_Title;
 
     // Connection form state
-    char m_Uri[50] {""};
-    char m_User[50] {""};
-    char m_Password[50] {""};
+    char m_Uri[50] {};
+    char m_User[50] {};
+    char m_Password[50] {};
     pap::DBDriver m_SelectedDriver = pap::DBDriver::MariaDB;
 
     void connectNew();

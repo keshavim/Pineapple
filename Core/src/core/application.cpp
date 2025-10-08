@@ -2,7 +2,7 @@
 #include "event.h"
 #include "pinepch.h"
 
-#include "ImGui/ImGuiDockSpaceLayer.h"
+#include "ImGui/layers/ImGuiDockSpace.h"
 #include "core.h"
 #include "layer_manager.h"
 
@@ -37,7 +37,7 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
 
     imguiManager.init(m_Window->GetNativeWindow());
 
-    pushGuiWindow<ImGuiDockSpace>();
+    pushImGuiWindow<ImGuiDockSpace>();
 }
 
 Application::~Application()

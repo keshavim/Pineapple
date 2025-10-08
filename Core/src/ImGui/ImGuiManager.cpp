@@ -19,7 +19,8 @@ void ImGuiManager::init(GLFWwindow *window)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; //doesn't work on wayland
+
+    io.MouseDrawCursor = true;
 
     ImGui::StyleColorsDark();
 
@@ -29,8 +30,6 @@ void ImGuiManager::init(GLFWwindow *window)
     // Renderer backend
     ImGui_ImplOpenGL3_Init("#version 460");
 
-    // Timing
-    m_LastTime = glfwGetTime();
 }
 
 // =================== Frame lifecycle ===================
@@ -48,11 +47,18 @@ void ImGuiManager::newFrame(float dt)
     glfwGetWindowSize(m_Window, &window_w, &window_h);
 
     io.DisplaySize = ImVec2((float)window_w, (float)window_h);
-    io.DisplayFramebufferScale =
-        ImVec2(window_w > 0 ? (float)display_w / (float)window_w : 0.0f, window_h > 0 ? (float)display_h / (float)window_h : 0.0f);
+    io.DisplayFramebufferScale = ImVec2(window_w > 0 ? (float)display_w / (float)window_w : 0.0f,
+                                        window_h > 0 ? (float)display_h / (float)window_h : 0.0f);
+
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
+
+
+
+    
+
+
 }
 
 void ImGuiManager::render()
@@ -174,9 +180,7 @@ void ImGuiManager::onEvent(Event::Base &e)
     PAP_EVENT_DISPATCH(Event::WindowFocused, e, io.AddFocusEvent(e.focused););
 
     //window resize
-    PAP_EVENT_DISPATCH(Event::WindowResized, e,
-        io.DisplaySize = ImVec2((float)e.width, (float)e.height);
-    );
+    PAP_EVENT_DISPATCH(Event::WindowResized, e, io.DisplaySize = ImVec2((float)e.width, (float)e.height););
 }
 
 

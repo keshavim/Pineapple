@@ -83,7 +83,7 @@ void DBConnectionWindow::connectNew()
     if (res)
     {
         // Open a schema browser window for this connection
-        pap::Application::pushGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
+        pap::Application::pushImGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
     }
 }
 
@@ -106,6 +106,6 @@ void DBConnectionWindow::reconnect(const pap::ConnectInfo& info)
 
     if (res)
     {
-        pap::Application::pushGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
+        pap::Application::pushImGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
     }
 }

@@ -2,9 +2,9 @@
 #define IMGUIMANAGER_H
 
 #include "core/event.h" // Your event base and subclasses
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <string>
+#include <GLFW/glfw3.h>
 
 namespace pap
 {
@@ -36,6 +36,7 @@ private:
     void setupClipboard();
     static const char *getClipboardText(void *user_data);
     static void setClipboardText(void *user_data, const char *text);
+
 
     ImGuiKey toImGuiKey(KeyCode key) const;
 };
