@@ -6,7 +6,7 @@
 
 #include "ImGui/ImGuiManager.h"
 #include "core/layer_manager.h"
-#include "dbc/DBManager.h"
+#include "dbc/Manager.h"
 #include "layer.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
@@ -44,7 +44,7 @@ public:
         return m_Window->GetFramebufferSize();
     }
 
-    DBManager& getDBManager(){
+    db::Manager& getDBManager(){
         return dbManager;
     }
 
@@ -69,7 +69,7 @@ private:
     std::shared_ptr<Window> m_Window;
     LayerManager layerManager;
     ImGuiManager imguiManager;
-    DBManager dbManager;
+    db::Manager dbManager;
 
     bool m_Running = false;
     static Application *s_Instance;

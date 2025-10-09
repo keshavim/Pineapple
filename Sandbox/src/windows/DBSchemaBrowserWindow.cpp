@@ -1,9 +1,9 @@
 #include "DBSchemaBrowserWindow.h"
-#include "imgui.h"
+#include "DBTableViewerWindow.h"
 #include "core/application.h"
+#include "imgui.h"
 
-DBSchemaBrowserWindow::DBSchemaBrowserWindow(const std::string& title)
-    : m_Title(title)
+DBSchemaBrowserWindow::DBSchemaBrowserWindow(const std::string &title) : m_Title(title)
 {
     refreshSchemas();
 }
@@ -19,7 +19,7 @@ void DBSchemaBrowserWindow::drawImGui()
     }
     else
     {
-        for (const auto& schema : m_Schemas)
+        for (const auto &schema : m_Schemas)
         {
             bool selected = (m_SelectedSchema && *m_SelectedSchema == schema);
             if (ImGui::Selectable(schema.c_str(), selected))
@@ -42,9 +42,42 @@ void DBSchemaBrowserWindow::drawImGui()
     }
     else
     {
-        for (const auto& table : m_Tables)
+        auto &dbManager = pap::Application::Get().getDBManager();
+
+        for (const auto &table : m_Tables)
         {
-            ImGui::BulletText("%s", table.name.c_str());
+            // Each table becomes a collapsible header
+            if (ImGui::CollapsingHeader(table.name.c_str()))
+            {
+                // Fetch table info
+                auto tinfoResult = dbManager.getTableInfo(*m_SelectedSchema, table.name);
+                if (tinfoResult)
+                {
+                    const pap::db::TableInfo &tinfo = *tinfoResult;
+
+                    ImGui::Text("Columns (%zu):", tinfo.columns.size());
+                    for (const auto &col : tinfo.columns)
+                    {
+                        ImGui::BulletText("%s : %s%s%s",
+                                          col.name.c_str(),
+                                          col.type.c_str(),
+                                          col.isPrimaryKey ? " [PK]" : "",
+                                          col.isNullable ? " [NULL]" : " [NOT NULL]");
+                    }
+
+                    // Button to open full table viewer
+                    ImGui::Spacing();
+                    if (ImGui::Button(("View Table: " + table.name).c_str()))
+                    {
+                        // Open a new DBTableViewerWindow for this table
+                        pap::Application::pushImGuiWindow<DBTableViewerWindow>(table.name, *m_SelectedSchema);
+                    }
+                }
+                else
+                {
+                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to fetch table info");
+                }
+            }
         }
     }
 
@@ -53,7 +86,7 @@ void DBSchemaBrowserWindow::drawImGui()
 
 void DBSchemaBrowserWindow::refreshSchemas()
 {
-    auto& mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::Get().getDBManager();
     auto res = mgr.listSchemas();
     if (res)
     {
@@ -65,9 +98,9 @@ void DBSchemaBrowserWindow::refreshSchemas()
     }
 }
 
-void DBSchemaBrowserWindow::refreshTables(const std::string& schema)
+void DBSchemaBrowserWindow::refreshTables(const std::string &schema)
 {
-    auto& mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::Get().getDBManager();
     auto res = mgr.listTables(schema);
     if (res)
     {

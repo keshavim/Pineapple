@@ -1,10 +1,9 @@
 #include "DBConnectionWindow.h"
 #include "DBSchemaBrowserWindow.h"
-#include "imgui.h"
 #include "core/application.h"
+#include "imgui.h"
 
-DBConnectionWindow::DBConnectionWindow(const std::string& title)
-    : m_Title(title)
+DBConnectionWindow::DBConnectionWindow(const std::string &title) : m_Title(title)
 {
 }
 
@@ -18,11 +17,11 @@ void DBConnectionWindow::drawImGui()
     ImGui::InputText("Password", m_Password, IM_ARRAYSIZE(m_Password), ImGuiInputTextFlags_Password);
 
     // Driver dropdown (only MariaDB for now)
-    const char* drivers[] = { "MariaDB" };
+    const char *drivers[] = {"MariaDB"};
     int current = static_cast<int>(m_SelectedDriver);
     if (ImGui::Combo("Driver", &current, drivers, IM_ARRAYSIZE(drivers)))
     {
-        m_SelectedDriver = static_cast<pap::DBDriver>(current);
+        m_SelectedDriver = static_cast<pap::db::Driver>(current);
     }
 
     if (ImGui::Button("Connect"))
@@ -33,8 +32,8 @@ void DBConnectionWindow::drawImGui()
     ImGui::Separator();
     ImGui::Text("Saved Connections");
 
-    auto& mgr = pap::Application::Get().getDBManager();
-    const auto& connections = mgr.getConnections();
+    auto &mgr = pap::Application::Get().getDBManager();
+    const auto &connections = mgr.getConnections();
 
     if (connections.empty())
     {
@@ -42,7 +41,7 @@ void DBConnectionWindow::drawImGui()
     }
     else
     {
-        for (const auto& c : connections)
+        for (const auto &c : connections)
         {
             std::string label = c.user + "@" + c.uri;
             if (ImGui::Button(label.c_str()))
@@ -57,14 +56,14 @@ void DBConnectionWindow::drawImGui()
 
 void DBConnectionWindow::connectNew()
 {
-    pap::ConnectInfo info{
+    pap::db::ConnectInfo info{
         m_SelectedDriver,
         m_Uri,
         m_User,
         m_Password,
     };
 
-    auto& mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::Get().getDBManager();
     auto res = mgr.connect(info);
     if (!res)
     {
@@ -74,7 +73,7 @@ void DBConnectionWindow::connectNew()
 
     if (ImGui::BeginPopupModal("Connection Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Text("Failed to connect:\n%s", res.error().c_str());
+        ImGui::Text("Failed to connect:\n%s", res.error().message);
         if (ImGui::Button("OK"))
             ImGui::CloseCurrentPopup();
         ImGui::EndPopup();
@@ -87,9 +86,9 @@ void DBConnectionWindow::connectNew()
     }
 }
 
-void DBConnectionWindow::reconnect(const pap::ConnectInfo& info)
+void DBConnectionWindow::reconnect(const pap::db::ConnectInfo &info)
 {
-    auto& mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::Get().getDBManager();
     auto res = mgr.connect(info);
     if (!res)
     {
@@ -98,7 +97,7 @@ void DBConnectionWindow::reconnect(const pap::ConnectInfo& info)
 
     if (ImGui::BeginPopupModal("Connection Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Text("Failed to connect:\n%s", res.error().c_str());
+        ImGui::Text("Failed to connect:\n%s", res.error().message);
         if (ImGui::Button("OK"))
             ImGui::CloseCurrentPopup();
         ImGui::EndPopup();

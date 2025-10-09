@@ -10,8 +10,6 @@
 
 namespace pap
 {
-template <typename T>
-using Result = std::expected<T, std::string>;
 
 
 } // namespace pap

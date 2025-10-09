@@ -1,39 +1,44 @@
 #pragma once
-#include "../DBConnector.h"
+#include "../Connector.h"
+#include <memory>
+#include <mutex>
+#include <string>
 
-
-namespace sql {
-    class Connection;
-}
+namespace sql
+{
+class Connection;
+class Driver;
+class Statement;
+class ResultSet;
+} // namespace sql
 
 namespace pap
 {
-    class MariaDatabase : public DBConnector
-    {
-    public:
-        MariaDatabase();
-        ~MariaDatabase() override;
+namespace db
+{
+class QueryData;
 
-        Result<void> connect(const std::string &uri,
-                             const std::string &user,
-                             const std::string &password) override;
+class MariaDatabase : public Connector
+{
+public:
+    MariaDatabase();
+    ~MariaDatabase() override;
 
-        void disconnect() override;
-        bool isConnected() const override;
+    Result<void> connect(const ConnectInfo &info) override;
 
+    void disconnect() override;
+    bool isConnected() const override;
 
-        Result<DBResult> executeQuery(const std::string &query) override;
-        Result<void> dryRun(const std::string &query) override;
+    Result<QueryData> executeQuery(const std::string &query) override;
+    Result<void> dryRun(const std::string &query) override;
 
+    Result<void> beginTransaction() override;
+    Result<void> commitTransaction() override;
+    Result<void> rollbackTransaction() override;
 
-        Result<void> beginTransaction() override;
-        Result<void> commitTransaction() override;
-        Result<void> rollbackTransaction() override;
-
-        Result<std::string> getServerVersion() const override;
-
-    private:
-        mutable std::mutex m_ConnMutex;
-        std::unique_ptr<sql::Connection> m_Connection;
-    };
-}
+private:
+    mutable std::mutex m_ConnMutex;
+    std::unique_ptr<sql::Connection> m_Connection;
+};
+} // namespace db
+} // namespace pap

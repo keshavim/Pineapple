@@ -2,17 +2,23 @@
 
 
 #include "ImGui/ImGuiWindow.h"
-#include "dbc/DBConnector.h"
+#include "dbc/Connector.h"
+#include "dbc/Schema.h"
 #include <string>
 
 class DBSchemaBrowserWindow : public pap::ImGuiWindow
 {
 public:
-    DBSchemaBrowserWindow(const std::string& title);
+    DBSchemaBrowserWindow(const std::string &title);
 
     void drawImGui() override;
-    bool wantsCapture() const override { return true; }
-    void onEvent(pap::Event::Base& e) override {}
+    bool wantsCapture() const override
+    {
+        return true;
+    }
+    void onEvent(pap::Event::Base &e) override
+    {
+    }
 
 private:
     std::string m_Title;
@@ -20,8 +26,8 @@ private:
     // Cached data
     std::vector<std::string> m_Schemas;
     std::optional<std::string> m_SelectedSchema;
-    std::vector<pap::TableInfo> m_Tables;
+    std::vector<pap::db::TableInfo> m_Tables;
 
     void refreshSchemas();
-    void refreshTables(const std::string& schema);
+    void refreshTables(const std::string &schema);
 };

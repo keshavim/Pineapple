@@ -1,5 +1,5 @@
 #include "windows/DBConnectionWindow.h"
-#include <dbc/DBManager.h>
+#include <dbc/Manager.h>
 #include <pineapple.h>
 
 

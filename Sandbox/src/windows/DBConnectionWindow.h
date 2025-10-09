@@ -2,7 +2,7 @@
 
 #include "ImGui/ImGuiWindow.h"
 #include "core/event.h"
-#include "dbc/DBManager.h"
+#include "dbc/Manager.h"
 #include <string>
 
 
@@ -24,11 +24,11 @@ private:
     std::string m_Title;
 
     // Connection form state
-    char m_Uri[50] {};
-    char m_User[50] {};
-    char m_Password[50] {};
-    pap::DBDriver m_SelectedDriver = pap::DBDriver::MariaDB;
+    char m_Uri[50]{};
+    char m_User[50]{};
+    char m_Password[50]{};
+    pap::db::Driver m_SelectedDriver = pap::db::Driver::Maria;
 
     void connectNew();
-    void reconnect(const pap::ConnectInfo &info);
+    void reconnect(const pap::db::ConnectInfo &info);
 };
