@@ -44,23 +44,26 @@ public:
         return m_Window->GetFramebufferSize();
     }
 
-    db::Manager& getDBManager(){
+    db::Manager &getDBManager()
+    {
         return dbManager;
     }
 
-    template <typename TLayer, typename... Args>
-        requires std::is_base_of_v<Layer, TLayer>
+
+    template <LayerType T, typename... Args>
     static void pushLayer(Args &&...args)
     {
-        Application::Get().layerManager.pushLayer<TLayer>(std::forward<Args>(args)...);
+
+        Application::Get().layerManager.pushLayer(std::make_unique<T>(std::forward<Args>(args)...));
     }
 
-    // Push a GUI Layer
-    template <typename TLayer, typename... Args>
-        requires std::is_base_of_v<ImGuiWindow, TLayer>
-    static void pushImGuiWindow(Args &&...args)
+    // --- Push overlay at the end ---
+    template <LayerType T, typename... Args>
+    static void pushOverlay(Args &&...args)
     {
-        Application::Get().layerManager.pushImGuiLayer<TLayer>(std::forward<Args>(args)...);
+        Application::Get().layerManager.pushLayer(std::make_unique<T>(std::forward<Args>(args)...));
+
+
     }
 
 

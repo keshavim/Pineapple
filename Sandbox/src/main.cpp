@@ -3,14 +3,14 @@
 #include <pineapple.h>
 
 
-class DemoWindow : public pap::ImGuiWindow
+class DemoWindow : public pap::Layer
 {
 public:
     DemoWindow()
     {
     }
 
-    void drawImGui() override
+    void onRender() override
     {
         ImGui::ShowDemoWindow();
     }
@@ -19,6 +19,6 @@ public:
 
 void pap::InitApplication()
 {
-    Application::pushImGuiWindow<DemoWindow>();
-    Application::pushImGuiWindow<DBConnectionWindow>("Database Connection");
+    Application::pushOverlay<DemoWindow>();
+    Application::pushOverlay<DBConnectionWindow>("Database Connection");
 }

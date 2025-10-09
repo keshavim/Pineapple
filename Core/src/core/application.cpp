@@ -37,7 +37,7 @@ Application::Application(const AppSpecifications &specs) : m_Specifications(spec
 
     imguiManager.init(m_Window->GetNativeWindow());
 
-    pushImGuiWindow<ImGuiDockSpace>();
+    pushOverlay<ImGuiDockSpace>();
 }
 
 Application::~Application()
@@ -66,7 +66,7 @@ void Application::OnEvent(Event::Base &e)
         Stop();
     }
 
-    layerManager.OnEvent(e);
+    layerManager.onEvent(e);
 }
 
 void Application::Run()
@@ -94,15 +94,12 @@ void Application::Run()
         lastTime = currentTime;
 
 
-        layerManager.OnUpdate(dt);
-
-        layerManager.OnRender();
+        layerManager.onUpdate(dt);
 
 
         imguiManager.newFrame(dt);
 
-        layerManager.drawImGuiWindows();
-
+        layerManager.onRender();
         imguiManager.render();
 
 

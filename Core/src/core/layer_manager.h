@@ -1,92 +1,39 @@
 #pragma once
-
-#include <GLFW/glfw3.h>
-#include <functional>
-#include <memory>
-#include <string>
-#include <vector>
-
-#include "ImGui/ImGuiWindow.h"
 #include "layer.h"
-
+#include <concepts>
+#include <memory>
+#include <vector>
 
 namespace pap
 {
 
-class Application; // friend
+
 
 class LayerManager
 {
 public:
     LayerManager() = default;
+    ~LayerManager();
 
-    // Push a non-GUI Layer
-    template <std::derived_from<Layer> TLayer, typename... Args>
-    void pushLayer(Args &&...args)
-    {
-        if (findLayer<TLayer>(m_Layers) != m_Layers.end())
-            return;
+    // --- Push layer before overlays ---
+    void pushLayer(std::unique_ptr<Layer> layer);
+    void pushOverlay(std::unique_ptr<Layer> layer);
 
-        auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
-        newLayer->onAttach();
-        m_Layers.push_back(std::move(newLayer));
-    }
+    // --- Frame operations ---
+    void onUpdate(float dt);
+    void onRender();
+    void onEvent(Event::Base &e);
 
-    // Push a GUI Layer
-    template <std::derived_from<ImGuiWindow> TLayer, typename... Args>
-    void pushImGuiLayer(Args &&...args)
-    {
-        if (findLayer<TLayer>(m_ImGuiWindows) != m_ImGuiWindows.end())
-            return;
-
-        auto newLayer = std::make_unique<TLayer>(std::forward<Args>(args)...);
-        m_ImGuiWindows.push_back(std::move(newLayer));
-    }
-
-    // Pop non-GUI Layer
-    template <std::derived_from<Layer> TLayer>
-    void popLayer()
-    {
-        auto it = findLayer<TLayer>(m_Layers);
-        if (it != m_Layers.end())
-        {
-            (*it)->onDetach();
-            m_Layers.erase(it);
-        }
-    }
-
-    // Pop GUI Layer
-    template <std::derived_from<ImGuiWindow>, typename TLayer>
-    void popImGuiLayer()
-    {
-        auto it = findLayer<TLayer>(m_ImGuiWindows);
-        if (it != m_ImGuiWindows.end())
-        {
-            m_ImGuiWindows.erase(it);
-        }
-    }
-
-
-private:
-    friend class Application;
-
-    void OnUpdate(float dt);
-    void OnRender();
-    void OnEvent(Event::Base &e);
-    void drawImGuiWindows();
+    // --- Layer control ---
+    void markLayerForDeletion(Layer *ptr);
     void clear();
 
-    template <typename LayerType, typename Container>
-    auto findLayer(Container &layers)
-    {
-        return std::ranges::find_if(layers, [](const auto &layer) {
-            return dynamic_cast<LayerType *>(layer.get()) != nullptr;
-        });
-    }
+private:
+    void removeDeletedLayers();
 
 private:
     std::vector<std::unique_ptr<Layer>> m_Layers;
-    std::vector<std::unique_ptr<ImGuiWindow>> m_ImGuiWindows;
+    size_t m_OverlayInsertIndex = 0;
 };
 
 } // namespace pap

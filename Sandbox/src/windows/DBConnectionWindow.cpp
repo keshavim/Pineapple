@@ -7,7 +7,7 @@ DBConnectionWindow::DBConnectionWindow(const std::string &title) : m_Title(title
 {
 }
 
-void DBConnectionWindow::drawImGui()
+void DBConnectionWindow::onRender()
 {
     ImGui::Begin(m_Title.c_str());
 
@@ -82,7 +82,7 @@ void DBConnectionWindow::connectNew()
     if (res)
     {
         // Open a schema browser window for this connection
-        pap::Application::pushImGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
+        pap::Application::pushOverlay<DBSchemaBrowserWindow>("Schema Browser");
     }
 }
 
@@ -105,6 +105,6 @@ void DBConnectionWindow::reconnect(const pap::db::ConnectInfo &info)
 
     if (res)
     {
-        pap::Application::pushImGuiWindow<DBSchemaBrowserWindow>("Schema Browser");
+        pap::Application::pushOverlay<DBSchemaBrowserWindow>("Schema Browser");
     }
 }

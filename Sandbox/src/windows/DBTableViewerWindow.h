@@ -1,5 +1,5 @@
 #pragma once
-#include "ImGui/ImGuiWindow.h"
+#include "core/layer.h"
 #include "dbc/Manager.h"
 #include "dbc/QueryData.h"
 #include <optional>
@@ -7,7 +7,7 @@
 #include <vector>
 
 
-class DBTableViewerWindow : public pap::ImGuiWindow
+class DBTableViewerWindow : public pap::Layer
 {
 public:
     DBTableViewerWindow(const std::string &title, const std::string &schema)
@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void drawImGui() override;
+    void onRender() override;
     bool wantsCapture() const override
     {
         return true;

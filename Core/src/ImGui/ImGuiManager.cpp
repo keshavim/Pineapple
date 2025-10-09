@@ -1,5 +1,6 @@
 #include "ImGuiManager.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
 #include "core/keycodes.h"
 #include <iostream>
 
@@ -21,6 +22,8 @@ void ImGuiManager::init(GLFWwindow *window)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     io.MouseDrawCursor = true;
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     ImGui::StyleColorsDark();
 
@@ -56,7 +59,7 @@ void ImGuiManager::newFrame(float dt)
 
 
 
-    
+
 
 
 }

@@ -1,17 +1,17 @@
 #pragma once
 
 
-#include "ImGui/ImGuiWindow.h"
+#include "core/layer.h"
 #include "dbc/Connector.h"
 #include "dbc/Schema.h"
 #include <string>
 
-class DBSchemaBrowserWindow : public pap::ImGuiWindow
+class DBSchemaBrowserWindow : public pap::Layer
 {
 public:
     DBSchemaBrowserWindow(const std::string &title);
 
-    void drawImGui() override;
+    void onRender() override;
     bool wantsCapture() const override
     {
         return true;

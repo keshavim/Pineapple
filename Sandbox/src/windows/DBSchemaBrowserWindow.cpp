@@ -8,7 +8,7 @@ DBSchemaBrowserWindow::DBSchemaBrowserWindow(const std::string &title) : m_Title
     refreshSchemas();
 }
 
-void DBSchemaBrowserWindow::drawImGui()
+void DBSchemaBrowserWindow::onRender()
 {
     ImGui::Begin(m_Title.c_str());
 
@@ -70,7 +70,7 @@ void DBSchemaBrowserWindow::drawImGui()
                     if (ImGui::Button(("View Table: " + table.name).c_str()))
                     {
                         // Open a new DBTableViewerWindow for this table
-                        pap::Application::pushImGuiWindow<DBTableViewerWindow>(table.name, *m_SelectedSchema);
+                        pap::Application::pushOverlay<DBTableViewerWindow>(table.name, *m_SelectedSchema);
                     }
                 }
                 else

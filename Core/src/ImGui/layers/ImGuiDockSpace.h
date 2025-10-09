@@ -1,19 +1,18 @@
 #pragma once
-#include "../ImGuiWindow.h"
+#include "core/layer.h"
 #include <GLFW/glfw3.h>
 
 
 namespace pap
 {
 
-class ImGuiDockSpace : public ImGuiWindow
+class ImGuiDockSpace : public Layer
 {
 public:
     ImGuiDockSpace();
     ~ImGuiDockSpace() override;
 
-    void drawImGui() override;
-    bool wantsCapture() const override{return false;}
+    void onRender() override;
 };
 
 } // namespace pap

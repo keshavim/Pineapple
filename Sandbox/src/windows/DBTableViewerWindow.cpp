@@ -3,10 +3,13 @@
 #include <imgui.h>
 
 
-void DBTableViewerWindow::drawImGui()
+void DBTableViewerWindow::onRender()
 {
     // In drawImGui:
-if (!m_Open) return; // Skip rendering if closed
+if (!m_Open) {
+    setState(pap::LayerState::Deleted);
+    return;
+}
 
 // Flags for full, resizable, closable, and tabbed window
 ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse |
@@ -14,7 +17,7 @@ ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse |
                          ImGuiWindowFlags_NoSavedSettings;
 
 // Pass &m_Open so user can close the window with [X]
-if (ImGui::Begin(m_Title.c_str(), nullptr, flags))
+if (ImGui::Begin(m_Title.c_str(), &m_Open, flags))
 {
     auto &dbManager = pap::Application::Get().getDBManager();
 

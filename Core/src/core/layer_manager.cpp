@@ -1,57 +1,111 @@
 #include "layer_manager.h"
+#include <algorithm>
 
-namespace pap
-{
+namespace pap {
 
-// Update/render non-GUI layers
-void LayerManager::OnUpdate(float dt)
+LayerManager::~LayerManager()
 {
-    for (auto &layer : m_Layers)
-        layer->OnUpdate(dt);
+    clear();
 }
 
-void LayerManager::OnRender()
+void LayerManager::pushLayer(std::unique_ptr<Layer> layer)
 {
-    for (auto &layer : m_Layers)
-        layer->OnRender();
+    m_Layers.insert(m_Layers.begin() + m_OverlayInsertIndex, std::move(layer));
+    ++m_OverlayInsertIndex;
 }
 
-// Draw GUI layers inside ImGui frame
-void LayerManager::drawImGuiWindows()
+void LayerManager::pushOverlay(std::unique_ptr<Layer> layer)
 {
-    for (auto &window : m_ImGuiWindows)
-        window->drawImGui();
+    m_Layers.push_back(std::move(layer));
 }
 
-void LayerManager::OnEvent(Event::Base &e)
+void LayerManager::onUpdate(float dt)
 {
-    // 1️⃣ First, let ImGui windows handle events if they want to
-    for (auto &window : m_ImGuiWindows)
+    for (auto& layer : m_Layers)
     {
-        window->onEvent(e);
-        if (window->wantsCapture())
+        if (layer->getState() == LayerState::Active ||
+            layer->getState() == LayerState::Hidden)
         {
-            e.handled = true; // block lower layers
-            break;
+            layer->onUpdate(dt);
+        }
+    }
+}
+
+void LayerManager::onRender()
+{
+    // Normal layers
+    for (size_t i = 0; i < m_OverlayInsertIndex; ++i)
+    {
+        auto& layer = m_Layers[i];
+        if (layer->getState() != LayerState::Hidden &&
+            layer->getState() != LayerState::Deleted)
+        {
+            layer->onRender();
         }
     }
 
-    // 2️⃣ Then propagate to layers if event not handled
-    if (!e.handled)
+    // Overlays
+    for (size_t i = m_OverlayInsertIndex; i < m_Layers.size(); ++i)
     {
-        for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
+        auto& layer = m_Layers[i];
+        if (layer->getState() != LayerState::Hidden &&
+            layer->getState() != LayerState::Deleted)
         {
-            (*it)->OnEvent(e);
-            if (e.handled)
-                break;
+            layer->onRender();
+        }
+    }
+
+    removeDeletedLayers();
+}
+
+void LayerManager::onEvent(Event::Base& e)
+{
+    for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
+    {
+        auto& layer = *it;
+        if (layer->getState() == LayerState::Deleted)
+            continue;
+
+        layer->onEvent(e);
+        if (e.handled)
+            break;
+    }
+}
+
+void LayerManager::markLayerForDeletion(Layer* ptr)
+{
+    for (auto& l : m_Layers)
+    {
+        if (l.get() == ptr)
+        {
+            l->setState(LayerState::Deleted);
+            break;
         }
     }
 }
 
 void LayerManager::clear()
 {
-    m_ImGuiWindows.clear();
     m_Layers.clear();
+    m_OverlayInsertIndex = 0;
 }
 
+void LayerManager::removeDeletedLayers()
+{
+    m_Layers.erase(
+        std::remove_if(m_Layers.begin(), m_Layers.end(),
+            [](const std::unique_ptr<Layer>& layer) {
+                return layer->getState() == LayerState::Deleted;
+            }),
+        m_Layers.end());
+
+    // Recalculate overlay split
+    size_t normalCount = 0;
+    for (size_t i = 0; i < m_Layers.size(); ++i)
+    {
+        if (i >= m_OverlayInsertIndex) break;
+        ++normalCount;
+    }
+    m_OverlayInsertIndex = normalCount;
+}
 } // namespace pap
