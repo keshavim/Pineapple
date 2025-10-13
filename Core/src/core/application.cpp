@@ -5,7 +5,6 @@
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "core.h"
 #include "layer_manager.h"
-#include "renderer/renderer.h"
 
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
@@ -29,6 +28,16 @@ void Application::Init(const AppSpecifications &specs)
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
 
+    RendererInitInfo info;
+    info.windowHandle = s_Window->GetNativeWindow();
+    auto [w, h] = s_Window->GetFramebufferSize();
+    info.width = w;
+    info.height = h;
+    info.backend = specs.rendererbackend;
+
+    pap::Renderer::Init(info);
+
+
     s_ImGuiManager.init(s_Window->GetNativeWindow());
 
     PushOverlay<ImGuiDockSpace>();
@@ -38,6 +47,7 @@ void Application::Shutdown()
 {
     s_LayerManager.clear();
     s_ImGuiManager.shutdown();
+    //Renderer::Shutdown();
     if (s_Window)
     {
         s_Window->Destroy();
@@ -80,6 +90,8 @@ void Application::Run()
         float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
         lastTime = currentTime;
 
+       Renderer::BeginFrame();
+
         s_LayerManager.onUpdate(dt);
         s_LayerManager.onRender();
 
@@ -87,7 +99,8 @@ void Application::Run()
         s_LayerManager.onRenderOverlay();
         s_ImGuiManager.render();
 
-        s_Window->Update();
+        Renderer::EndFrame();
+        // s_Window->Update();
     }
 
     PAP_PRINT("Application shutting down");

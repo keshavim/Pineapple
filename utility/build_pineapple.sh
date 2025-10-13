@@ -3,7 +3,7 @@
 set -e
 
 # Default configuration
-CONFIG=${1:Debug}
+CONFIG=${1:-Debug}
 
 # Ensure we're in the parent directory of the script (where CMakeLists.txt is)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

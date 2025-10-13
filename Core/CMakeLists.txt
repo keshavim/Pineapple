@@ -8,6 +8,7 @@ project(Core LANGUAGES CXX)
 file(GLOB_RECURSE SOURCES
     "src/*.cpp"
     "src/*.h"
+    "${VENDOR_DIR}/glad/src/glad.c"
 )
 add_library(Core STATIC ${SOURCES})
 

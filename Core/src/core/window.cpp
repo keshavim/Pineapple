@@ -25,7 +25,7 @@ void Window::Create()
     // Configure GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 #if __APPLE__
@@ -41,6 +41,7 @@ void Window::Create()
         glfwTerminate();
         std::exit(EXIT_FAILURE);
     }
+
 
     glfwMakeContextCurrent(m_Window);
     SetVSync(m_Data.VSync);
