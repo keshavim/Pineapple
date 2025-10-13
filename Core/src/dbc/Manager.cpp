@@ -1,17 +1,15 @@
 #include "Manager.h"
 #include "QueryData.h"
 #include "drivers/MariaDB.h"
+#include <utility>
 
-namespace pap
-{
-namespace db
-{
+namespace pap {
+namespace db {
 
-    
 Result<void> Manager::connect(const ConnectInfo &info)
 {
+    // create connector instance based on driver
     std::shared_ptr<Connector> conn;
-
     switch (info.driver)
     {
     case Driver::Maria:
@@ -21,22 +19,24 @@ Result<void> Manager::connect(const ConnectInfo &info)
         return std::unexpected(Error{ErrorCode::UnsupportedDriver});
     }
 
+    // attempt to connect
     auto res = conn->connect(info);
     if (!res)
         return std::unexpected(res.error());
 
-    m_CurrentConnection = conn;
+    // store owned copies: push info and connector into the pools
+    // keep them in parallel so index i corresponds to both vectors
+    m_Connections.push_back(info);
+    m_ConnectionPool.push_back(conn);
 
-    auto it = std::find(m_Connections.begin(), m_Connections.end(), info);
-    if (it == m_Connections.end())
-    {
-        m_Connections.push_back(info);
-    }
+    // set this new connection as the current connection
+    m_CurrentConnection = conn;
+    m_CurrentSchema.reset();
 
     return {};
 }
 
-void Manager::disconnect()
+void Manager::disconnectCurrent()
 {
     if (m_CurrentConnection)
     {
@@ -44,6 +44,35 @@ void Manager::disconnect()
         m_CurrentConnection.reset();
         m_CurrentSchema.reset();
     }
+}
+
+Result<void> Manager::closeConnection(size_t index)
+{
+    if (index >= m_ConnectionPool.size())
+        return std::unexpected(Error{ErrorCode::InvalidArgument});
+
+    // If closing the currently active connector, reset current before removing
+    if (m_CurrentConnection && m_CurrentConnection == m_ConnectionPool[index])
+    {
+        m_CurrentConnection.reset();
+        m_CurrentSchema.reset();
+    }
+
+    // Erase both info and connector at index (keeps vectors parallel)
+    m_ConnectionPool.erase(m_ConnectionPool.begin() + index);
+    m_Connections.erase(m_Connections.begin() + index);
+
+    return {};
+}
+
+Result<void> Manager::setCurrentConnection(size_t index)
+{
+    if (index >= m_ConnectionPool.size())
+        return std::unexpected(Error{ErrorCode::InvalidArgument});
+
+    m_CurrentConnection = m_ConnectionPool[index];
+    m_CurrentSchema.reset();
+    return {};
 }
 
 bool Manager::isConnected() const
@@ -71,7 +100,6 @@ Result<void> Manager::beginTransaction()
 {
     if (!m_CurrentConnection)
         return std::unexpected(Error{ErrorCode::NoConnection});
-
     return m_CurrentConnection->beginTransaction();
 }
 
@@ -79,7 +107,6 @@ Result<void> Manager::commitTransaction()
 {
     if (!m_CurrentConnection)
         return std::unexpected(Error{ErrorCode::NoConnection});
-
     return m_CurrentConnection->commitTransaction();
 }
 
@@ -87,7 +114,6 @@ Result<void> Manager::rollbackTransaction()
 {
     if (!m_CurrentConnection)
         return std::unexpected(Error{ErrorCode::NoConnection});
-
     return m_CurrentConnection->rollbackTransaction();
 }
 
@@ -108,7 +134,6 @@ Result<std::vector<std::string>> Manager::listSchemas()
             return std::unexpected(row.error());
         schemas.push_back((*row)[0]);
     }
-
     return schemas;
 }
 
@@ -140,10 +165,8 @@ Result<std::vector<TableInfo>> Manager::listTables(const std::string &schema)
         auto row = res->getRow(i);
         if (!row)
             return std::unexpected(row.error());
-
         tables.push_back({(*row)[0], {}});
     }
-
     return tables;
 }
 
@@ -158,13 +181,11 @@ Result<TableInfo> Manager::getTableInfo(const std::string &schema, const std::st
 
     TableInfo tinfo;
     tinfo.name = table;
-
     for (size_t i = 0; i < res->getRowCount(); ++i)
     {
         auto row = res->getRow(i);
         if (!row)
             return std::unexpected(row.error());
-
         ColumnInfo col;
         col.name = (*row)[0];
         col.type = (*row)[1];
@@ -172,8 +193,8 @@ Result<TableInfo> Manager::getTableInfo(const std::string &schema, const std::st
         col.isPrimaryKey = ((*row)[3] == "PRI");
         tinfo.columns.push_back(col);
     }
-
     return tinfo;
 }
+
 } // namespace db
 } // namespace pap

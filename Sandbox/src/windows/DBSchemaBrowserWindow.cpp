@@ -10,7 +10,13 @@ DBSchemaBrowserWindow::DBSchemaBrowserWindow(const std::string &title) : m_Title
 
 void DBSchemaBrowserWindow::onRender()
 {
-    ImGui::Begin(m_Title.c_str());
+    ImGui::Begin(m_Title.c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
+
+
+    if (ImGui::Button("Close"))
+    {
+        setState(pap::LayerState::Deleted);
+    }
 
     ImGui::Text("Schemas");
     if (m_Schemas.empty())
@@ -42,7 +48,7 @@ void DBSchemaBrowserWindow::onRender()
     }
     else
     {
-        auto &dbManager = pap::Application::Get().getDBManager();
+        auto &dbManager = pap::Application::GetDBManager();
 
         for (const auto &table : m_Tables)
         {
@@ -70,7 +76,7 @@ void DBSchemaBrowserWindow::onRender()
                     if (ImGui::Button(("View Table: " + table.name).c_str()))
                     {
                         // Open a new DBTableViewerWindow for this table
-                        pap::Application::pushOverlay<DBTableViewerWindow>(table.name, *m_SelectedSchema);
+                        pap::Application::PushOverlay<DBTableViewerWindow>(table.name, *m_SelectedSchema);
                     }
                 }
                 else
@@ -86,7 +92,7 @@ void DBSchemaBrowserWindow::onRender()
 
 void DBSchemaBrowserWindow::refreshSchemas()
 {
-    auto &mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::GetDBManager();
     auto res = mgr.listSchemas();
     if (res)
     {
@@ -100,7 +106,7 @@ void DBSchemaBrowserWindow::refreshSchemas()
 
 void DBSchemaBrowserWindow::refreshTables(const std::string &schema)
 {
-    auto &mgr = pap::Application::Get().getDBManager();
+    auto &mgr = pap::Application::GetDBManager();
     auto res = mgr.listTables(schema);
     if (res)
     {

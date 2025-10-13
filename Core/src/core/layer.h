@@ -1,5 +1,6 @@
 #pragma once
 #include "core/event.h"
+#include "imgui.h"
 
 
 namespace pap
@@ -34,7 +35,6 @@ public:
     virtual void onEvent(Event::Base &e)
     {
     }
-    virtual bool wantsCapture() const {return false;}
 
     // --- State management ---
     void setState(LayerState state)
@@ -50,8 +50,7 @@ public:
     {
         return m_State == LayerState::Deleted;
     }
-
-protected:
+private:
     LayerState m_State = LayerState::Active;
 };
 // Concept for layer types

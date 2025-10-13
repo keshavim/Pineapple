@@ -30,6 +30,8 @@ const char *toString(ErrorCode code)
         return "TransactionFailed";
     case ErrorCode::SchemaSwitchFailed:
         return "SchemaSwitchFailed";
+    case ErrorCode::InvalidArgument:
+        return "InvalidArgument";
     default:
         return "Unknown";
     }

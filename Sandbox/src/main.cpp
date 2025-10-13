@@ -17,8 +17,8 @@ public:
 };
 
 
-void pap::InitApplication()
+void pap::CreateApplication()
 {
-    Application::pushOverlay<DemoWindow>();
-    Application::pushOverlay<DBConnectionWindow>("Database Connection");
+    Application::PushOverlay<DemoWindow>();
+    Application::PushOverlay<DBConnectionWindow>("Database Connection");
 }

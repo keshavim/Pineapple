@@ -12,13 +12,6 @@ public:
     DBSchemaBrowserWindow(const std::string &title);
 
     void onRender() override;
-    bool wantsCapture() const override
-    {
-        return true;
-    }
-    void onEvent(pap::Event::Base &e) override
-    {
-    }
 
 private:
     std::string m_Title;

@@ -13,6 +13,7 @@
 
 namespace pap
 {
+
 struct AppSpecifications
 {
     std::string name = "Pineapple";
@@ -22,64 +23,57 @@ struct AppSpecifications
 class Application
 {
 public:
-    Application(const AppSpecifications &spec = AppSpecifications());
-    virtual ~Application();
+    Application() = delete; // no instances allowed
 
-    void Run();
-    void Stop();
+    static void Init(const AppSpecifications &spec = AppSpecifications());
+    static void Shutdown();
 
-    void OnEvent(Event::Base &e);
+    static void Run();
+    static void Stop();
+    static void OnEvent(Event::Base &e);
 
-    static Application &Get();
+    static std::shared_ptr<Window> GetWindow() { return s_Window; }
+    static std::pair<int, int> GetFramebufferSize();
+
+    static db::Manager &GetDBManager() { return s_DBManager; }
+    static LayerManager &GetLayerManager() { return s_LayerManager; }
+
     static float GetTime();
 
-
-    std::shared_ptr<Window> getWindow() const
+    // Layer utility functions
+    template <LayerType T, typename... Args>
+    static size_t PushLayer(Args &&...args)
     {
-        return m_Window;
+        return s_LayerManager.pushLayer(std::make_unique<T>(std::forward<Args>(args)...));
     }
-
-    std::pair<int, int> GetFramebufferSize() const
-    {
-        return m_Window->GetFramebufferSize();
-    }
-
-    db::Manager &getDBManager()
-    {
-        return dbManager;
-    }
-
 
     template <LayerType T, typename... Args>
-    static void pushLayer(Args &&...args)
+    static size_t PushOverlay(Args &&...args)
     {
-
-        Application::Get().layerManager.pushLayer(std::make_unique<T>(std::forward<Args>(args)...));
+        return s_LayerManager.pushOverlay(std::make_unique<T>(std::forward<Args>(args)...));
     }
 
-    // --- Push overlay at the end ---
-    template <LayerType T, typename... Args>
-    static void pushOverlay(Args &&...args)
+    static inline LayerState GetLayerState(size_t index)
     {
-        Application::Get().layerManager.pushLayer(std::make_unique<T>(std::forward<Args>(args)...));
-
-
+        return s_LayerManager.getState(index);
     }
 
+    static inline void SetLayerState(size_t index, LayerState state)
+    {
+        s_LayerManager.setState(index, state);
+    }
 
 private:
-    AppSpecifications m_Specifications;
-    std::shared_ptr<Window> m_Window;
-    LayerManager layerManager;
-    ImGuiManager imguiManager;
-    db::Manager dbManager;
-
-    bool m_Running = false;
-    static Application *s_Instance;
+    static inline AppSpecifications s_Specifications{};
+    static inline std::shared_ptr<Window> s_Window = nullptr;
+    static inline LayerManager s_LayerManager{};
+    static inline ImGuiManager s_ImGuiManager{};
+    static inline db::Manager s_DBManager{};
+    static inline bool s_Running = false;
 };
 
 // To be defined by client
-void InitApplication();
+void CreateApplication();
 
 } // namespace pap
 

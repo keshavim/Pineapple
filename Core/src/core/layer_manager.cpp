@@ -1,111 +1,99 @@
 #include "layer_manager.h"
 #include <algorithm>
+#include <cassert>
 
-namespace pap {
+namespace pap
+{
 
 LayerManager::~LayerManager()
 {
     clear();
 }
 
-void LayerManager::pushLayer(std::unique_ptr<Layer> layer)
+size_t LayerManager::pushLayer(std::unique_ptr<Layer> layer)
 {
-    m_Layers.insert(m_Layers.begin() + m_OverlayInsertIndex, std::move(layer));
-    ++m_OverlayInsertIndex;
+    if (!layer) return -1;
+
+    m_Layers.insert(m_Layers.begin() + m_OverlayIndex, std::move(layer));
+    return m_OverlayIndex++; // return index of inserted layer
 }
 
-void LayerManager::pushOverlay(std::unique_ptr<Layer> layer)
+size_t LayerManager::pushOverlay(std::unique_ptr<Layer> overlay)
 {
-    m_Layers.push_back(std::move(layer));
+    if (!overlay) return -1;
+
+    m_Layers.push_back(std::move(overlay));
+    return m_Layers.size() - 1; // return index of inserted overlay
+}
+
+LayerState LayerManager::getState(size_t index) const
+{
+    assert(index < m_Layers.size());
+    return m_Layers[index]->getState();
+}
+
+void LayerManager::setState(size_t index, LayerState state)
+{
+    if (index < m_Layers.size())
+        m_Layers[index]->setState(state);
 }
 
 void LayerManager::onUpdate(float dt)
 {
-    for (auto& layer : m_Layers)
+    for (auto &ptr : m_Layers)
     {
-        if (layer->getState() == LayerState::Active ||
-            layer->getState() == LayerState::Hidden)
-        {
-            layer->onUpdate(dt);
-        }
+        if (!ptr) continue;
+        auto state = ptr->getState();
+        if (state == LayerState::Active || state == LayerState::Hidden)
+            ptr->onUpdate(dt);
     }
 }
 
 void LayerManager::onRender()
 {
-    // Normal layers
-    for (size_t i = 0; i < m_OverlayInsertIndex; ++i)
+    for (size_t i = 0; i < m_OverlayIndex; ++i)
     {
-        auto& layer = m_Layers[i];
-        if (layer->getState() != LayerState::Hidden &&
-            layer->getState() != LayerState::Deleted)
-        {
-            layer->onRender();
-        }
-    }
+        auto &ptr = m_Layers[i];
+        if (!ptr) continue;
+        auto state = ptr->getState();
+        if (state == LayerState::Hidden || state == LayerState::Deleted)
+            continue;
 
-    // Overlays
-    for (size_t i = m_OverlayInsertIndex; i < m_Layers.size(); ++i)
-    {
-        auto& layer = m_Layers[i];
-        if (layer->getState() != LayerState::Hidden &&
-            layer->getState() != LayerState::Deleted)
-        {
-            layer->onRender();
-        }
-    }
+        ptr->onRender();
 
-    removeDeletedLayers();
+    }
 }
 
-void LayerManager::onEvent(Event::Base& e)
+void LayerManager::onRenderOverlay()
+{
+    for (size_t i = m_OverlayIndex; i < m_Layers.size(); ++i)
+    {
+        auto &ptr = m_Layers[i];
+        if (!ptr) continue;
+        auto state = ptr->getState();
+        if (state != LayerState::Hidden && state != LayerState::Deleted)
+            ptr->onRender();
+    }
+
+
+}
+
+void LayerManager::onEvent(Event::Base &e)
 {
     for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
     {
-        auto& layer = *it;
-        if (layer->getState() == LayerState::Deleted)
-            continue;
-
-        layer->onEvent(e);
-        if (e.handled)
-            break;
-    }
-}
-
-void LayerManager::markLayerForDeletion(Layer* ptr)
-{
-    for (auto& l : m_Layers)
-    {
-        if (l.get() == ptr)
-        {
-            l->setState(LayerState::Deleted);
-            break;
-        }
+        auto &ptr = *it;
+        if (!ptr) continue;
+        if (ptr->getState() == LayerState::Deleted) continue;
+        ptr->onEvent(e);
+        if (e.handled) return;
     }
 }
 
 void LayerManager::clear()
 {
     m_Layers.clear();
-    m_OverlayInsertIndex = 0;
+    m_OverlayIndex = 0;
 }
 
-void LayerManager::removeDeletedLayers()
-{
-    m_Layers.erase(
-        std::remove_if(m_Layers.begin(), m_Layers.end(),
-            [](const std::unique_ptr<Layer>& layer) {
-                return layer->getState() == LayerState::Deleted;
-            }),
-        m_Layers.end());
-
-    // Recalculate overlay split
-    size_t normalCount = 0;
-    for (size_t i = 0; i < m_Layers.size(); ++i)
-    {
-        if (i >= m_OverlayInsertIndex) break;
-        ++normalCount;
-    }
-    m_OverlayInsertIndex = normalCount;
-}
 } // namespace pap

@@ -16,17 +16,12 @@ enum class Driver
     // MySQL, PostgreSQL, SQLite etc. can be added later
 };
 
-struct ConnectInfo
-{
-    Driver driver;
+struct ConnectInfo {
+    pap::db::Driver driver;
     std::string uri;
     std::string user;
     std::string password;
-
-    bool operator==(const ConnectInfo &other) const
-    {
-        return driver == other.driver && uri == other.uri && user == other.user && password == other.password;
-    }
+    bool operator==(ConnectInfo const& o) const = default;
 };
 
 // ───────────── Interface ─────────────

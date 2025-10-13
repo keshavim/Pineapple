@@ -19,7 +19,7 @@ ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse |
 // Pass &m_Open so user can close the window with [X]
 if (ImGui::Begin(m_Title.c_str(), &m_Open, flags))
 {
-    auto &dbManager = pap::Application::Get().getDBManager();
+    auto &dbManager = pap::Application::GetDBManager();
 
     // Query table data once
     if (!m_Queried)

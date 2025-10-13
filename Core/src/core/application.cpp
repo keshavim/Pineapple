@@ -5,9 +5,7 @@
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "core.h"
 #include "layer_manager.h"
-
 #include "renderer/renderer.h"
-
 
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
@@ -18,92 +16,78 @@
 namespace pap
 {
 
-
-Application *Application::s_Instance = nullptr;
-
-Application::Application(const AppSpecifications &specs) : m_Specifications(specs)
+void Application::Init(const AppSpecifications &specs)
 {
-    s_Instance = this;
+    s_Specifications = specs;
 
-    glfwSetErrorCallback(
-        [](int error, const char *description) { PAP_ERROR("[GLFW Error] ({}): {}", error, description); });
+    glfwSetErrorCallback([](int error, const char *description) {
+        PAP_ERROR("[GLFW Error] ({}): {}", error, description);
+    });
     glfwInit();
 
+    s_Window = std::make_shared<Window>(s_Specifications.winSpec);
+    s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
+    s_Window->Create();
 
-    m_Window = std::make_shared<Window>(m_Specifications.winSpec);
-    m_Window->SetEventCallback([this](Event::Base &e) { this->OnEvent(e); });
-    m_Window->Create();
+    s_ImGuiManager.init(s_Window->GetNativeWindow());
 
-
-    imguiManager.init(m_Window->GetNativeWindow());
-
-    pushOverlay<ImGuiDockSpace>();
+    PushOverlay<ImGuiDockSpace>();
 }
 
-Application::~Application()
+void Application::Shutdown()
 {
-    // Clean up layers in reverse order
-    layerManager.clear();
-    imguiManager.shutdown();
-    m_Window->Destroy();
+    s_LayerManager.clear();
+    s_ImGuiManager.shutdown();
+    if (s_Window)
+    {
+        s_Window->Destroy();
+        s_Window.reset();
+    }
+    glfwTerminate();
 }
-
 
 void Application::OnEvent(Event::Base &e)
 {
-    imguiManager.onEvent(e);
+    s_ImGuiManager.onEvent(e);
 
-    PAP_EVENT_DISPATCH(
-        Event::KeyPressed,
-        e,
+    PAP_EVENT_DISPATCH(Event::KeyPressed, e, {
         if (e.key == KeyCode::Escape) {
             e.handled = true;
-            m_Running = false;
-        });
+            s_Running = false;
+        }
+    });
 
     if (e.getType() == EventType::WindowClosed)
     {
         Stop();
     }
 
-    layerManager.onEvent(e);
+    s_LayerManager.onEvent(e);
 }
 
 void Application::Run()
 {
-
     PAP_PRINT("Application starting main loop");
-
-    m_Running = true;
+    s_Running = true;
 
     float lastTime = GetTime();
-    while (m_Running)
+    while (s_Running)
     {
-
-
         glfwPollEvents();
-
-
-        if (!m_Running)
-        {
-            break;
-        }
+        if (!s_Running) break;
 
         float currentTime = GetTime();
         float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
         lastTime = currentTime;
 
+        s_LayerManager.onUpdate(dt);
+        s_LayerManager.onRender();
 
-        layerManager.onUpdate(dt);
+        s_ImGuiManager.newFrame(dt);
+        s_LayerManager.onRenderOverlay();
+        s_ImGuiManager.render();
 
-
-        imguiManager.newFrame(dt);
-
-        layerManager.onRender();
-        imguiManager.render();
-
-
-        m_Window->Update();
+        s_Window->Update();
     }
 
     PAP_PRINT("Application shutting down");
@@ -111,17 +95,19 @@ void Application::Run()
 
 void Application::Stop()
 {
-    m_Running = false;
+    s_Running = false;
 }
 
-Application &Application::Get()
+std::pair<int, int> Application::GetFramebufferSize()
 {
-    assert(s_Instance);
-    return *s_Instance;
+    if (s_Window)
+        return s_Window->GetFramebufferSize();
+    return {0, 0};
 }
 
 float Application::GetTime()
 {
-    return (float)glfwGetTime();
+    return static_cast<float>(glfwGetTime());
 }
+
 } // namespace pap

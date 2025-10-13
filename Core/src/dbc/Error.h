@@ -23,6 +23,7 @@ enum class ErrorCode
     QueryFailed,
     TransactionFailed,
     SchemaSwitchFailed,
+    InvalidArgument,
     Unknown
 };
 

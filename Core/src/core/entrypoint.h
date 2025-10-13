@@ -4,7 +4,7 @@
 
 namespace pap
 {
-extern void InitApplication();
+extern void CreateApplication();
 }
 // Define the CreateApplication function required by the engine
 
@@ -12,8 +12,8 @@ int main()
 {
 
     // Create and run the application
-    pap::Application app;
-    pap::InitApplication();
-    app.Run();
+    pap::Application::Init();
+    pap::CreateApplication();
+    pap::Application::Run();
     return 0;
 }
