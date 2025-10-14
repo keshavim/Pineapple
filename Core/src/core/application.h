@@ -7,7 +7,7 @@
 #include "ImGui/ImGuiManager.h"
 #include "core/layer_manager.h"
 #include "dbc/Manager.h"
-#include "window.h"
+#include "Window.h"
 
 
 

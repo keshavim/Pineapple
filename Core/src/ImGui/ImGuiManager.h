@@ -4,6 +4,7 @@
 #include "core/event.h" // Your event base and subclasses
 #include <imgui.h>
 #include <string>
+#include "core/Window.h"
 
 
 struct GLFWwindow;
@@ -17,7 +18,7 @@ public:
     ~ImGuiManager();
 
     // Called once after you create the GLFW window
-    void init(GLFWwindow *window);
+    void init(Window& window);
 
     // Called each frame before rendering your UI
     void newFrame(float dt);
@@ -32,7 +33,7 @@ public:
     void onEvent(Event::Base &e);
 
 private:
-    GLFWwindow *m_Window = nullptr;
+    Window* m_Window = nullptr;
     double m_LastTime = 0.0;
 
     void setupClipboard();

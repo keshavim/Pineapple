@@ -4,14 +4,16 @@
 #include "core/keycodes.h"
 #include <iostream>
 
+
+//TODO make imgui more platform diagnostic when more platforms are added
 // =================== Initialization ===================
 namespace pap
 {
 
 
-void ImGuiManager::init(GLFWwindow *window)
+void ImGuiManager::init(Window& window)
 {
-    m_Window = window;
+    m_Window = &window;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -25,15 +27,22 @@ void ImGuiManager::init(GLFWwindow *window)
 
     io.MouseDrawCursor = true;
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-
     // Clipboard
     setupClipboard();
 
-    // Renderer backend
-    ImGui_ImplGlfw_InitForOpenGL(window, false);
-    ImGui_ImplOpenGL3_Init("#version 460 core");
+     // Only set GLFW cursor and init backends if window is valid
+    if (auto native = static_cast<GLFWwindow*>(m_Window->GetNativeHandle()))
+    {
+        glfwSetInputMode(native, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+        // Renderer backend
+        ImGui_ImplGlfw_InitForOpenGL(native, false);
+        ImGui_ImplOpenGL3_Init("#version 460 core");
+    }
+    else
+    {
+        PAP_WARN("ImGuiManager: Invalid window handle during init");
+    }
 }
 
 // =================== Frame lifecycle ===================
@@ -44,11 +53,9 @@ void ImGuiManager::newFrame(float dt)
 
     io.DeltaTime = dt;
 
-    // 🧭 Update display size manually
-    int display_w, display_h;
-    int window_w, window_h;
-    glfwGetFramebufferSize(m_Window, &display_w, &display_h);
-    glfwGetWindowSize(m_Window, &window_w, &window_h);
+    // Update display size manually
+    auto [display_w, display_h] = m_Window->GetFramebufferSize();
+    auto [window_w, window_h] = m_Window->GetWindowSize();
 
     io.DisplaySize = ImVec2((float)window_w, (float)window_h);
     io.DisplayFramebufferScale = ImVec2(window_w > 0 ? (float)display_w / (float)window_w : 0.0f,
@@ -95,7 +102,7 @@ void ImGuiManager::setupClipboard()
     ImGuiIO &io = ImGui::GetIO();
     io.SetClipboardTextFn = setClipboardText;
     io.GetClipboardTextFn = getClipboardText;
-    io.ClipboardUserData = m_Window;
+    io.ClipboardUserData = m_Window->GetNativeHandle();
 }
 
 const char *ImGuiManager::getClipboardText(void *user_data)

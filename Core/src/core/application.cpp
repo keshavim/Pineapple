@@ -13,6 +13,8 @@
 #include "renderer/Renderer.h"
 #include <glad/glad.h>
 
+#include "platform/GLFW_Window.h"
+
 
 namespace pap
 {
@@ -25,13 +27,13 @@ void Application::Init(const AppSpecifications &specs)
         [](int error, const char *description) { PAP_ERROR("[GLFW Error] ({}): {}", error, description); });
     glfwInit();
 
-    s_Window = std::make_shared<Window>(s_Specifications.winSpec);
+    s_Window = std::make_shared<GLFWWindow>(s_Specifications.winSpec);
     //sents the event function to the window so application can recive its events
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
 
 
-    s_ImGuiManager.init(s_Window->GetNativeWindow());
+    s_ImGuiManager.init(*s_Window);
 
     PushOverlay<ImGuiDockSpace>();
 }
