@@ -4,7 +4,9 @@
 #include "core/event.h" // Your event base and subclasses
 #include <imgui.h>
 #include <string>
-#include <GLFW/glfw3.h>
+
+
+struct GLFWwindow;
 
 namespace pap
 {

@@ -51,7 +51,7 @@ void LayerManager::onUpdate(float dt)
 
 void LayerManager::onRender()
 {
-    for (size_t i = 0; i < m_OverlayIndex; ++i)
+    for (size_t i = 0; i < m_Layers.size(); ++i)
     {
         auto &ptr = m_Layers[i];
         if (!ptr) continue;
@@ -64,15 +64,15 @@ void LayerManager::onRender()
     }
 }
 
-void LayerManager::onRenderOverlay()
+void LayerManager::onImGuiRenderer()
 {
-    for (size_t i = m_OverlayIndex; i < m_Layers.size(); ++i)
+    for (size_t i = 0; i < m_Layers.size(); ++i)
     {
         auto &ptr = m_Layers[i];
         if (!ptr) continue;
         auto state = ptr->getState();
         if (state != LayerState::Hidden && state != LayerState::Deleted)
-            ptr->onRender();
+            ptr->onImGuiRenderer();
     }
 
 

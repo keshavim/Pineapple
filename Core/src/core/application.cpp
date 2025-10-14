@@ -1,16 +1,15 @@
+
+#include "pinepch.h"
+#include "core.h"
+
+
 #include "application.h"
 #include "event.h"
-#include "pinepch.h"
 
 #include "ImGui/layers/ImGuiDockSpace.h"
-#include "core.h"
 #include "layer_manager.h"
+#include "renderer/Renderer.h"
 
-#include <GLFW/glfw3.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <imgui.h>
-#include <thread>
 
 namespace pap
 {
@@ -19,23 +18,13 @@ void Application::Init(const AppSpecifications &specs)
 {
     s_Specifications = specs;
 
-    glfwSetErrorCallback([](int error, const char *description) {
-        PAP_ERROR("[GLFW Error] ({}): {}", error, description);
-    });
+    glfwSetErrorCallback(
+        [](int error, const char *description) { PAP_ERROR("[GLFW Error] ({}): {}", error, description); });
     glfwInit();
 
     s_Window = std::make_shared<Window>(s_Specifications.winSpec);
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
-
-    RendererInitInfo info;
-    info.windowHandle = s_Window->GetNativeWindow();
-    auto [w, h] = s_Window->GetFramebufferSize();
-    info.width = w;
-    info.height = h;
-    info.backend = specs.rendererbackend;
-
-    pap::Renderer::Init(info);
 
 
     s_ImGuiManager.init(s_Window->GetNativeWindow());
@@ -47,7 +36,7 @@ void Application::Shutdown()
 {
     s_LayerManager.clear();
     s_ImGuiManager.shutdown();
-    //Renderer::Shutdown();
+    Renderer::Shutdown();
     if (s_Window)
     {
         s_Window->Destroy();
@@ -61,7 +50,8 @@ void Application::OnEvent(Event::Base &e)
     s_ImGuiManager.onEvent(e);
 
     PAP_EVENT_DISPATCH(Event::KeyPressed, e, {
-        if (e.key == KeyCode::Escape) {
+        if (e.key == KeyCode::Escape)
+        {
             e.handled = true;
             s_Running = false;
         }
@@ -84,23 +74,23 @@ void Application::Run()
     while (s_Running)
     {
         glfwPollEvents();
-        if (!s_Running) break;
+        if (!s_Running)
+            break;
 
         float currentTime = GetTime();
         float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
         lastTime = currentTime;
 
-       Renderer::BeginFrame();
+        Renderer::BeginFrame();
 
         s_LayerManager.onUpdate(dt);
         s_LayerManager.onRender();
 
         s_ImGuiManager.newFrame(dt);
-        s_LayerManager.onRenderOverlay();
+        s_LayerManager.onImGuiRenderer();
         s_ImGuiManager.render();
 
         Renderer::EndFrame();
-        // s_Window->Update();
     }
 
     PAP_PRINT("Application shutting down");

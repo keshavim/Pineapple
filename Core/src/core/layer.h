@@ -32,6 +32,9 @@ public:
     virtual void onRender()
     {
     }
+    virtual void onImGuiRenderer()
+    {
+    }
     virtual void onEvent(Event::Base &e)
     {
     }
@@ -56,4 +59,8 @@ private:
 // Concept for layer types
 template <typename T>
 concept LayerType = std::derived_from<T, Layer>;
+
+
+using Overlay = Layer;
+
 } // namespace pap

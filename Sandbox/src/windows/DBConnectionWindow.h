@@ -6,12 +6,12 @@
 #include <string>
 
 
-class DBConnectionWindow : public pap::Layer
+class DBConnectionWindow : public pap::Overlay
 {
 public:
     explicit DBConnectionWindow(const std::string &title);
 
-    void onRender() override;
+    void onImGuiRenderer() override;
 
 private:
     pap::db::Result<void> connectNew();

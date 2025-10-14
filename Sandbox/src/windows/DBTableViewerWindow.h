@@ -7,7 +7,7 @@
 #include <vector>
 
 
-class DBTableViewerWindow : public pap::Layer
+class DBTableViewerWindow : public pap::Overlay
 {
 public:
     DBTableViewerWindow(const std::string &title, const std::string &schema)
@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void onRender() override;
+    void onImGuiRenderer() override;
 
 private:
     std::string m_Title;

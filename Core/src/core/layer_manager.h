@@ -21,7 +21,7 @@ public:
     // --- Frame operations ---
     void onUpdate(float dt);
     void onRender();
-    void onRenderOverlay();
+    void onImGuiRenderer();
     void onEvent(Event::Base &e);
 
     // --- State access ---

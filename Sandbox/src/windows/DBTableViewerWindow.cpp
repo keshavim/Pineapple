@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 
-void DBTableViewerWindow::onRender()
+void DBTableViewerWindow::onImGuiRenderer()
 {
     // In drawImGui:
 if (!m_Open) {

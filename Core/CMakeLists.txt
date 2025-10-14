@@ -3,12 +3,12 @@ project(Core LANGUAGES CXX)
 
 
 
+add_compile_definitions(GLFW_INCLUDE_NONE)
 
 # Source files (recursive to include subdirectories)
-file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "src/*.cpp"
     "src/*.h"
-    "${VENDOR_DIR}/glad/src/glad.c"
 )
 add_library(Core STATIC ${SOURCES})
 
@@ -26,7 +26,7 @@ target_link_libraries(Core PRIVATE
     ${VENDOR_LIBRARIES}
 )
 
-# Platform-specific libraries
+# # Platform-specific libraries
 if(WIN32)
     target_link_libraries(Core PRIVATE opengl32 gdi32 user32 shell32)
 elseif(APPLE)

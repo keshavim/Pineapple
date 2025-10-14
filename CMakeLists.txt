@@ -37,6 +37,8 @@ elseif(UNIX)
 endif()
 
 
+
+
 add_compile_definitions(
     $<$<CONFIG:Debug>:PAP_DEBUG>
     $<$<CONFIG:Release>:PAP_RELEASE>

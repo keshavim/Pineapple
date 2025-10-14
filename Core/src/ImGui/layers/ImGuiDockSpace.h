@@ -12,7 +12,7 @@ public:
     ImGuiDockSpace();
     ~ImGuiDockSpace() override;
 
-    void onRender() override;
+    void onImGuiRenderer() override;
 };
 
 } // namespace pap

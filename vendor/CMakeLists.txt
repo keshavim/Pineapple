@@ -2,7 +2,7 @@
 # -------------------------
 # Paths
 # -------------------------
-set(VENDOR_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "")
+set(VENDOR_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # -------------------------
 # GLFW
@@ -28,25 +28,42 @@ add_subdirectory(mariadbc)
 # -------------------------
 # ImGui
 # -------------------------
-file(GLOB IMGUI_SRC
+file(GLOB IMGUI_SRC CONFIGURE_DEPENDS
     ${VENDOR_DIR}/imgui/*.cpp
     ${VENDOR_DIR}/imgui/backends/imgui_impl_glfw.cpp
     ${VENDOR_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+
+    ${VENDOR_DIR}/imgui/*.h
+    ${VENDOR_DIR}/imgui/backends/imgui_impl_glfw.h
+    ${VENDOR_DIR}/imgui/backends/imgui_impl_opengl3.h
 )
 
 add_library(imgui STATIC ${IMGUI_SRC})
 target_include_directories(imgui PUBLIC ${VENDOR_DIR}/imgui)
 target_link_libraries(imgui PRIVATE glfw)
 
+
+# -------------------------
+# GLAD
+# -------------------------
+file(GLOB GLAD_SRC CONFIGURE_DEPENDS
+    ${VENDOR_DIR}/glad/src/glad.c
+    ${VENDOR_DIR}/glad/include/glad/glad.h
+    ${VENDOR_DIR}/glad/include/KHR/khrplatform.h
+
+)
+
+add_library(glad STATIC ${GLAD_SRC})
+target_include_directories(glad PUBLIC ${VENDOR_DIR}/glad/include)
+
 # -------------------------
 # Export include dirs and targets
 # -------------------------
-set(VENDOR_LIBRARIES glfw imgui mariadbcpp CACHE INTERNAL "")
+set(VENDOR_LIBRARIES glfw glad imgui mariadbcpp CACHE INTERNAL "")
 set(VENDOR_INCLUDE_DIRS
     ${VENDOR_DIR}/glfw/include
     ${VENDOR_DIR}/mariadbc/include
     ${VENDOR_DIR}/imgui
     ${VENDOR_DIR}/glad/include
-
     CACHE INTERNAL ""
 )

@@ -8,7 +8,7 @@ DBSchemaBrowserWindow::DBSchemaBrowserWindow(const std::string &title) : m_Title
     refreshSchemas();
 }
 
-void DBSchemaBrowserWindow::onRender()
+void DBSchemaBrowserWindow::onImGuiRenderer()
 {
     ImGui::Begin(m_Title.c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
 

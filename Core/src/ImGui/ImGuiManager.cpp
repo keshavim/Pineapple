@@ -1,6 +1,6 @@
 #include "ImGuiManager.h"
-#include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 #include "core/keycodes.h"
 #include <iostream>
 
@@ -15,6 +15,8 @@ void ImGuiManager::init(GLFWwindow *window)
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+
 
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -25,14 +27,13 @@ void ImGuiManager::init(GLFWwindow *window)
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-    ImGui::StyleColorsDark();
 
     // Clipboard
     setupClipboard();
 
     // Renderer backend
-    ImGui_ImplOpenGL3_Init("#version 460");
-
+    ImGui_ImplGlfw_InitForOpenGL(window, false);
+    ImGui_ImplOpenGL3_Init("#version 460 core");
 }
 
 // =================== Frame lifecycle ===================
@@ -55,17 +56,13 @@ void ImGuiManager::newFrame(float dt)
 
 
     ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-
-
-
-
-
 }
 
 void ImGuiManager::render()
 {
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -81,6 +78,7 @@ void ImGuiManager::render()
 void ImGuiManager::shutdown()
 {
     ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 

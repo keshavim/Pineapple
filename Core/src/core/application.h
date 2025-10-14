@@ -7,10 +7,7 @@
 #include "ImGui/ImGuiManager.h"
 #include "core/layer_manager.h"
 #include "dbc/Manager.h"
-#include "layer.h"
 #include "window.h"
-#include <GLFW/glfw3.h>
-#include "renderer/Renderer.h"
 
 
 namespace pap
@@ -19,7 +16,6 @@ namespace pap
 struct AppSpecifications
 {
     std::string name = "Pineapple";
-    RendererBackendType rendererbackend = RendererBackendType::OpenGL;
     WindowSpecifications winSpec;
 };
 

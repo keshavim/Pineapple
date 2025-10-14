@@ -2,9 +2,11 @@
 
 #include "core.h"
 #include "event.h"
-#include <GLFW/glfw3.h>
 #include <functional>
 #include <string>
+
+
+#include "renderer/Renderer.h"
 
 
 namespace pap
@@ -19,6 +21,8 @@ struct WindowSpecifications
     int Height = 720;
     bool VSync = true;
     bool Resizable = true;
+    RendererBackendType rendererbackend = RendererBackendType::OpenGL;
+
 };
 
 class Window
@@ -79,6 +83,8 @@ private:
         int Height = 720;
         bool VSync = true;
         bool Resizable = true;
+        RendererBackendType rendererbackend = RendererBackendType::OpenGL;
+
 
         EventCallbackFn EventCallback;
     } m_Data;

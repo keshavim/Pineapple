@@ -7,7 +7,7 @@ DBConnectionWindow::DBConnectionWindow(const std::string &title) : m_Title(title
 {
 }
 
-void DBConnectionWindow::onRender()
+void DBConnectionWindow::onImGuiRenderer()
 {
     ImGui::Begin(m_Title.c_str());
 

@@ -2,6 +2,7 @@
 #include "pinepch.h"
 
 
+
 namespace pap
 {
 
@@ -13,6 +14,7 @@ Window::Window(const WindowSpecifications &specs)
     m_Data.Title = specs.Title;
     m_Data.VSync = specs.VSync;
     m_Data.Resizable = specs.Resizable;
+    m_Data.rendererbackend = specs.rendererbackend;
 }
 
 Window::~Window()
@@ -25,8 +27,8 @@ void Window::Create()
     // Configure GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 #if __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Required on macOS
@@ -44,6 +46,15 @@ void Window::Create()
 
 
     glfwMakeContextCurrent(m_Window);
+
+    RendererInitInfo info;
+    info.windowHandle = GetNativeWindow();
+    auto [w, h] = GetFramebufferSize();
+    info.width = w;
+    info.height = h;
+    info.backend = m_Data.rendererbackend;
+    Renderer::Init(info);
+
     SetVSync(m_Data.VSync);
 
     glfwSetWindowUserPointer(m_Window, &m_Data);

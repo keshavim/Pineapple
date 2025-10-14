@@ -14,7 +14,7 @@ ImGuiDockSpace::~ImGuiDockSpace()
 {
 }
 
-void ImGuiDockSpace::onRender()
+void ImGuiDockSpace::onImGuiRenderer()
 {
     // Dockspace window setup
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

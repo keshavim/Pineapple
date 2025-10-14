@@ -11,7 +11,7 @@ class Renderer
 public:
     Renderer() = delete;
 
-    static bool Init(const RendererInitInfo& info);
+    static bool Init(const RendererInitInfo &info);
     static void Shutdown();
 
     static void BeginFrame();
@@ -20,7 +20,7 @@ public:
 
     static RendererBackendType GetBackendType();
 
-    static IRendererBackend* GetBackend();
+    static IRendererBackend *GetBackend();
 
 private:
     static inline std::unique_ptr<IRendererBackend> s_Backend = nullptr;

@@ -6,12 +6,12 @@
 #include "dbc/Schema.h"
 #include <string>
 
-class DBSchemaBrowserWindow : public pap::Layer
+class DBSchemaBrowserWindow : public pap::Overlay
 {
 public:
     DBSchemaBrowserWindow(const std::string &title);
 
-    void onRender() override;
+    void onImGuiRenderer() override;
 
 private:
     std::string m_Title;
