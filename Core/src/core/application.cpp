@@ -1,4 +1,6 @@
 
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 #include "pinepch.h"
 #include "core.h"
 
@@ -9,6 +11,7 @@
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "layer_manager.h"
 #include "renderer/Renderer.h"
+#include <glad/glad.h>
 
 
 namespace pap
@@ -23,6 +26,7 @@ void Application::Init(const AppSpecifications &specs)
     glfwInit();
 
     s_Window = std::make_shared<Window>(s_Specifications.winSpec);
+    //sents the event function to the window so application can recive its events
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
 
@@ -36,6 +40,8 @@ void Application::Shutdown()
 {
     s_LayerManager.clear();
     s_ImGuiManager.shutdown();
+
+
     Renderer::Shutdown();
     if (s_Window)
     {
@@ -53,7 +59,7 @@ void Application::OnEvent(Event::Base &e)
         if (e.key == KeyCode::Escape)
         {
             e.handled = true;
-            s_Running = false;
+            Stop();
         }
     });
 
@@ -81,14 +87,20 @@ void Application::Run()
         float dt = std::clamp(currentTime - lastTime, 0.001f, 0.1f);
         lastTime = currentTime;
 
-        Renderer::BeginFrame();
 
         s_LayerManager.onUpdate(dt);
+
+
+        Renderer::BeginFrame();
+
+
+
         s_LayerManager.onRender();
 
         s_ImGuiManager.newFrame(dt);
         s_LayerManager.onImGuiRenderer();
         s_ImGuiManager.render();
+
 
         Renderer::EndFrame();
     }

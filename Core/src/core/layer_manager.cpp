@@ -14,16 +14,16 @@ size_t LayerManager::pushLayer(std::unique_ptr<Layer> layer)
 {
     if (!layer) return -1;
 
-    m_Layers.insert(m_Layers.begin() + m_OverlayIndex, std::move(layer));
-    return m_OverlayIndex++; // return index of inserted layer
+    m_Layers.emplace(m_Layers.begin() + m_OverlayIndex, std::move(layer));
+    return m_OverlayIndex++; //returns curent index then increments
 }
 
 size_t LayerManager::pushOverlay(std::unique_ptr<Layer> overlay)
 {
     if (!overlay) return -1;
 
-    m_Layers.push_back(std::move(overlay));
-    return m_Layers.size() - 1; // return index of inserted overlay
+    m_Layers.emplace_back(std::move(overlay));
+    return m_Layers.size() - 1;
 }
 
 LayerState LayerManager::getState(size_t index) const

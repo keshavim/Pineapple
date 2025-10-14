@@ -15,5 +15,6 @@ int main()
     pap::Application::Init();
     pap::CreateApplication();
     pap::Application::Run();
+    pap::Application::Shutdown();
     return 0;
 }

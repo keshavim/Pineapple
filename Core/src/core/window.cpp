@@ -208,6 +208,9 @@ std::pair<int, int> Window::GetFramebufferSize()
     glfwGetFramebufferSize(m_Window, &display_w, &display_h);
     return {display_w, display_h};
 }
+std::pair<int, int> Window::GetWindowSize() const{
+    return {m_Data.Width, m_Data.Height};
+}
 
 
 } // namespace pap

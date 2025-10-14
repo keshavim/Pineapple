@@ -47,6 +47,7 @@ public:
         return m_Window;
     }
     std::pair<int, int> GetFramebufferSize();
+    std::pair<int, int> GetWindowSize() const;
 
     // -------------------------
     // Event Callback
@@ -59,15 +60,15 @@ public:
     // -------------------------
     // Getters for data
     // -------------------------
-    const std::string &GetTitle() const
+    inline const std::string &GetTitle() const
     {
         return m_Data.Title;
     }
-    int GetWidth() const
+    inline int GetWidth() const
     {
         return m_Data.Width;
     }
-    int GetHeight() const
+    inline int GetHeight() const
     {
         return m_Data.Height;
     }

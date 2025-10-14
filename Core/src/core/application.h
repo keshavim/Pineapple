@@ -10,6 +10,11 @@
 #include "window.h"
 
 
+
+
+//Static class that initalizes and deletes all other engine level classes
+
+
 namespace pap
 {
 

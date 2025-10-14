@@ -8,6 +8,9 @@
 
 #include <cstring>
 
+//just some core utilites that should be included in most files
+
+
 namespace pap
 {
 
