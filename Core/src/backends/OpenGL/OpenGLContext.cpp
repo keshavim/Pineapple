@@ -1,5 +1,7 @@
-#include "OpenGLBackend.h"
 #include "pinepch.h"
+
+#include "OpenGLContext.h"
+#include "core/core.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -74,54 +76,19 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
 
 namespace pap
 {
+    OpenGLContext::OpenGLContext(GLFWwindow* windowhandle)
+    :m_windowhandle(windowhandle){
+        assert(m_windowhandle && "OpenGLContext windowhandle is null");
+    }
+    void OpenGLContext::Init(){
+        glfwMakeContextCurrent(m_windowhandle);
+        int s = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        assert(s && "glad loadgl failed");
+    }
 
-bool OpenGLBackend::Init(const RendererInitInfo& info)
-{
-    m_WindowHandle = info.windowHandle;
-    m_Width = info.width;
-    m_Height = info.height;
+    void OpenGLContext::SwapBuffers(){
+        glfwSwapBuffers(m_windowhandle);
+    }
 
-    int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    assert(status && "Failed glad load");
-
-    glViewport(0, 0, m_Width, m_Height);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(message_callback, nullptr);
-
-    PAP_PRINT("OpenGL initialized");
-    PAP_PRINT("Vendor: {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
-    PAP_PRINT("Renderer: {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
-    PAP_PRINT("Version: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-
-    return true;
-}
-
-void OpenGLBackend::Shutdown()
-{
-    // No special cleanup needed for basic GL
-    PAP_PRINT("OpenGL backend shutdown");
-}
-
-void OpenGLBackend::BeginFrame()
-{
-    
-    glViewport(0, 0, m_Width, m_Height);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void OpenGLBackend::EndFrame()
-{
-    glfwSwapBuffers(static_cast<GLFWwindow*>(m_WindowHandle));
-}
-
-void OpenGLBackend::Resize(int width, int height)
-{
-    m_Width = width;
-    m_Height = height;
-    glViewport(0, 0, width, height);
-}
 
 } // namespace pap

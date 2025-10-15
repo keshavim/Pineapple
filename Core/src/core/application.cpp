@@ -10,7 +10,6 @@
 
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "layer_manager.h"
-#include "renderer/Renderer.h"
 #include <glad/glad.h>
 
 #include "backends/GLFW/GLFW_Window.h"
@@ -45,7 +44,6 @@ void Application::Shutdown()
     s_ImGuiManager.shutdown();
 
 
-    Renderer::Shutdown();
     if (s_Window)
     {
         s_Window->Destroy();
@@ -97,18 +95,23 @@ void Application::Run()
         s_LayerManager.onUpdate(dt);
 
 
-        Renderer::BeginFrame();
 
+        s_ImGuiManager.newFrame(dt);
+        auto [x,y] = GetFramebufferSize();
+        glViewport(0,0,x,y);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
         s_LayerManager.onRender();
-
-        s_ImGuiManager.newFrame(dt);
         s_LayerManager.onImGuiRenderer();
+
+
         s_ImGuiManager.render();
 
+        s_Window->Update();
 
-        Renderer::EndFrame();
+
     }
 
     PAP_PRINT("Application shutting down");

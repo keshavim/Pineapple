@@ -2,6 +2,7 @@
 #pragma once
 
 #include "core/Window.h"
+#include "renderer/RendererContext.h"
 
 
 struct GLFWwindow;
@@ -43,12 +44,12 @@ private:
         int Height;
         bool VSync;
         bool Resizable;
-        RendererBackendType rendererbackend;
         EventCallbackFn EventCallback;
     };
 
     Data m_Data;
     GLFWwindow *m_Window = nullptr;
+    RendererContext *m_Context = nullptr;
 };
 
 } // namespace pap

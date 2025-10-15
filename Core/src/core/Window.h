@@ -7,7 +7,6 @@
 #include <string>
 #include <utility>
 
-#include "renderer/Renderer.h"
 
 namespace pap
 {
@@ -21,7 +20,6 @@ struct WindowSpecifications
     int Height = 720;
     bool VSync = true;
     bool Resizable = true;
-    RendererBackendType rendererbackend = RendererBackendType::OpenGL;
 };
 
 enum class WindowBackend{

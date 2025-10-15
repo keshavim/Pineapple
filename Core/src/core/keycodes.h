@@ -5,6 +5,7 @@ namespace pap
 {
 
 // Key codes directly mapped to GLFW
+//this will need to change in the future
 enum class KeyCode : int
 {
     Unknown = -1,

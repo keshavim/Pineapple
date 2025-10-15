@@ -3,6 +3,7 @@
 
 #include "GLFW_Input.h"
 #include <GLFW/glfw3.h>
+#include "backends/OpenGL/OpenGLContext.h"
 
 
 namespace pap
@@ -15,7 +16,6 @@ GLFWWindowBackend::GLFWWindowBackend(const WindowSpecifications &specs)
     m_Data.Height = specs.Height;
     m_Data.VSync = specs.VSync;
     m_Data.Resizable = specs.Resizable;
-    m_Data.rendererbackend = specs.rendererbackend;
 }
 
 GLFWWindowBackend::~GLFWWindowBackend()
@@ -42,15 +42,8 @@ void GLFWWindowBackend::Create()
         std::exit(EXIT_FAILURE);
     }
 
-    glfwMakeContextCurrent(m_Window);
-
-    RendererInitInfo info;
-    info.windowHandle = m_Window;
-    auto [w, h] = GetFramebufferSize();
-    info.width = w;
-    info.height = h;
-    info.backend = m_Data.rendererbackend;
-    Renderer::Init(info);
+    m_Context = new OpenGLContext(m_Window);
+    m_Context->Init();
 
     SetVSync(m_Data.VSync);
     glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -163,7 +156,7 @@ void GLFWWindowBackend::Destroy()
 
 void GLFWWindowBackend::Update()
 {
-    glfwSwapBuffers(m_Window);
+    m_Context->SwapBuffers();
 }
 
 bool GLFWWindowBackend::ShouldClose() const
