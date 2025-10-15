@@ -1,8 +1,7 @@
-
-
 #pragma once
 
 #include "pineapple.h"
+#include "renderer/VertexArray.h"
 #include "temp_shader_functions.h"
 
 class TriangleLayer : public pap::Layer
@@ -14,49 +13,37 @@ public:
         m_Shader = render::CreateGraphicsShader("shaders/Vertex.glsl", "shaders/Fragment.glsl");
 
         // Create geometry
-        glCreateVertexArrays(1, &m_VertexArray);
         struct Vertex
         {
             float Position[2];
             float TexCoord[2];
         };
 
-        // Define vertices
         Vertex vertices[] = {
             {{-1.0f, -1.0f}, {0.0f, 0.0f}}, // Bottom-left
-            {{3.0f, -1.0f}, {2.0f, 0.0f}},  // Bottom-right
-            {{-1.0f, 3.0f}, {0.0f, 2.0f}}   // Top-left
+            {{3.0f, -1.0f},  {2.0f, 0.0f}}, // Bottom-right
+            {{-1.0f,  3.0f}, {0.0f, 2.0f}}  // Top-left
         };
 
-        m_VertexBuffer.reset(pap::VertexBuffer::Create((float *)vertices, sizeof(vertices)));
-        m_VertexBuffer->BindToVAO(m_VertexArray, 0, sizeof(Vertex));
+        // Create VAO
+        m_VertexArray.reset(pap::VertexArray::Create());
 
-        // Enable attributes
-        glEnableVertexArrayAttrib(m_VertexArray, 0); // position
-        glEnableVertexArrayAttrib(m_VertexArray, 1); // uv
+        // Create VBO
+        m_VertexBuffer.reset(pap::VertexBuffer::Create((float*)vertices, sizeof(vertices)));
 
-        // Format: location, size, type, normalized, relative offset
-        glVertexArrayAttribFormat(m_VertexArray,
-                                  0,
-                                  2,
-                                  GL_FLOAT,
-                                  GL_FALSE,
-                                  static_cast<GLuint>(offsetof(Vertex, Position)));
-        glVertexArrayAttribFormat(m_VertexArray,
-                                  1,
-                                  2,
-                                  GL_FLOAT,
-                                  GL_FALSE,
-                                  static_cast<GLuint>(offsetof(Vertex, TexCoord)));
+        // Describe layout
+        pap::VertexBufferLayout layout;
+        layout.Push(2, pap::ShaderDataType::Float, false); // Position
+        layout.Push(2, pap::ShaderDataType::Float, false); // TexCoord
 
-        // Link attribute locations to binding index 0
-        glVertexArrayAttribBinding(m_VertexArray, 0, 0);
-        glVertexArrayAttribBinding(m_VertexArray, 1, 0);
+        // Attach buffer to VAO with layout
+        m_VertexArray->AddVertexBuffer(*m_VertexBuffer, layout);
     }
 
     ~TriangleLayer() override
     {
-        glDeleteVertexArrays(1, &m_VertexArray);
+        m_VertexArray.reset();   // cleans up VAO via its destructor
+        m_VertexBuffer.reset();  // cleans up VBO
         glDeleteProgram(m_Shader);
     }
 
@@ -69,18 +56,17 @@ public:
 
         auto [x, y] = pap::Application::GetFramebufferSize();
         glUniform2f(1, x, y);
-
         glViewport(0, 0, static_cast<GLsizei>(x), static_cast<GLsizei>(y));
 
         // Render
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glBindVertexArray(m_VertexArray);
+        m_VertexArray->Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
 private:
-    GLuint m_VertexArray = 0;
-    std::unique_ptr<pap::VertexBuffer> m_VertexBuffer;
+    std::shared_ptr<pap::VertexArray> m_VertexArray;
+    std::shared_ptr<pap::VertexBuffer> m_VertexBuffer;
 
     GLuint m_Shader = 0;
 };

@@ -34,7 +34,7 @@ void OpenGLVertexBuffer::SetData(const void *data, size_t size)
     glNamedBufferSubData(m_RendererID, 0, size, data);
 }
 
-void OpenGLVertexBuffer::BindToVAO(uint32_t vao, uint32_t bindingIndex, uint32_t stride)
+void OpenGLVertexBuffer::BindToVAO(uint32_t vao, uint32_t bindingIndex, uint32_t stride) const
 {
     glVertexArrayVertexBuffer(vao, bindingIndex, m_RendererID, 0, stride);
 }

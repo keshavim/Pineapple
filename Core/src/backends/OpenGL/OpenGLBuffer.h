@@ -17,7 +17,7 @@ public:
 
     void SetData(const void *data, size_t size) override;
 
-    void BindToVAO(uint32_t vao, uint32_t bindingIndex, uint32_t stride) override;
+    void BindToVAO(uint32_t vao, uint32_t bindingIndex, uint32_t stride) const override;
 
     inline uint32_t GetID() override {return m_RendererID;}
 
