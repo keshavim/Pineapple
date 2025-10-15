@@ -10,11 +10,11 @@
 
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "layer_manager.h"
-#include "platform/GLFW_Input.h"
 #include "renderer/Renderer.h"
 #include <glad/glad.h>
 
-#include "platform/GLFW_Window.h"
+#include "backends/GLFW/GLFW_Window.h"
+#include "backends/GLFW/GLFW_Input.h"
 
 
 namespace pap
@@ -28,13 +28,11 @@ void Application::Init(const AppSpecifications &specs)
         [](int error, const char *description) { PAP_ERROR("[GLFW Error] ({}): {}", error, description); });
     glfwInit();
 
-    s_Window = std::make_shared<GLFWWindow>(s_Specifications.winSpec);
+    s_Window = std::make_shared<GLFWWindowBackend>(s_Specifications.winSpec);
     //sents the event function to the window so application can recive its events
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
 
-    //i know new and delete is bad but this is very simple it probably doesn't matter
-    Input::s_Instance = new GLFWInput(static_cast<GLFWwindow*>(s_Window->GetNativeHandle()));
 
     s_ImGuiManager.init(*s_Window);
 

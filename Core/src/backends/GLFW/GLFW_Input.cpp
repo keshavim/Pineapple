@@ -1,44 +1,48 @@
 #include "GLFW_Input.h"
+#include "core/application.h"
 
 namespace pap
 {
 
-GLFWInput::GLFWInput(GLFWwindow* window)
-    : m_Window(window)
-{
-}
+Input* Input::s_Instance = new GLFWInput();
 
 void GLFWInput::OnEventImpl(Event::Base& e)
 {
-    PAP_EVENT_DISPATCH(Event::MouseScrolled, e, {
-        m_ScrollX = e.xOffset;
-        m_ScrollY = e.yOffset;
-    });
+
 }
 
 bool GLFWInput::IsKeyPressedImpl(KeyCode keycode) const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
     int state = glfwGetKey(m_Window, static_cast<int>(keycode));
     return state == GLFW_PRESS || state == GLFW_REPEAT;
 }
 
 bool GLFWInput::IsKeyReleasedImpl(KeyCode keycode) const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+
     return glfwGetKey(m_Window, static_cast<int>(keycode)) == GLFW_RELEASE;
 }
 
 bool GLFWInput::IsMouseButtonPressedImpl(MouseButton button) const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+
     return glfwGetMouseButton(m_Window, static_cast<int>(button)) == GLFW_PRESS;
 }
 
 bool GLFWInput::IsMouseButtonReleasedImpl(MouseButton button) const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+
     return glfwGetMouseButton(m_Window, static_cast<int>(button)) == GLFW_RELEASE;
 }
 
 float GLFWInput::GetMouseXImpl() const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+
     double x, y;
     glfwGetCursorPos(m_Window, &x, &y);
     return static_cast<float>(x);
@@ -46,6 +50,8 @@ float GLFWInput::GetMouseXImpl() const
 
 float GLFWInput::GetMouseYImpl() const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+
     double x, y;
     glfwGetCursorPos(m_Window, &x, &y);
     return static_cast<float>(y);
@@ -53,24 +59,12 @@ float GLFWInput::GetMouseYImpl() const
 
 std::pair<float, float> GLFWInput::GetMousePositionImpl() const
 {
+    auto m_Window = static_cast<GLFWwindow*>(Application::GetWindow()->GetNativeHandle());
+    
     double x, y;
     glfwGetCursorPos(m_Window, &x, &y);
     return { static_cast<float>(x), static_cast<float>(y) };
 }
 
-float GLFWInput::GetScrollXImpl() const
-{
-    return m_ScrollX;
-}
-
-float GLFWInput::GetScrollYImpl() const
-{
-    return m_ScrollY;
-}
-
-std::pair<float, float> GLFWInput::GetScrollOffsetImpl() const
-{
-    return { m_ScrollX, m_ScrollY };
-}
 
 } // namespace pap

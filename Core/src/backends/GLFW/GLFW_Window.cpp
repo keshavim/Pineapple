@@ -1,12 +1,14 @@
-#include "core/Input.h"
 #include "pinepch.h"
-#include "platform/GLFW_Input.h"
 #include "GLFW_Window.h"
+
+#include "GLFW_Input.h"
+#include <GLFW/glfw3.h>
+
 
 namespace pap
 {
 
-GLFWWindow::GLFWWindow(const WindowSpecifications &specs)
+GLFWWindowBackend::GLFWWindowBackend(const WindowSpecifications &specs)
 {
     m_Data.Title = specs.Title;
     m_Data.Width = specs.Width;
@@ -16,12 +18,12 @@ GLFWWindow::GLFWWindow(const WindowSpecifications &specs)
     m_Data.rendererbackend = specs.rendererbackend;
 }
 
-GLFWWindow::~GLFWWindow()
+GLFWWindowBackend::~GLFWWindowBackend()
 {
     Destroy();
 }
 
-void GLFWWindow::Create()
+void GLFWWindowBackend::Create()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -49,8 +51,6 @@ void GLFWWindow::Create()
     info.height = h;
     info.backend = m_Data.rendererbackend;
     Renderer::Init(info);
-
-    GLFWInput input(m_Window);
 
     SetVSync(m_Data.VSync);
     glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -153,7 +153,7 @@ void GLFWWindow::Create()
     });
 }
 
-void GLFWWindow::Destroy()
+void GLFWWindowBackend::Destroy()
 {
     if (m_Window)
         glfwDestroyWindow(m_Window);
@@ -161,30 +161,30 @@ void GLFWWindow::Destroy()
     m_Window = nullptr;
 }
 
-void GLFWWindow::Update()
+void GLFWWindowBackend::Update()
 {
     glfwSwapBuffers(m_Window);
 }
 
-bool GLFWWindow::ShouldClose() const
+bool GLFWWindowBackend::ShouldClose() const
 {
     return glfwWindowShouldClose(m_Window);
 }
 
-void GLFWWindow::SetVSync(bool enabled)
+void GLFWWindowBackend::SetVSync(bool enabled)
 {
     glfwSwapInterval(enabled ? 1 : 0);
     m_Data.VSync = enabled;
 }
 
-std::pair<int, int> GLFWWindow::GetFramebufferSize()
+std::pair<int, int> GLFWWindowBackend::GetFramebufferSize()
 {
     int display_w, display_h;
     glfwGetFramebufferSize(m_Window, &display_w, &display_h);
     return {display_w, display_h};
 }
 
-std::pair<int, int> GLFWWindow::GetWindowSize() const
+std::pair<int, int> GLFWWindowBackend::GetWindowSize() const
 {
     return {m_Data.Width, m_Data.Height};
 }

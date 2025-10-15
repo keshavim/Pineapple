@@ -14,10 +14,6 @@ class Application; // forward declare
 class Input
 {
 public:
-    virtual ~Input(){
-        delete s_Instance;
-    };
-
     // Called from Application to push events into the backend
     void OnEvent(Event::Base& e) { OnEventImpl(e); }
 
@@ -32,11 +28,9 @@ public:
     static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
     static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
 
-    static float GetScrollX() { return s_Instance->GetScrollXImpl(); }
-    static float GetScrollY() { return s_Instance->GetScrollYImpl(); }
-    static std::pair<float, float> GetScrollOffset() { return s_Instance->GetScrollOffsetImpl(); }
-
 protected:
+
+
     // Event hook (overridable by backend)
     virtual void OnEventImpl(Event::Base& e) {}
 
@@ -50,10 +44,6 @@ protected:
     virtual float GetMouseXImpl() const = 0;
     virtual float GetMouseYImpl() const = 0;
     virtual std::pair<float, float> GetMousePositionImpl() const = 0;
-
-    virtual float GetScrollXImpl() const = 0;
-    virtual float GetScrollYImpl() const = 0;
-    virtual std::pair<float, float> GetScrollOffsetImpl() const = 0;
 
 protected:
     static Input* s_Instance;

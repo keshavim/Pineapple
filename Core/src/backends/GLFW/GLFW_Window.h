@@ -2,16 +2,18 @@
 #pragma once
 
 #include "core/Window.h"
-#include <GLFW/glfw3.h>
+
+
+struct GLFWwindow;
 
 namespace pap
 {
 
-class GLFWWindow : public Window
+class GLFWWindowBackend : public Window
 {
 public:
-    GLFWWindow(const WindowSpecifications &specs);
-    ~GLFWWindow() override;
+    GLFWWindowBackend(const WindowSpecifications &specs);
+    ~GLFWWindowBackend() override;
 
     void Create() override;
     void Destroy() override;
@@ -23,7 +25,7 @@ public:
     std::pair<int, int> GetWindowSize() const override;
 
     void *GetNativeHandle() const override { return m_Window; }
-    WindowPlatform GetPlatform() const override {return WindowPlatform::GLFW;}
+    WindowBackend GetWindowBackend() const override {return WindowBackend::GLFW;}
 
 
     const std::string &GetTitle() const override { return m_Data.Title; }

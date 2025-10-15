@@ -15,9 +15,8 @@ public:
     {
         ImGui::ShowDemoWindow();
 
-        if(pap::Input::IsKeyPressed(pap::KeyCode::A)){
-            PAP_INFO("a");
-        }
+        auto [x,y] = pap::Input::GetMousePosition();
+        PAP_TRACE("{0}, {1}", x, y);
     }
 };
 

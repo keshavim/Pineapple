@@ -24,7 +24,7 @@ struct WindowSpecifications
     RendererBackendType rendererbackend = RendererBackendType::OpenGL;
 };
 
-enum class WindowPlatform{
+enum class WindowBackend{
     None,
     GLFW,
 };
@@ -45,7 +45,7 @@ public:
     virtual std::pair<int, int> GetWindowSize() const = 0;
 
     virtual void *GetNativeHandle() const = 0;
-    virtual WindowPlatform GetPlatform() const = 0;
+    virtual WindowBackend GetWindowBackend() const = 0;
 
     virtual const std::string &GetTitle() const = 0;
     virtual int GetWidth() const = 0;
