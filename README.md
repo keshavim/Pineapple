@@ -9,7 +9,7 @@ for now, this will only work with maria becuse the is the best open src opion i 
 I need to fix up a lot of the structure. but i have an idea of how this will work
 
 
-![Screenshot of the current app](./assets/readme/output.mp4)
+![Screenshot of the current app](./assets/readme/Screenshot_20251015_144546.png)
 
 
 you will need some dependinces for this to work.
