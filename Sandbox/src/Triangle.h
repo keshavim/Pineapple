@@ -11,7 +11,7 @@ public:
     TriangleLayer()
     {
         // Create shaders
-        m_Shader = render::CreateGraphicsShader("/home/overloard/dev/Pineapple/Sandbox/src/shaders/Vertex.glsl", "/home/overloard/dev/Pineapple/Sandbox/src/shaders/Fragment.glsl");
+        m_Shader = render::CreateGraphicsShader("shaders/Vertex.glsl", "shaders/Fragment.glsl");
 
         // Create geometry
         glCreateVertexArrays(1, &m_VertexArray);

@@ -7,26 +7,38 @@
 #include <string>
 #include <vector>
 
+
+
+namespace fs = std::filesystem;
+
 namespace render {
 
 
 // ======================================================
 // Read entire file content into a string
 // ======================================================
-static std::string ReadTextFile(const std::filesystem::path& path)
-	{
-		std::ifstream file(path);
+static std::string ReadTextFile(const fs::path& path)
+    {
+        fs::path fullPath = path;
 
-		if (!file.is_open())
-		{
-			std::cerr << "Failed to open file: " << path.string() << std::endl;
-			return {};
-		}
+        // If the path is relative, make it relative to the current source file
+        if (path.is_relative())
+        {
+            fs::path sourceDir = fs::path(__FILE__).parent_path();
+            fullPath = sourceDir / path;
+        }
 
-		std::ostringstream contentStream;
-		contentStream << file.rdbuf();
-		return contentStream.str();
-	}
+        std::ifstream file(fullPath);
+        if (!file.is_open())
+        {
+            std::cerr << "Failed to open file: " << fullPath << std::endl;
+            return {};
+        }
+
+        std::ostringstream contentStream;
+        contentStream << file.rdbuf();
+        return contentStream.str();
+    }
 
 // ======================================================
 // Check shader compilation / program linking errors
