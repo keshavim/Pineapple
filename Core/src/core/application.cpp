@@ -10,6 +10,7 @@
 
 #include "ImGui/layers/ImGuiDockSpace.h"
 #include "layer_manager.h"
+#include "platform/GLFW_Input.h"
 #include "renderer/Renderer.h"
 #include <glad/glad.h>
 
@@ -32,6 +33,8 @@ void Application::Init(const AppSpecifications &specs)
     s_Window->SetEventCallback([](Event::Base &e) { Application::OnEvent(e); });
     s_Window->Create();
 
+    //i know new and delete is bad but this is very simple it probably doesn't matter
+    Input::s_Instance = new GLFWInput(static_cast<GLFWwindow*>(s_Window->GetNativeHandle()));
 
     s_ImGuiManager.init(*s_Window);
 
@@ -55,6 +58,9 @@ void Application::Shutdown()
 
 void Application::OnEvent(Event::Base &e)
 {
+
+    Input::s_Instance->OnEvent(e);
+
     s_ImGuiManager.onEvent(e);
 
     PAP_EVENT_DISPATCH(Event::KeyPressed, e, {

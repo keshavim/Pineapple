@@ -3,6 +3,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "core/keycodes.h"
 #include <iostream>
+#include "core/application.h"
 
 
 //TODO make imgui more platform diagnostic when more platforms are added
@@ -13,7 +14,7 @@ namespace pap
 
 void ImGuiManager::init(Window& window)
 {
-    m_Window = &window;
+    m_Window = Application::GetWindow().get();
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

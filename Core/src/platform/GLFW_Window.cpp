@@ -1,5 +1,6 @@
+#include "core/Input.h"
 #include "pinepch.h"
-
+#include "platform/GLFW_Input.h"
 #include "GLFW_Window.h"
 
 namespace pap
@@ -48,6 +49,8 @@ void GLFWWindow::Create()
     info.height = h;
     info.backend = m_Data.rendererbackend;
     Renderer::Init(info);
+
+    GLFWInput input(m_Window);
 
     SetVSync(m_Data.VSync);
     glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -144,6 +147,7 @@ void GLFWWindow::Create()
 
     glfwSetScrollCallback(m_Window, [](GLFWwindow *window, double xOffset, double yOffset) {
         auto &data = *(Data *)glfwGetWindowUserPointer(window);
+
         Event::MouseScrolled e(xOffset, yOffset);
         if (data.EventCallback) data.EventCallback(e);
     });
