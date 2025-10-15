@@ -15,8 +15,6 @@ public:
 
         // Create geometry
         glCreateVertexArrays(1, &m_VertexArray);
-        glCreateBuffers(1, &m_VertexBuffer);
-
         struct Vertex
         {
             float Position[2];
@@ -30,11 +28,8 @@ public:
             {{-1.0f, 3.0f}, {0.0f, 2.0f}}   // Top-left
         };
 
-        // Upload to buffer (DSA)
-        glNamedBufferData(m_VertexBuffer, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        // Bind the VBO to VAO at binding index 0
-        glVertexArrayVertexBuffer(m_VertexArray, 0, m_VertexBuffer, 0, sizeof(Vertex));
+        m_VertexBuffer.reset(pap::VertexBuffer::Create((float *)vertices, sizeof(vertices)));
+        m_VertexBuffer->BindToVAO(m_VertexArray, 0, sizeof(Vertex));
 
         // Enable attributes
         glEnableVertexArrayAttrib(m_VertexArray, 0); // position
@@ -62,8 +57,6 @@ public:
     ~TriangleLayer() override
     {
         glDeleteVertexArrays(1, &m_VertexArray);
-        glDeleteBuffers(1, &m_VertexBuffer);
-
         glDeleteProgram(m_Shader);
     }
 
@@ -87,6 +80,7 @@ public:
 
 private:
     GLuint m_VertexArray = 0;
-    GLuint m_VertexBuffer = 0;
+    std::unique_ptr<pap::VertexBuffer> m_VertexBuffer;
+
     GLuint m_Shader = 0;
 };

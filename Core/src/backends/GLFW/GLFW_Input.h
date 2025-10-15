@@ -7,10 +7,9 @@ namespace pap
 class GLFWInput : public Input
 {
 public:
-
 protected:
     // Event hook
-    void OnEventImpl(Event::Base& e) override;
+    void OnEventImpl(Event::Base &e) override;
 
     bool IsKeyPressedImpl(KeyCode keycode) const override;
     bool IsKeyReleasedImpl(KeyCode keycode) const override;
@@ -23,7 +22,6 @@ protected:
     std::pair<float, float> GetMousePositionImpl() const override;
 
 private:
-
 };
 
 } // namespace pap

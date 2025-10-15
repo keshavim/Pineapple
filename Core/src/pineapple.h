@@ -5,6 +5,7 @@
 #include "core/application.h"
 #include "core/Input.h"
 #include <glad/glad.h>
+#include "renderer/Buffer.h"
 
 #ifndef __ENTRY_POINT__
 #define __ENTRY_POINT__

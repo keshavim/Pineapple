@@ -25,16 +25,37 @@ public:
     std::pair<int, int> GetFramebufferSize() override;
     std::pair<int, int> GetWindowSize() const override;
 
-    void *GetNativeHandle() const override { return m_Window; }
-    WindowBackend GetWindowBackend() const override {return WindowBackend::GLFW;}
+    void *GetNativeHandle() const override
+    {
+        return m_Window;
+    }
+    WindowBackend GetWindowBackend() const override
+    {
+        return WindowBackend::GLFW;
+    }
 
 
-    const std::string &GetTitle() const override { return m_Data.Title; }
-    int GetWidth() const override { return m_Data.Width; }
-    int GetHeight() const override { return m_Data.Height; }
-    bool IsVSync() const override { return m_Data.VSync; }
+    const std::string &GetTitle() const override
+    {
+        return m_Data.Title;
+    }
+    int GetWidth() const override
+    {
+        return m_Data.Width;
+    }
+    int GetHeight() const override
+    {
+        return m_Data.Height;
+    }
+    bool IsVSync() const override
+    {
+        return m_Data.VSync;
+    }
 
-    void SetEventCallback(const EventCallbackFn &callback) override { m_Data.EventCallback = callback; }
+    void SetEventCallback(const EventCallbackFn &callback) override
+    {
+        m_Data.EventCallback = callback;
+    }
 
 private:
     struct Data
