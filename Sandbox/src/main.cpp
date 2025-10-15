@@ -15,8 +15,6 @@ public:
     {
         ImGui::ShowDemoWindow();
 
-        auto [x,y] = pap::Input::GetMousePosition();
-        PAP_TRACE("{0}, {1}", x, y);
     }
 };
 

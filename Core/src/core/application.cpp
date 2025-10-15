@@ -95,12 +95,13 @@ void Application::Run()
         s_LayerManager.onUpdate(dt);
 
 
-
-        s_ImGuiManager.newFrame(dt);
         auto [x,y] = GetFramebufferSize();
         glViewport(0,0,x,y);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        s_ImGuiManager.newFrame(dt);
+
 
 
         s_LayerManager.onRender();
