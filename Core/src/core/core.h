@@ -1,21 +1,16 @@
 #pragma once
 #include <cassert>
 #include <expected>
+#include <filesystem>
 #include <format>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <cstring>
 
 //just some core utilites that should be included in most files
-
-
-namespace pap
-{
-
-
-} // namespace pap
 
 #ifdef __cpp_lib_print
 #include <print>
@@ -80,3 +75,24 @@ constexpr void print(const std::string_view str_fmt, auto&&... args ){
 
 
 #endif
+
+
+namespace pap {
+
+
+#define PAP_RELATIVE_PATH(relative) (std::filesystem::path(__FILE__).parent_path() / relative)
+
+inline std::string ReadTextFile(const std::filesystem::path& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open())
+    {
+        PAP_ERROR("Failed to open shader file: {}", path.string());
+        return {};
+    }
+
+    std::ostringstream contentStream;
+    contentStream << file.rdbuf();
+    return contentStream.str();
+}
+}

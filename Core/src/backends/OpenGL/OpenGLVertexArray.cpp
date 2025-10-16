@@ -28,13 +28,31 @@ static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
     return 0; // should never happen
 }
 
+static uint32_t ShaderDataTypeSize(ShaderDataType type)
+{
+    switch (type)
+    {
+        case ShaderDataType::Float:  return 4;
+        case ShaderDataType::Vec2:   return 4 * 2;
+        case ShaderDataType::Vec3:   return 4 * 3;
+        case ShaderDataType::Vec4:   return 4 * 4;
+
+        case ShaderDataType::Int:    return 4;
+        case ShaderDataType::IVec2:  return 4 * 2;
+        case ShaderDataType::IVec3:  return 4 * 3;
+        case ShaderDataType::IVec4:  return 4 * 4;
+
+        case ShaderDataType::Bool:   return 1;
+    }
+    return 0;
+}
 
 
 
 void VertexBufferLayout::Push(uint32_t count, ShaderDataType type, bool normalized)
 {
     Elements.push_back({count, type, normalized, Stride});
-    Stride += count * ShaderDataTypeToOpenGLBaseType(type); // extend for other types if needed
+    Stride += count * ShaderDataTypeSize(type); // extend for other types if needed
 }
 
 

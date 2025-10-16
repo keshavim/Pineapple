@@ -1,8 +1,8 @@
 #pragma once
 
 #include "pineapple.h"
+#include "renderer/ShaderProgram.h"
 #include "renderer/VertexArray.h"
-#include "temp_shader_functions.h"
 
 class TriangleLayer : public pap::Layer
 {
@@ -10,7 +10,8 @@ public:
     TriangleLayer()
     {
         // Create shaders
-        m_Shader = render::CreateGraphicsShader("shaders/Vertex.glsl", "shaders/Fragment.glsl");
+        m_Shader.reset(pap::ShaderProgram::Create(PAP_RELATIVE_PATH("shaders/Vertex.glsl"),
+                                                  PAP_RELATIVE_PATH("shaders/Fragment.glsl")));
 
         // Create geometry
         struct Vertex
@@ -21,15 +22,15 @@ public:
 
         Vertex vertices[] = {
             {{-1.0f, -1.0f}, {0.0f, 0.0f}}, // Bottom-left
-            {{3.0f, -1.0f},  {2.0f, 0.0f}}, // Bottom-right
-            {{-1.0f,  3.0f}, {0.0f, 2.0f}}  // Top-left
+            {{3.0f, -1.0f}, {2.0f, 0.0f}},  // Bottom-right
+            {{-1.0f, 3.0f}, {0.0f, 2.0f}}   // Top-left
         };
 
         // Create VAO
         m_VertexArray.reset(pap::VertexArray::Create());
 
         // Create VBO
-        m_VertexBuffer.reset(pap::VertexBuffer::Create((float*)vertices, sizeof(vertices)));
+        m_VertexBuffer.reset(pap::VertexBuffer::Create((float *)vertices, sizeof(vertices)));
 
         // Describe layout
         pap::VertexBufferLayout layout;
@@ -42,20 +43,20 @@ public:
 
     ~TriangleLayer() override
     {
-        m_VertexArray.reset();   // cleans up VAO via its destructor
-        m_VertexBuffer.reset();  // cleans up VBO
-        glDeleteProgram(m_Shader);
+        m_VertexArray.reset(); // cleans up VAO via its destructor
+        m_VertexBuffer.reset();
+        m_Shader.reset();
     }
 
     void onRender() override
     {
-        glUseProgram(m_Shader);
+        m_Shader->Bind();
 
         // Uniforms
-        glUniform1f(0, pap::Application::GetTime());
+        m_Shader->SetUniform1f("iTime", pap::Application::GetTime());
 
         auto [x, y] = pap::Application::GetFramebufferSize();
-        glUniform2f(1, x, y);
+        m_Shader->SetUniform2f("iResolution", x, y);
         glViewport(0, 0, static_cast<GLsizei>(x), static_cast<GLsizei>(y));
 
         // Render
@@ -68,5 +69,5 @@ private:
     std::shared_ptr<pap::VertexArray> m_VertexArray;
     std::shared_ptr<pap::VertexBuffer> m_VertexBuffer;
 
-    GLuint m_Shader = 0;
+    std::shared_ptr<pap::ShaderProgram> m_Shader;
 };
